@@ -13,7 +13,7 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Ok(TournamentConverter.DataToViewModel());
+            return Ok(TournamentConverter.DataToViewModel(8));
         }
     }
 }

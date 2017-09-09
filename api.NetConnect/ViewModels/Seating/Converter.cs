@@ -3,15 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 namespace api.NetConnect.ViewModels.Seating
 {
-    public class TournamentConverter
+    public class TournamentConverter : Converter
     {
         public static List<SeatingViewModelItem> DataToViewModel()
         {
             List<SeatingViewModelItem> returnResult = new List<SeatingViewModelItem>();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
             var qry = db.Seat.OrderBy(x => x.ID);
 
             foreach(var item in qry)
@@ -25,7 +24,7 @@ namespace api.NetConnect.ViewModels.Seating
         public static SeatingViewModelItem DataToViewModelDetail(Int32 id)
         {
             SeatingViewModelItem returnResult = new SeatingViewModelItem();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
 
             Seat item = db.Seat.FirstOrDefault(x => x.ID == id);
             returnResult = ConvertSingleItem(item);
@@ -36,7 +35,7 @@ namespace api.NetConnect.ViewModels.Seating
         public static SeatingViewModelItem ConvertSingleItem(Seat item)
         {
             SeatingViewModelItem model = new SeatingViewModelItem();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
 
             model.ID = item.ID;
             model.Status = item.status;

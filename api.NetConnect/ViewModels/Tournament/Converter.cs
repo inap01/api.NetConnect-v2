@@ -6,12 +6,12 @@ using System.Web;
 
 namespace api.NetConnect.ViewModels.Tournament
 {
-    public class TournamentConverter
+    public class TournamentConverter : Converter
     {
         public static List<TournamentViewModelItem> DataToViewModel(Int32 lanID)
         {
             List<TournamentViewModelItem> returnResult = new List<TournamentViewModelItem>();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
             var qry = db.Tournament.Where(x => x.ID == lanID);
 
             foreach(var item in qry)
@@ -25,7 +25,7 @@ namespace api.NetConnect.ViewModels.Tournament
         public static TournamentViewModelItem DataToViewModelDetail(Int32 id)
         {
             TournamentViewModelItem returnResult = new TournamentViewModelItem();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
 
             data.Tournament item = db.Tournament.FirstOrDefault(x => x.ID == id);
             returnResult = ConvertSingleItem(item);
@@ -36,7 +36,7 @@ namespace api.NetConnect.ViewModels.Tournament
         public static TournamentViewModelItem ConvertSingleItem(data.Tournament item)
         {
             TournamentViewModelItem model = new TournamentViewModelItem();
-            DataContext db = new DataContext();
+            DataContext db = new DataContext(_connectionString);
 
             model.ID = item.ID;
             model.LanID = item.lan_id;
