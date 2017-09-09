@@ -1,0 +1,5 @@
+packages/
+api.NetConnect/bin/
+api.NetConnect/obj/
+api.NetConnect.data/bin/
+api.NetConnect.data/obj/
