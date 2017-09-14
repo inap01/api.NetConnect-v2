@@ -8,19 +8,19 @@ namespace api.NetConnect.data
 {
     public class User : BaseModel
     {
-        public String email { get; set; }
-        public String password { get; set; }
-        public String password_reset { get; set; }
-        public DateTime registered_since { get; set; }
-        public String first_name { get; set; }
-        public String last_name { get; set; }
-        public String nickname { get; set; }
-        public Boolean is_team { get; set; }
-        public Boolean is_admin { get; set; }
-        public Boolean is_vorstand { get; set; }
-        public String image { get; set; }
-        public String steam_id { get; set; }
-        public String battle_tag { get; set; }
-        public Boolean newsletter { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public String Nickname { get; set; }
+        public String Email { get; set; }
+        public String Password { get; set; }
+        public String PasswordReset { get; set; }
+        public DateTime Registered { get; set; }
+        public Boolean IsTeam { get; set; }
+        public Boolean IsAdmin { get; set; }
+        public Boolean IsVorstand { get; set; }
+        public String Image { get; set; }
+        public String SteamID { get; set; }
+        public String BattleTag { get; set; }
+        public Boolean Newsletter { get; set; }
     }
 }

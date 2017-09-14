@@ -92,13 +92,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
+    <Compile Include="DataControllers\ProfileDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Converter.cs" />
+    <Compile Include="ViewModels\Profile\Converter.cs" />
+    <Compile Include="ViewModels\Profile\ViewModel.cs" />
     <Compile Include="ViewModels\Seating\Converter.cs" />
     <Compile Include="ViewModels\Seating\ViewModel.cs" />
     <Compile Include="ViewModels\Tournament\Converter.cs" />
