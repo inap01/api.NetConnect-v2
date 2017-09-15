@@ -1,3 +1,18 @@
+USE master
+GO
+
+DROP DATABASE NetConnect
+GO
+
+USE master
+GO
+
+CREATE DATABASE NetConnect
+GO
+
+USE NetConnect
+GO
+
 CREATE TABLE [dbo].[User] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[FirstName] varchar(255) NOT NULL,
@@ -6,36 +21,35 @@ CREATE TABLE [dbo].[User] (
 	[Email] varchar(255) NOT NULL,
 	[Password] varchar(64) NOT NULL,
 	[PasswordReset] varchar(64),
-	[Registered] datetime NOT NULL,
-	[IsTeam] bit NOT NULL,
-	[IsAdmin] bit NOT NULL,
-	[IsVorstand] bit NOT NULL,
+	[Registered] datetime NOT NULL DEFAULT GETDATE(),
+	[IsTeam] bit NOT NULL DEFAULT 0,
+	[IsAdmin] bit NOT NULL DEFAULT 0,
+	[IsVorstand] bit NOT NULL DEFAULT 0,
 	[Image] varchar(255),
 	[SteamID] varchar(25),
 	[BattleTag] varchar(25),
-	[Newsletter] bit NOT NULL,
-	[LastChange] DateTime NOT NULL DEFAULT GETDATE(),
+	[Newsletter] bit NOT NULL DEFAULT 1,
+	[LastChange] timestamp NOT NULL
 );
 
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [Registered_Default] DEFAULT GETDATE() FOR [Registered]
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [IsTeam_Default] DEFAULT 0 FOR [IsTeam]
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [IsAdmin_Default] DEFAULT 0 FOR [IsAdmin]
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [IsVorstand_Default] DEFAULT 0 FOR [IsVorstand]
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [Newsletter_Default] DEFAULT 1 FOR [Newsletter]
-GO
-
-CREATE TABLE [dbo].[CateringOrders] (
+CREATE TABLE [dbo].[CateringOrder] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
-	[LanID] int NOT NULL,
+	[Volume] int NOT NULL,
 	[UserID] int NOT NULL,
 	[SeatID] int NOT NULL,
-	[Details] text NOT NULL,
-	[Price] decimal(10,2) NOT NULL,
-	[CompletionState] bit NOT NULL DEFAULT 0,
-	[LastChange] DateTime NOT NULL DEFAULT GETDATE(),
+	[CompletionState] int NOT NULL DEFAULT 0,
+	[LastChange] timestamp NOT NULL
+);
+
+CREATE TABLE [dbo].[CateringOrderDetail] (
+	[ID] int IDENTITY(1,1) PRIMARY KEY,
+	[CateringOrderID] int NOT NULL,
+	[CateringProductID] int NOT NULL,
+	[Attributes] text,
+	[LastChange] timestamp NOT NULL
 );
   
-  CREATE TABLE [CateringProducts] (
+CREATE TABLE [dbo].[CateringProduct] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] text NOT NULL,
 	[Description] text,
@@ -43,20 +57,20 @@ CREATE TABLE [dbo].[CateringOrders] (
 	[Price] decimal(10,2) NOT NULL,
 	[Attributes] text,
 	[SingleChoice] bit NOT NULL DEFAULT 0,
-	[LastChange] datetime NOT NULL DEFAULT GETDATE(),
-  );
+	[LastChange] timestamp NOT NULL
+);
   
-  CREATE TABLE [Chat] (
+CREATE TABLE [dbo].[Chat] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[UserID] int NOT NULL,
 	[Message] text NOT NULL,
 	[GameFlag] bit NOT NULL DEFAULT 0,
 	[GameTitle] varchar(50) DEFAULT NULL,
-	[LastChange] datetime NOT NULL DEFAULT GETDATE(),
+	[LastChange] timestamp NOT NULL
 );
 
 
-CREATE TABLE [Logs] (
+CREATE TABLE [dbo].[Logs] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[UserID] int NOT NULL,
 	[SQLTable] varchar(50) NOT NULL,
@@ -64,102 +78,133 @@ CREATE TABLE [Logs] (
 	[SQLQuery] text NOT NULL,
 	[ModelBefore] text NOT NULL,
 	[ModelAfter] text NOT NULL,
-	[LastChange] datetime NOT NULL DEFAULT GETDATE(),
+	[LastChange] timestamp NOT NULL
 );
 
 
-CREATE TABLE [Partner] (
+CREATE TABLE [dbo].[Partner] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
 	[Link] varchar(100) NOT NULL,
-	[Content] text NOT NULL,
+	[Content] text,
 	[Image] varchar(50) NOT NULL,
 	[ImageAlt] text NOT NULL,
-	[State] int NOT NULL,
-	[Active] bit NOT NULL DEFAULT 0,
+	[PartnerPackID] int NOT NULL DEFAULT 1,
+	[IsActive] bit NOT NULL DEFAULT 0,
 	[Position] int NOT NULL DEFAULT 0,
 	[ClickCount] int NOT NULL DEFAULT 0,
-	[LastChange] datetime NOT NULL DEFAULT GETDATE(),
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [PartnerPacks] (
+CREATE TABLE [dbo].[PartnerPack] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
-	[ShowPartner] bit NOT NULL,
-	[ShowFrontsite] bit NOT NULL,
-	[ShowShirt] bit NOT NULL,
-	[LastChange] datetime NOT NULL DEFAULT GETDATE(),
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [Seating] (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [UserID] INT NOT NULL DEFAULT 0,
-  [State] INT NOT NULL,
-  [Description] text NOT NULL,
-  [ReservationDate] datetime NOT NULL,
-  [Payed] bit NOT NULL,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[Seat] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[UserID] INT NOT NULL DEFAULT 0,
+	[State] INT NOT NULL,
+	[Description] text NOT NULL,
+	[ReservationDate] datetime NOT NULL,
+	[Payed] bit NOT NULL,
+	[IsTeam] bit NOT NULL,
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [Settings] (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [Volume] INT NOT NULL,
-  [PrePayment] FLOAT NOT NULL,
-  [BoxOffice] FLOAT NOT NULL,
-  [Start] datetime NOT NULL,
-  [End] datetime NOT NULL,
-  [ActiveReservation] INT NOT NULL DEFAULT 0,
-  [BankAccountCheck] DATE NOT NULL,
-  [ReservedDays] INT NOT NULL,
-  [Catering] bit NOT NULL,
-  [Feedback] bit NOT NULL,
-  [FeedbackLink] VARCHAR(255) NOT NULL,
-  [Chat] bit NOT NULL,
-  [BankAccountOwner] VARCHAR(50) NOT NULL,
-  [IBAN] VARCHAR(50) NOT NULL,
-  [BLZ] VARCHAR(50) NOT NULL,
-  [BankAccountNumber] VARCHAR(50) NOT NULL,
-  [BIC] VARCHAR(50) NOT NULL,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[Settings] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Volume] INT NOT NULL,
+	[ReservationCost] FLOAT NOT NULL,
+	[Start] datetime NOT NULL,
+	[End] datetime NOT NULL,
+	[IsActiveReservation] INT NOT NULL DEFAULT 0,
+	[BankAccountCheck] DATE NOT NULL,
+	[ReservedDays] INT NOT NULL,
+	[IsActiveCatering] bit NOT NULL,
+	[IsActiveFeedback] bit NOT NULL,
+	[FeedbackLink] VARCHAR(255) NOT NULL,
+	[IsActiveChat] bit NOT NULL,
+	[BankAccountOwner] VARCHAR(50) NOT NULL,
+	[IBAN] VARCHAR(50) NOT NULL,
+	[BLZ] VARCHAR(50) NOT NULL,
+	[BankAccountNumber] VARCHAR(50) NOT NULL,
+	[BIC] VARCHAR(50) NOT NULL,
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [Tournaments] (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [LanID] INT NOT NULL,
-  [GameID] INT NOT NULL,
-  [Team] INT NOT NULL DEFAULT 1,
-  [Link] text NOT NULL,
-  [Mode] VARCHAR(10) NOT NULL,
-  [Start] datetime NOT NULL,
-  [End] datetime NOT NULL,
-  [PauseGame] bit NOT NULL DEFAULT 0,
-  [PowerdBy] INT NOT NULL DEFAULT 0,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[Tournament] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Volume] INT NOT NULL,
+	[TournamentGameID] INT NOT NULL,
+	[TeamSize] INT NOT NULL DEFAULT 1,
+	[ChallongeLink] text NOT NULL,
+	[Mode] VARCHAR(10) NOT NULL,
+	[Start] datetime NOT NULL,
+	[End] datetime NOT NULL,
+	[IsPauseGame] bit NOT NULL DEFAULT 0,
+	[PartnerID] INT NOT NULL DEFAULT 0,
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [TournamentGames] (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [Name] VARCHAR(50) NOT NULL,
-  [Icon] VARCHAR(50) NOT NULL,
-  [Rules] text NOT NULL,
-  [BattleTag] bit NOT NULL DEFAULT 0,
-  [SteamID] bit NOT NULL DEFAULT 0,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[TournamentGame] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Name] VARCHAR(50) NOT NULL,
+	[Icon] VARCHAR(50) NOT NULL,
+	[Rules] text NOT NULL,
+	[BattleTag] bit NOT NULL DEFAULT 0,
+	[SteamID] bit NOT NULL DEFAULT 0,
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE [TournamentParticipants] (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [UserID] INT NOT NULL,
-  [TournamentID] int NOT NULL,
-  [TeamID] INT NOT NULL DEFAULT 0,
-  [Registered] datetime NOT NULL,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[TournamentParticipant] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[UserID] INT NOT NULL,
+	[TournamentID] int NOT NULL,
+	[TournamentTeamID] INT NOT NULL DEFAULT 0,
+	[Registered] datetime NOT NULL,
+	[LastChange] timestamp NOT NULL
 );
 
-CREATE TABLE TournamentTeams (
-  [ID] INT IDENTITY(1,1) PRIMARY KEY,
-  [Name] VARCHAR(250) NOT NULL,
-  [TournamentID] INT NOT NULL,
-  [Password] VARCHAR(500) NOT NULL,
-  [LastChange] datetime NOT NULL DEFAULT GETDATE()
+CREATE TABLE [dbo].[TournamentTeam] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Name] VARCHAR(250) NOT NULL,
+	[TournamentID] INT NOT NULL,
+	[Password] VARCHAR(100) NOT NULL,
+	[LastChange] timestamp NOT NULL
 );
+
+GO
+
+
+-- [dbo].[CateringOrder]
+ALTER TABLE [dbo].[CateringOrder] ADD CONSTRAINT [FK_CateringOrder_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+ALTER TABLE [dbo].[CateringOrder] ADD CONSTRAINT [FK_CateringOrder_SeatID] FOREIGN KEY (SeatID) REFERENCES [dbo].[Seat](ID);
+
+-- [dbo].[CateringOrderDetail]
+ALTER TABLE [dbo].[CateringOrderDetail] ADD CONSTRAINT [FK_CateringOrderDetail_CateringOrderID] FOREIGN KEY (CateringOrderID) REFERENCES [dbo].[CateringOrder](ID);
+ALTER TABLE [dbo].[CateringOrderDetail] ADD CONSTRAINT [FK_CateringOrderDetail_CateringProductID] FOREIGN KEY (CateringProductID) REFERENCES [dbo].[CateringProduct](ID);
+
+-- [dbo].[Chat]
+ALTER TABLE [dbo].[Chat] ADD CONSTRAINT [FK_Chat_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+
+-- [dbo].[Logs]
+ALTER TABLE [dbo].[Logs] ADD CONSTRAINT [FK_Logs_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+
+-- [dbo].[Partner]
+ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_PartnerPackID] FOREIGN KEY (PartnerPackID) REFERENCES [dbo].[PartnerPack](ID);
+
+-- [dbo].[Seat]
+ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+
+-- [dbo].[Tournament]
+ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_TournamentGameID] FOREIGN KEY (TournamentGameID) REFERENCES [dbo].[TournamentGame](ID);
+ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID);
+
+-- [dbo].[TournamentParticipant]
+ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
+ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentTeamID] FOREIGN KEY (TournamentTeamID) REFERENCES [dbo].[TournamentTeam](ID);
+
+GO
