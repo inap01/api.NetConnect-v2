@@ -39,6 +39,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,8 +50,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="CateringOrder.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CateringOrderDetail.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CateringProduct.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chat.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Models\Order.cs" />
+    <Compile Include="Logs.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\_Order.cs" />
     <Compile Include="Models\Partner_Pack.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Partner.cs" />
@@ -59,15 +76,76 @@
     <Compile Include="Models\Tournament_Game.cs" />
     <Compile Include="Models\Tournament_Participant.cs" />
     <Compile Include="Models\Tournament_Team.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="NetConnect.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NetConnect.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NetConnect.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NetConnect.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NetConnect.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Partner.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartnerPack.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Seat.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tournament.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentGame.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentParticipant.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentTeam.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <EntityDeploy Include="NetConnect.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>NetConnect.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="NetConnect.edmx.diagram">
+      <DependentUpon>NetConnect.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NetConnect.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>NetConnect.edmx</DependentUpon>
+      <LastGenOutput>NetConnect.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="NetConnect.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>NetConnect.edmx</DependentUpon>
+      <LastGenOutput>NetConnect.cs</LastGenOutput>
+    </Content>
     <Content Include="SQL\CreateTables.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    public class Partner : BaseModel
+    public class _Partner : BaseModel
     {
         public String name { get; set; }
         public String link { get; set; }

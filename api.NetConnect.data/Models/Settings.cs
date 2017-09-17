@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    public class Settings : BaseModel
+    public class _Settings : BaseModel
     {
         public Int32 volume { get; set; }
         public Decimal vorkasse { get; set; }

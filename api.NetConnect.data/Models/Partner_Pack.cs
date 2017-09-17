@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    public class Partner_Pack : BaseModel
+    public class _Partner_Pack : BaseModel
     {
         public String name { get; set; }
         public Boolean show_partner { get; set; }

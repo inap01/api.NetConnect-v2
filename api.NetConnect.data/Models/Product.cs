@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    public class Product : BaseModel
+    public class _Product : BaseModel
     {
         public String description { get; set; }
         public String image { get; set; }

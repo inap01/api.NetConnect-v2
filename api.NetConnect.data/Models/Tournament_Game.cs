@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    public class Tournament_Game : BaseModel
+    public class _Tournament_Game : BaseModel
     {
         public String name { get; set; }
         public String icon { get; set; }

@@ -7,7 +7,7 @@ namespace api.NetConnect.ViewModels.Seating
 {
     public static class SeatingConverterExtensions
     {
-        public static Seating.SeatingViewModelItem ToViewModel(this Seat model)
+        public static Seating.SeatingViewModelItem ToViewModel(this _Seat model)
         {
             return new SeatingViewModelItem()
             {
