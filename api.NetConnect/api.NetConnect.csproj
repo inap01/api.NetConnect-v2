@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="api.NetConnect.data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\api.NetConnect.data.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -88,12 +92,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="lib\api.NetConnect.data.dll" />
+    <Content Include="lib\EntityFramework.dll" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TestingController.cs" />
+    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
+    <Compile Include="DataControllers\GenericDataController.cs" />
+    <Compile Include="DataControllers\PartnerDataController.cs" />
     <Compile Include="DataControllers\ProfileDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -101,6 +111,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\Converter.cs" />
+    <Compile Include="ViewModels\Partner\Converter.cs" />
+    <Compile Include="ViewModels\Partner\ViewModel.cs" />
     <Compile Include="ViewModels\Profile\Converter.cs" />
     <Compile Include="ViewModels\Profile\ViewModel.cs" />
     <Compile Include="ViewModels\Seating\Converter.cs" />
@@ -111,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="App.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -120,12 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\api.NetConnect.data\api.NetConnect.data.csproj">
-      <Project>{a542f88d-6b5b-4d3a-be5a-87f6f8df8cc7}</Project>
-      <Name>api.NetConnect.data</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

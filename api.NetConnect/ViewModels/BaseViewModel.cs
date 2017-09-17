@@ -5,6 +5,10 @@ using System.Web;
 
 namespace api.NetConnect.ViewModels
 {
+    public class BaseViewModelItem
+    {
+        public DateTime LastChange { get; set; }
+    }
     public class BaseViewModel
     {
         public Boolean Success { get; set; }

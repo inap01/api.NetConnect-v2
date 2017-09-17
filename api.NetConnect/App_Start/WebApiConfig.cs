@@ -26,7 +26,16 @@ namespace api.NetConnect
                    controller = "Profile",
                    action = "GetItem"
                }
-           );
+           ); config.Routes.MapHttpRoute(
+                name: "GET_Testing",
+                routeTemplate: "testing/{id}",
+                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+                defaults: new
+                {
+                    controller = "Testing",
+                    action = "GetItem"
+                }
+            );
 
             #endregion
         }

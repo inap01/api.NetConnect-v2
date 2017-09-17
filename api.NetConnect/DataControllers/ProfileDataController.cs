@@ -10,7 +10,7 @@ namespace api.NetConnect.DataControllers
     {
         private static DataContext InitDB()
         {
-            return new DataContext(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            return new DataContext();
         }
 
         public static data.User GetItem(Int32 id)

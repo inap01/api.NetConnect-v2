@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data
 {
-    class DataContext : NetConnect.data.NetConnectEntities
+    public sealed class DataContext : NetConnect.data.NetConnectEntities
     {
+
     }
 }

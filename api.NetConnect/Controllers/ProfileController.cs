@@ -14,6 +14,8 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult GetItem(Int32 id)
         {
+
+
             ProfileViewModel viewmodel = new ProfileViewModel();
 
             try
