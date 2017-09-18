@@ -18,12 +18,19 @@ namespace api.NetConnect.DataControllers
             db = new DataContext();
             return db;
         }
+        public static T GetItem(Int32 condition)
+        {
+            InitDB();
+            var list = GetPropertyMatchingTypeT(typeof(User));
 
+            return GetPropertyFromSetMatchingCondition<Int32>(list, condition, "ID");
+        }
 
         public static T GetItem<ConditionPropType>(ConditionPropType condition, String ParameterName)
         {
             InitDB();
             var list = GetPropertyMatchingTypeT(typeof(User));
+            
             return GetPropertyFromSetMatchingCondition<ConditionPropType>(list, condition, ParameterName);
         }
         
