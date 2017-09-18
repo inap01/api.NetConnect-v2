@@ -48,7 +48,7 @@ namespace api.NetConnect.DataControllers
             throw new NoMatchingPropertyFoundException(msg);
         }
 
-        private static DbSet<T> GetPropertyMatchingTypeT(Type typeOfT) 
+        private static DbSet<T> GetPropertyMatchingTypeT(Type typeOfT)
         {
             var u = typeof(DataContext).GetProperties().SingleOrDefault(x => x.PropertyType.GetGenericArguments().Any(t => t.AssemblyQualifiedName == typeOfT.AssemblyQualifiedName));
             return (System.Data.Entity.DbSet<T>)u.GetValue(InitDB());            

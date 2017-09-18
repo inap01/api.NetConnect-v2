@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Routing;
 
@@ -12,6 +13,7 @@ namespace api.NetConnect
         public static void Register(HttpConfiguration config)
         {
             // Web-API-Konfiguration und -Dienste
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             // Web-API-Routen
             config.MapHttpAttributeRoutes();

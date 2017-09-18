@@ -50,15 +50,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\Converter.cs" />
-    <Compile Include="ViewModel\Partner\Converter.cs" />
-    <Compile Include="ViewModel\Partner\ViewModel.cs" />
     <Compile Include="ViewModel\Profile\Converter.cs" />
     <Compile Include="ViewModel\Profile\ViewModel.cs" />
-    <Compile Include="ViewModel\Seating\Converter.cs" />
-    <Compile Include="ViewModel\Seating\ViewModel.cs" />
-    <Compile Include="ViewModel\Tournament\Converter.cs" />
-    <Compile Include="ViewModel\Tournament\Details\ViewModel.cs" />
-    <Compile Include="ViewModel\Tournament\ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
