@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace api.NetConnect.data
+namespace api.NetConnect.data.Entity
 {
     public class BaseModel
     {

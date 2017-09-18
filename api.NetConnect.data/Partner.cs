@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace api.NetConnect.data
+namespace api.NetConnect.data.Entity
 {
     using System;
     using System.Collections.Generic;

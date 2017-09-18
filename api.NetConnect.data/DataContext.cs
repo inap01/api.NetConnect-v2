@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace api.NetConnect.data
+namespace api.NetConnect.data.Entity
 {
-    public sealed class DataContext : NetConnect.data.NetConnectEntities
+    public sealed class DataContext : NetConnect.data.Entity.NetConnectEntities
     {
 
     }
