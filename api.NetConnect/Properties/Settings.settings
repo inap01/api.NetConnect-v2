@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="api.NetConnect.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="APIStatus_IsActive" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="APIStatus_Titel" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Wartungsarbeiten</Value>
+    </Setting>
+    <Setting Name="APIStatus_Text" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Wir sind bald wieder da!</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

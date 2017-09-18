@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Configuration;
 
-namespace api.NetConnect.ViewModels
+namespace api.NetConnect.data.ViewModel
 {
 
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace api.NetConnect.ViewModels.Profile
+namespace api.NetConnect.data.ViewModel.Profile
 {
     public class ProfileViewModel : BaseViewModel
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace api.NetConnect.ViewModels
+namespace api.NetConnect.data.ViewModel
 {
     public class BaseViewModel
     {

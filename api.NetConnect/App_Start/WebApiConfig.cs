@@ -18,13 +18,40 @@ namespace api.NetConnect
             // Web-API-Routen
             config.MapHttpAttributeRoutes();
 
+            #region STATUS
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Status_Get_Default",
+               routeTemplate: "",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Status",
+                   action = "Get"
+               }
+            );
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Status_Get",
+               routeTemplate: "status",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Status",
+                   action = "Get"
+               }
+            );
+
+            #endregion
+
             #region PROFILE
 
             config.Routes.MapHttpRoute(
                name: "GET_Profile_GetItem",
                routeTemplate: "profile/{id}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new {
+               defaults: new
+               {
                    controller = "Profile",
                    action = "GetItem"
                }

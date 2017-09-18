@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.ViewModels.Profile;
+using api.NetConnect.data.ViewModel.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,6 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult GetItem(Int32 id)
         {
-
-
             ProfileViewModel viewmodel = new ProfileViewModel();
 
             try
