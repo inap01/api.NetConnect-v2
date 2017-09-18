@@ -44,9 +44,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="api.NetConnect.data.Entity">
-      <HintPath>lib\api.NetConnect.data.Entity.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -107,7 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="App.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -119,6 +115,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\api.NetConnect.data.Entity\api.NetConnect.data.Entity.csproj">
+      <Project>{a542f88d-6b5b-4d3a-be5a-87f6f8df8cc7}</Project>
+      <Name>api.NetConnect.data.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\api.NetConnect.data.ViewModel\api.NetConnect.data.ViewModel.csproj">
       <Project>{789f4f2b-f3d9-4571-a908-d2d0bae69d98}</Project>
       <Name>api.NetConnect.data.ViewModel</Name>

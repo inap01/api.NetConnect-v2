@@ -1,6 +1,7 @@
 ﻿using api.NetConnect.data.Entity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -15,7 +16,7 @@ namespace api.NetConnect.DataControllers
         {
             if (db != null)
                 return db;
-            db = new DataContext();
+            db = new DataContext(ConfigurationManager.ConnectionStrings["NetConnectEntities"].ConnectionString);
             return db;
         }
         public static T GetItem(Int32 condition)

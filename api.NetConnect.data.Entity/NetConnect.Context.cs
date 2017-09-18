@@ -19,7 +19,11 @@ namespace api.NetConnect.data.Entity
             : base("name=NetConnectEntities")
         {
         }
-    
+        public NetConnectEntities(String ConnectionString)
+            :base(ConnectionString)
+        {
+
+        }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

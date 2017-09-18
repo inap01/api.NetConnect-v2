@@ -111,7 +111,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <EntityDeploy Include="NetConnect.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>NetConnect.Designer.cs</LastGenOutput>
