@@ -1,4 +1,4 @@
-﻿using api.NetConnect.data;
+﻿using api.NetConnect.data.Entity;
 using api.NetConnect.DataControllers;
 using api.NetConnect.ViewModels.Profile;
 using System;

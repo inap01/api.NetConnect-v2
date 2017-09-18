@@ -4,3 +4,9 @@ api.NetConnect/obj/
 api.NetConnect.data/bin/
 api.NetConnect.data/obj/
 .vs/
+api.NetConnect.data.Entity/obj/
+api.NetConnect.data.ViewModel/bin/Release/api.NetConnect.data.ViewModel.pdb
+api.NetConnect.data.ViewModel/bin/Release/api.NetConnect.data.ViewModel.dll.config
+api.NetConnect.data.ViewModel/bin/
+api.NetConnect.data.ViewModel/obj/
+api.NetConnect.data.Entity/bin/

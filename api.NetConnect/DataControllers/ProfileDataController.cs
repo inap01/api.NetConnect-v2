@@ -1,4 +1,4 @@
-﻿using api.NetConnect.data;
+﻿using api.NetConnect.data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace api.NetConnect.DataControllers
             return new DataContext();
         }
 
-        public static data.User GetItem(Int32 id)
+        public static User GetItem(Int32 id)
         {
             DataContext db = InitDB();
 

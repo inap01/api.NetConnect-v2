@@ -1,4 +1,4 @@
-﻿using api.NetConnect.data;
+﻿using api.NetConnect.data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,14 +21,13 @@ namespace api.NetConnect.DataControllers
 
 
         public static T GetItem<ConditionPropType>(ConditionPropType condition, String ParameterName)
-            where ConditionPropType : class
         {
             InitDB();
             var list = GetPropertyMatchingTypeT(typeof(User));
             return GetPropertyFromSetMatchingCondition<ConditionPropType>(list, condition, ParameterName);
         }
+        
         private static T GetPropertyFromSetMatchingCondition<Z>(DbSet<T> value, Z condition, String paramName)
-            where Z : class
         {
             foreach(var x in value)
             {
