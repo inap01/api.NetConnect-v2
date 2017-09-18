@@ -20,7 +20,7 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                var model = ProfileDataController.GetItem(id);
+                var model = UserDataController.GetItem(id);
                 viewmodel.Data = model.ToProfileViewModelItem();
             }
             catch(Exception ex)

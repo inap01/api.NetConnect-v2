@@ -9,7 +9,7 @@ namespace api.NetConnect.DataControllers
 {
     public class GenericDataController<T> where T : class
     {
-        private static DataContext db = null;
+        protected static DataContext db = null;
 
         private static DataContext InitDB()
         {
@@ -21,15 +21,16 @@ namespace api.NetConnect.DataControllers
         public static T GetItem(Int32 condition)
         {
             InitDB();
-            var list = GetPropertyMatchingTypeT(typeof(User));
+            var list = GetPropertyMatchingTypeT(typeof(T));
 
             return GetPropertyFromSetMatchingCondition<Int32>(list, condition, "ID");
         }
 
+        #region GETITEM
         public static T GetItem<ConditionPropType>(ConditionPropType condition, String ParameterName)
         {
             InitDB();
-            var list = GetPropertyMatchingTypeT(typeof(User));
+            var list = GetPropertyMatchingTypeT(typeof(T));
             
             return GetPropertyFromSetMatchingCondition<ConditionPropType>(list, condition, ParameterName);
         }
@@ -51,6 +52,14 @@ namespace api.NetConnect.DataControllers
         {
             var u = typeof(DataContext).GetProperties().SingleOrDefault(x => x.PropertyType.GetGenericArguments().Any(t => t.AssemblyQualifiedName == typeOfT.AssemblyQualifiedName));
             return (System.Data.Entity.DbSet<T>)u.GetValue(InitDB());            
+        }
+        #endregion
+
+        public static void Delete(T item)
+        {
+            InitDB();
+            var list = GetPropertyMatchingTypeT(typeof(T));
+            list.Remove(item);
         }
     }
 

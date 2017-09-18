@@ -5,10 +5,6 @@ using System.Web;
 
 namespace api.NetConnect.ViewModels
 {
-    public class BaseViewModelItem
-    {
-        public DateTime LastChange { get; set; }
-    }
     public class BaseViewModel
     {
         public Boolean Success { get; set; }
@@ -24,7 +20,7 @@ namespace api.NetConnect.ViewModels
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertStates.info,
+                State = AlertState.info,
                 Message = message
             });
         }
@@ -33,7 +29,7 @@ namespace api.NetConnect.ViewModels
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertStates.success,
+                State = AlertState.success,
                 Message = message
             });
         }
@@ -42,7 +38,7 @@ namespace api.NetConnect.ViewModels
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertStates.warning,
+                State = AlertState.warning,
                 Message = message
             });
         }
@@ -51,17 +47,22 @@ namespace api.NetConnect.ViewModels
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertStates.danger,
+                State = AlertState.danger,
                 Message = message
             });
         }
     }
 
-    public enum AlertStates { info, success, warning, danger }
+    public class BaseViewModelItem
+    {
+        public DateTime LastChange { get; set; }
+    }
+
+    public enum AlertState { info, success, warning, danger }
 
     public class AlertMessage
     {
-        public AlertStates State { get; set; }
+        public AlertState State { get; set; }
         public String Message { get; set; }
     }
 }

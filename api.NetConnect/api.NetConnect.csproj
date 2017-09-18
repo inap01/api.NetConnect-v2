@@ -97,13 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\TestingController.cs" />
-    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
-    <Compile Include="Controllers\TournamentController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
-    <Compile Include="DataControllers\PartnerDataController.cs" />
-    <Compile Include="DataControllers\ProfileDataController.cs" />
+    <Compile Include="DataControllers\UserDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
