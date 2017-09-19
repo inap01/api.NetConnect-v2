@@ -23,7 +23,6 @@ namespace api.NetConnect.DataControllers
         {
             InitDB();
             var list = GetPropertyMatchingTypeT(typeof(T));
-
             return GetPropertyFromSetMatchingCondition<Int32>(list, condition, "ID");
         }
 

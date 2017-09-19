@@ -18,6 +18,7 @@ namespace api.NetConnect.data.Entity
         public Tournament()
         {
             this.TournamentParticipant = new HashSet<TournamentParticipant>();
+            this.TournamentTeam = new HashSet<TournamentTeam>();
         }
     
         public int ID { get; set; }
@@ -27,14 +28,16 @@ namespace api.NetConnect.data.Entity
         public string ChallongeLink { get; set; }
         public string Mode { get; set; }
         public System.DateTime Start { get; set; }
-        public System.DateTime End { get; set; }
+        public Nullable<System.DateTime> End { get; set; }
         public bool IsPauseGame { get; set; }
-        public int PartnerID { get; set; }
+        public Nullable<int> PartnerID { get; set; }
         public byte[] LastChange { get; set; }
     
         public virtual Partner Partner { get; set; }
         public virtual TournamentGame TournamentGame { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TournamentParticipant> TournamentParticipant { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TournamentTeam> TournamentTeam { get; set; }
     }
 }

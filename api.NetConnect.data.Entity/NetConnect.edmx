@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="NetConnectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NetConnectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CateringOrder">
           <Key>
             <PropertyRef Name="ID" />
@@ -35,6 +35,7 @@
           <Property Name="Description" Type="text" />
           <Property Name="Image" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Attributes" Type="text" />
           <Property Name="SingleChoice" Type="bit" Nullable="false" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -85,6 +86,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="Seat">
@@ -98,6 +100,7 @@
           <Property Name="ReservationDate" Type="datetime" Nullable="false" />
           <Property Name="Payed" Type="bit" Nullable="false" />
           <Property Name="IsTeam" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="Settings">
@@ -134,9 +137,9 @@
           <Property Name="ChallongeLink" Type="text" Nullable="false" />
           <Property Name="Mode" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
-          <Property Name="End" Type="datetime" Nullable="false" />
+          <Property Name="End" Type="datetime" />
           <Property Name="IsPauseGame" Type="bit" Nullable="false" />
-          <Property Name="PartnerID" Type="int" Nullable="false" />
+          <Property Name="PartnerID" Type="int" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="TournamentGame">
@@ -147,6 +150,7 @@
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Icon" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Rules" Type="text" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="BattleTag" Type="bit" Nullable="false" />
           <Property Name="SteamID" Type="bit" Nullable="false" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -158,7 +162,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="TournamentID" Type="int" Nullable="false" />
-          <Property Name="TournamentTeamID" Type="int" Nullable="false" />
+          <Property Name="TournamentTeamID" Type="int" />
           <Property Name="Registered" Type="datetime" Nullable="false" />
           <Property Name="LastChange" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
@@ -186,7 +190,8 @@
           <Property Name="Registered" Type="datetime" Nullable="false" />
           <Property Name="IsTeam" Type="bit" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
-          <Property Name="IsVorstand" Type="bit" Nullable="false" />
+          <Property Name="IsCEO" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Image" Type="varchar" MaxLength="255" />
           <Property Name="SteamID" Type="varchar" MaxLength="25" />
           <Property Name="BattleTag" Type="varchar" MaxLength="25" />
@@ -290,7 +295,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_PartnerID">
-          <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
+          <End Role="Partner" Type="Self.Partner" Multiplicity="0..1" />
           <End Role="Tournament" Type="Self.Tournament" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Partner">
@@ -326,7 +331,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_TournamentTeamID">
-          <End Role="TournamentTeam" Type="Self.TournamentTeam" Multiplicity="1" />
+          <End Role="TournamentTeam" Type="Self.TournamentTeam" Multiplicity="0..1" />
           <End Role="TournamentParticipant" Type="Self.TournamentParticipant" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TournamentTeam">
@@ -346,6 +351,18 @@
             </Principal>
             <Dependent Role="TournamentParticipant">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TournamentTeam_TournamentID">
+          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
+          <End Role="TournamentTeam" Type="Self.TournamentTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TournamentTeam">
+              <PropertyRef Name="TournamentID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -416,12 +433,87 @@
             <End Role="User" EntitySet="User" />
             <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
           </AssociationSet>
+          <AssociationSet Name="FK_TournamentTeam_TournamentID" Association="Self.FK_TournamentTeam_TournamentID">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="TournamentTeam" EntitySet="TournamentTeam" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="NetConnectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="NetConnectEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CateringOrder" EntityType="NetConnectModel.CateringOrder" />
+          <EntitySet Name="CateringOrderDetail" EntityType="NetConnectModel.CateringOrderDetail" />
+          <EntitySet Name="CateringProduct" EntityType="NetConnectModel.CateringProduct" />
+          <EntitySet Name="Chat" EntityType="NetConnectModel.Chat" />
+          <EntitySet Name="Logs" EntityType="NetConnectModel.Logs" />
+          <EntitySet Name="Partner" EntityType="NetConnectModel.Partner" />
+          <EntitySet Name="PartnerPack" EntityType="NetConnectModel.PartnerPack" />
+          <EntitySet Name="Seat" EntityType="NetConnectModel.Seat" />
+          <EntitySet Name="Settings" EntityType="NetConnectModel.Settings" />
+          <EntitySet Name="Tournament" EntityType="NetConnectModel.Tournament" />
+          <EntitySet Name="TournamentGame" EntityType="NetConnectModel.TournamentGame" />
+          <EntitySet Name="TournamentParticipant" EntityType="NetConnectModel.TournamentParticipant" />
+          <EntitySet Name="TournamentTeam" EntityType="NetConnectModel.TournamentTeam" />
+          <EntitySet Name="User" EntityType="NetConnectModel.User" />
+          <AssociationSet Name="FK_CateringOrder_SeatID" Association="NetConnectModel.FK_CateringOrder_SeatID">
+            <End Role="Seat" EntitySet="Seat" />
+            <End Role="CateringOrder" EntitySet="CateringOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CateringOrder_UserID" Association="NetConnectModel.FK_CateringOrder_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="CateringOrder" EntitySet="CateringOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CateringOrderDetail_CateringOrderID" Association="NetConnectModel.FK_CateringOrderDetail_CateringOrderID">
+            <End Role="CateringOrder" EntitySet="CateringOrder" />
+            <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CateringOrderDetail_CateringProductID" Association="NetConnectModel.FK_CateringOrderDetail_CateringProductID">
+            <End Role="CateringProduct" EntitySet="CateringProduct" />
+            <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chat_UserID" Association="NetConnectModel.FK_Chat_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Chat" EntitySet="Chat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logs_UserID" Association="NetConnectModel.FK_Logs_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Partner_PartnerPackID" Association="NetConnectModel.FK_Partner_PartnerPackID">
+            <End Role="PartnerPack" EntitySet="PartnerPack" />
+            <End Role="Partner" EntitySet="Partner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tournament_PartnerID" Association="NetConnectModel.FK_Tournament_PartnerID">
+            <End Role="Partner" EntitySet="Partner" />
+            <End Role="Tournament" EntitySet="Tournament" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seat_UserID" Association="NetConnectModel.FK_Seat_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Seat" EntitySet="Seat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tournament_TournamentGameID" Association="NetConnectModel.FK_Tournament_TournamentGameID">
+            <End Role="TournamentGame" EntitySet="TournamentGame" />
+            <End Role="Tournament" EntitySet="Tournament" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tournament_TournamentID" Association="NetConnectModel.FK_Tournament_TournamentID">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TournamentTeam_TournamentID" Association="NetConnectModel.FK_TournamentTeam_TournamentID">
+            <End Role="Tournament" EntitySet="Tournament" />
+            <End Role="TournamentTeam" EntitySet="TournamentTeam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tournament_TournamentTeamID" Association="NetConnectModel.FK_Tournament_TournamentTeamID">
+            <End Role="TournamentTeam" EntitySet="TournamentTeam" />
+            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tournament_UserID" Association="NetConnectModel.FK_Tournament_UserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="CateringOrder">
           <Key>
             <PropertyRef Name="ID" />
@@ -431,10 +523,10 @@
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="SeatID" Type="Int32" Nullable="false" />
           <Property Name="CompletionState" Type="Int32" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Seat" Relationship="Self.FK_CateringOrder_SeatID" FromRole="CateringOrder" ToRole="Seat" />
-          <NavigationProperty Name="User" Relationship="Self.FK_CateringOrder_UserID" FromRole="CateringOrder" ToRole="User" />
-          <NavigationProperty Name="CateringOrderDetail" Relationship="Self.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrder" ToRole="CateringOrderDetail" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_CateringOrder_SeatID" FromRole="CateringOrder" ToRole="Seat" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_CateringOrder_UserID" FromRole="CateringOrder" ToRole="User" />
+          <NavigationProperty Name="CateringOrderDetail" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrder" ToRole="CateringOrderDetail" />
         </EntityType>
         <EntityType Name="CateringOrderDetail">
           <Key>
@@ -444,23 +536,24 @@
           <Property Name="CateringOrderID" Type="Int32" Nullable="false" />
           <Property Name="CateringProductID" Type="Int32" Nullable="false" />
           <Property Name="Attributes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="CateringOrder" Relationship="Self.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrderDetail" ToRole="CateringOrder" />
-          <NavigationProperty Name="CateringProduct" Relationship="Self.FK_CateringOrderDetail_CateringProductID" FromRole="CateringOrderDetail" ToRole="CateringProduct" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrderDetail" ToRole="CateringOrder" />
+          <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringProductID" FromRole="CateringOrderDetail" ToRole="CateringProduct" />
         </EntityType>
         <EntityType Name="CateringProduct">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Image" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Attributes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="SingleChoice" Type="Boolean" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="CateringOrderDetail" Relationship="Self.FK_CateringOrderDetail_CateringProductID" FromRole="CateringProduct" ToRole="CateringOrderDetail" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CateringOrderDetail" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringProductID" FromRole="CateringProduct" ToRole="CateringOrderDetail" />
         </EntityType>
         <EntityType Name="Chat">
           <Key>
@@ -468,11 +561,11 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="GameFlag" Type="Boolean" Nullable="false" />
           <Property Name="GameTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Chat_UserID" FromRole="Chat" ToRole="User" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Chat_UserID" FromRole="Chat" ToRole="User" />
         </EntityType>
         <EntityType Name="Logs">
           <Key>
@@ -480,40 +573,41 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="SQLTable" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SQLActionType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SQLQuery" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ModelBefore" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ModelAfter" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Logs_UserID" FromRole="Logs" ToRole="User" />
+          <Property Name="SQLTable" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SQLActionType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SQLQuery" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ModelBefore" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ModelAfter" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="Logs" ToRole="User" />
         </EntityType>
         <EntityType Name="Partner">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Link" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Link" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Image" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ImageAlt" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ImageAlt" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PartnerPackID" Type="Int32" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="ClickCount" Type="Int32" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="PartnerPack" Relationship="Self.FK_Partner_PartnerPackID" FromRole="Partner" ToRole="PartnerPack" />
-          <NavigationProperty Name="Tournament" Relationship="Self.FK_Tournament_PartnerID" FromRole="Partner" ToRole="Tournament" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="PartnerPack" Relationship="NetConnectModel.FK_Partner_PartnerPackID" FromRole="Partner" ToRole="PartnerPack" />
+          <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_PartnerID" FromRole="Partner" ToRole="Tournament" />
         </EntityType>
         <EntityType Name="PartnerPack">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Partner" Relationship="Self.FK_Partner_PartnerPackID" FromRole="PartnerPack" ToRole="Partner" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Partner_PartnerPackID" FromRole="PartnerPack" ToRole="Partner" />
         </EntityType>
         <EntityType Name="Seat">
           <Key>
@@ -522,13 +616,14 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="State" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ReservationDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Payed" Type="Boolean" Nullable="false" />
           <Property Name="IsTeam" Type="Boolean" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="CateringOrder" Relationship="Self.FK_CateringOrder_SeatID" FromRole="Seat" ToRole="CateringOrder" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Seat_UserID" FromRole="Seat" ToRole="User" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_SeatID" FromRole="Seat" ToRole="CateringOrder" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="Seat" ToRole="User" />
         </EntityType>
         <EntityType Name="Settings">
           <Key>
@@ -544,14 +639,14 @@
           <Property Name="ReservedDays" Type="Int32" Nullable="false" />
           <Property Name="IsActiveCatering" Type="Boolean" Nullable="false" />
           <Property Name="IsActiveFeedback" Type="Boolean" Nullable="false" />
-          <Property Name="FeedbackLink" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FeedbackLink" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IsActiveChat" Type="Boolean" Nullable="false" />
-          <Property Name="BankAccountOwner" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IBAN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BLZ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BankAccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BIC" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="BankAccountOwner" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IBAN" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BLZ" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BankAccountNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BIC" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Tournament">
           <Key>
@@ -561,29 +656,31 @@
           <Property Name="Volume" Type="Int32" Nullable="false" />
           <Property Name="TournamentGameID" Type="Int32" Nullable="false" />
           <Property Name="TeamSize" Type="Int32" Nullable="false" />
-          <Property Name="ChallongeLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Mode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ChallongeLink" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Mode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="End" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="End" Type="DateTime" Precision="3" />
           <Property Name="IsPauseGame" Type="Boolean" Nullable="false" />
-          <Property Name="PartnerID" Type="Int32" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Partner" Relationship="Self.FK_Tournament_PartnerID" FromRole="Tournament" ToRole="Partner" />
-          <NavigationProperty Name="TournamentGame" Relationship="Self.FK_Tournament_TournamentGameID" FromRole="Tournament" ToRole="TournamentGame" />
-          <NavigationProperty Name="TournamentParticipant" Relationship="Self.FK_Tournament_TournamentID" FromRole="Tournament" ToRole="TournamentParticipant" />
+          <Property Name="PartnerID" Type="Int32" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Tournament_PartnerID" FromRole="Tournament" ToRole="Partner" />
+          <NavigationProperty Name="TournamentGame" Relationship="NetConnectModel.FK_Tournament_TournamentGameID" FromRole="Tournament" ToRole="TournamentGame" />
+          <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_Tournament_TournamentID" FromRole="Tournament" ToRole="TournamentParticipant" />
+          <NavigationProperty Name="TournamentTeam" Relationship="NetConnectModel.FK_TournamentTeam_TournamentID" FromRole="Tournament" ToRole="TournamentTeam" />
         </EntityType>
         <EntityType Name="TournamentGame">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Rules" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Icon" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rules" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="BattleTag" Type="Boolean" Nullable="false" />
           <Property Name="SteamID" Type="Boolean" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Tournament" Relationship="Self.FK_Tournament_TournamentGameID" FromRole="TournamentGame" ToRole="Tournament" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_TournamentGameID" FromRole="TournamentGame" ToRole="Tournament" />
         </EntityType>
         <EntityType Name="TournamentParticipant">
           <Key>
@@ -592,53 +689,55 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
-          <Property Name="TournamentTeamID" Type="Int32" Nullable="false" />
+          <Property Name="TournamentTeamID" Type="Int32" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Tournament" Relationship="Self.FK_Tournament_TournamentID" FromRole="TournamentParticipant" ToRole="Tournament" />
-          <NavigationProperty Name="TournamentTeam" Relationship="Self.FK_Tournament_TournamentTeamID" FromRole="TournamentParticipant" ToRole="TournamentTeam" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Tournament_UserID" FromRole="TournamentParticipant" ToRole="User" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_TournamentID" FromRole="TournamentParticipant" ToRole="Tournament" />
+          <NavigationProperty Name="TournamentTeam" Relationship="NetConnectModel.FK_Tournament_TournamentTeamID" FromRole="TournamentParticipant" ToRole="TournamentTeam" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Tournament_UserID" FromRole="TournamentParticipant" ToRole="User" />
         </EntityType>
         <EntityType Name="TournamentTeam">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="TournamentParticipant" Relationship="Self.FK_Tournament_TournamentTeamID" FromRole="TournamentTeam" ToRole="TournamentParticipant" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_TournamentTeam_TournamentID" FromRole="TournamentTeam" ToRole="Tournament" />
+          <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_Tournament_TournamentTeamID" FromRole="TournamentTeam" ToRole="TournamentParticipant" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Nickname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Nickname" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PasswordReset" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsTeam" Type="Boolean" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
-          <Property Name="IsVorstand" Type="Boolean" Nullable="false" />
+          <Property Name="IsCEO" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="SteamID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="BattleTag" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Newsletter" Type="Boolean" Nullable="false" />
-          <Property Name="LastChange" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="CateringOrder" Relationship="Self.FK_CateringOrder_UserID" FromRole="User" ToRole="CateringOrder" />
-          <NavigationProperty Name="Chat" Relationship="Self.FK_Chat_UserID" FromRole="User" ToRole="Chat" />
-          <NavigationProperty Name="Logs" Relationship="Self.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
-          <NavigationProperty Name="Seat" Relationship="Self.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
-          <NavigationProperty Name="TournamentParticipant" Relationship="Self.FK_Tournament_UserID" FromRole="User" ToRole="TournamentParticipant" />
+          <Property Name="LastChange" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_UserID" FromRole="User" ToRole="CateringOrder" />
+          <NavigationProperty Name="Chat" Relationship="NetConnectModel.FK_Chat_UserID" FromRole="User" ToRole="Chat" />
+          <NavigationProperty Name="Logs" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
+          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
+          <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_Tournament_UserID" FromRole="User" ToRole="TournamentParticipant" />
         </EntityType>
         <Association Name="FK_CateringOrder_SeatID">
-          <End Role="Seat" Type="Self.Seat" Multiplicity="1" />
-          <End Role="CateringOrder" Type="Self.CateringOrder" Multiplicity="*" />
+          <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="1" />
+          <End Type="NetConnectModel.CateringOrder" Role="CateringOrder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Seat">
               <PropertyRef Name="ID" />
@@ -649,8 +748,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CateringOrder_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="CateringOrder" Type="Self.CateringOrder" Multiplicity="*" />
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.CateringOrder" Role="CateringOrder" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -661,8 +760,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CateringOrderDetail_CateringOrderID">
-          <End Role="CateringOrder" Type="Self.CateringOrder" Multiplicity="1" />
-          <End Role="CateringOrderDetail" Type="Self.CateringOrderDetail" Multiplicity="*" />
+          <End Type="NetConnectModel.CateringOrder" Role="CateringOrder" Multiplicity="1" />
+          <End Type="NetConnectModel.CateringOrderDetail" Role="CateringOrderDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CateringOrder">
               <PropertyRef Name="ID" />
@@ -673,8 +772,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CateringOrderDetail_CateringProductID">
-          <End Role="CateringProduct" Type="Self.CateringProduct" Multiplicity="1" />
-          <End Role="CateringOrderDetail" Type="Self.CateringOrderDetail" Multiplicity="*" />
+          <End Type="NetConnectModel.CateringProduct" Role="CateringProduct" Multiplicity="1" />
+          <End Type="NetConnectModel.CateringOrderDetail" Role="CateringOrderDetail" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CateringProduct">
               <PropertyRef Name="ID" />
@@ -685,8 +784,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Chat_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Chat" Type="Self.Chat" Multiplicity="*" />
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.Chat" Role="Chat" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -697,8 +796,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Logs_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Logs" Type="Self.Logs" Multiplicity="*" />
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.Logs" Role="Logs" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -709,8 +808,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Partner_PartnerPackID">
-          <End Role="PartnerPack" Type="Self.PartnerPack" Multiplicity="1" />
-          <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
+          <End Type="NetConnectModel.PartnerPack" Role="PartnerPack" Multiplicity="1" />
+          <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PartnerPack">
               <PropertyRef Name="ID" />
@@ -721,8 +820,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_PartnerID">
-          <End Role="Partner" Type="Self.Partner" Multiplicity="1" />
-          <End Role="Tournament" Type="Self.Tournament" Multiplicity="*" />
+          <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="0..1" />
+          <End Type="NetConnectModel.Tournament" Role="Tournament" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Partner">
               <PropertyRef Name="ID" />
@@ -733,8 +832,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Seat_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Seat" Type="Self.Seat" Multiplicity="*" />
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -745,8 +844,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_TournamentGameID">
-          <End Role="TournamentGame" Type="Self.TournamentGame" Multiplicity="1" />
-          <End Role="Tournament" Type="Self.Tournament" Multiplicity="*" />
+          <End Type="NetConnectModel.TournamentGame" Role="TournamentGame" Multiplicity="1" />
+          <End Type="NetConnectModel.Tournament" Role="Tournament" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TournamentGame">
               <PropertyRef Name="ID" />
@@ -757,8 +856,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_TournamentID">
-          <End Role="Tournament" Type="Self.Tournament" Multiplicity="1" />
-          <End Role="TournamentParticipant" Type="Self.TournamentParticipant" Multiplicity="*" />
+          <End Type="NetConnectModel.Tournament" Role="Tournament" Multiplicity="1" />
+          <End Type="NetConnectModel.TournamentParticipant" Role="TournamentParticipant" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tournament">
               <PropertyRef Name="ID" />
@@ -768,9 +867,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TournamentTeam_TournamentID">
+          <End Type="NetConnectModel.Tournament" Role="Tournament" Multiplicity="1" />
+          <End Type="NetConnectModel.TournamentTeam" Role="TournamentTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tournament">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TournamentTeam">
+              <PropertyRef Name="TournamentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Tournament_TournamentTeamID">
-          <End Role="TournamentTeam" Type="Self.TournamentTeam" Multiplicity="1" />
-          <End Role="TournamentParticipant" Type="Self.TournamentParticipant" Multiplicity="*" />
+          <End Type="NetConnectModel.TournamentTeam" Role="TournamentTeam" Multiplicity="0..1" />
+          <End Type="NetConnectModel.TournamentParticipant" Role="TournamentParticipant" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TournamentTeam">
               <PropertyRef Name="ID" />
@@ -781,8 +892,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Tournament_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="TournamentParticipant" Type="Self.TournamentParticipant" Multiplicity="*" />
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.TournamentParticipant" Role="TournamentParticipant" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="ID" />
@@ -792,75 +903,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="NetConnectEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="CateringOrder" EntityType="Self.CateringOrder" />
-          <EntitySet Name="CateringOrderDetail" EntityType="Self.CateringOrderDetail" />
-          <EntitySet Name="CateringProduct" EntityType="Self.CateringProduct" />
-          <EntitySet Name="Chat" EntityType="Self.Chat" />
-          <EntitySet Name="Logs" EntityType="Self.Logs" />
-          <EntitySet Name="Partner" EntityType="Self.Partner" />
-          <EntitySet Name="PartnerPack" EntityType="Self.PartnerPack" />
-          <EntitySet Name="Seat" EntityType="Self.Seat" />
-          <EntitySet Name="Settings" EntityType="Self.Settings" />
-          <EntitySet Name="Tournament" EntityType="Self.Tournament" />
-          <EntitySet Name="TournamentGame" EntityType="Self.TournamentGame" />
-          <EntitySet Name="TournamentParticipant" EntityType="Self.TournamentParticipant" />
-          <EntitySet Name="TournamentTeam" EntityType="Self.TournamentTeam" />
-          <EntitySet Name="User" EntityType="Self.User" />
-          <AssociationSet Name="FK_CateringOrder_SeatID" Association="Self.FK_CateringOrder_SeatID">
-            <End Role="Seat" EntitySet="Seat" />
-            <End Role="CateringOrder" EntitySet="CateringOrder" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CateringOrder_UserID" Association="Self.FK_CateringOrder_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="CateringOrder" EntitySet="CateringOrder" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CateringOrderDetail_CateringOrderID" Association="Self.FK_CateringOrderDetail_CateringOrderID">
-            <End Role="CateringOrder" EntitySet="CateringOrder" />
-            <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CateringOrderDetail_CateringProductID" Association="Self.FK_CateringOrderDetail_CateringProductID">
-            <End Role="CateringProduct" EntitySet="CateringProduct" />
-            <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Chat_UserID" Association="Self.FK_Chat_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="Chat" EntitySet="Chat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Logs_UserID" Association="Self.FK_Logs_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="Logs" EntitySet="Logs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Partner_PartnerPackID" Association="Self.FK_Partner_PartnerPackID">
-            <End Role="PartnerPack" EntitySet="PartnerPack" />
-            <End Role="Partner" EntitySet="Partner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tournament_PartnerID" Association="Self.FK_Tournament_PartnerID">
-            <End Role="Partner" EntitySet="Partner" />
-            <End Role="Tournament" EntitySet="Tournament" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Seat_UserID" Association="Self.FK_Seat_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="Seat" EntitySet="Seat" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tournament_TournamentGameID" Association="Self.FK_Tournament_TournamentGameID">
-            <End Role="TournamentGame" EntitySet="TournamentGame" />
-            <End Role="Tournament" EntitySet="Tournament" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tournament_TournamentID" Association="Self.FK_Tournament_TournamentID">
-            <End Role="Tournament" EntitySet="Tournament" />
-            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tournament_TournamentTeamID" Association="Self.FK_Tournament_TournamentTeamID">
-            <End Role="TournamentTeam" EntitySet="TournamentTeam" />
-            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tournament_UserID" Association="Self.FK_Tournament_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -869,202 +912,207 @@
           <EntitySetMapping Name="CateringOrder">
             <EntityTypeMapping TypeName="NetConnectModel.CateringOrder">
               <MappingFragment StoreEntitySet="CateringOrder">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
-                <ScalarProperty Name="CompletionState" ColumnName="CompletionState" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="CompletionState" ColumnName="CompletionState" />
+                <ScalarProperty Name="SeatID" ColumnName="SeatID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CateringOrderDetail">
             <EntityTypeMapping TypeName="NetConnectModel.CateringOrderDetail">
               <MappingFragment StoreEntitySet="CateringOrderDetail">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CateringOrderID" ColumnName="CateringOrderID" />
-                <ScalarProperty Name="CateringProductID" ColumnName="CateringProductID" />
-                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
+                <ScalarProperty Name="CateringProductID" ColumnName="CateringProductID" />
+                <ScalarProperty Name="CateringOrderID" ColumnName="CateringOrderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CateringProduct">
             <EntityTypeMapping TypeName="NetConnectModel.CateringProduct">
               <MappingFragment StoreEntitySet="CateringProduct">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
-                <ScalarProperty Name="SingleChoice" ColumnName="SingleChoice" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="SingleChoice" ColumnName="SingleChoice" />
+                <ScalarProperty Name="Attributes" ColumnName="Attributes" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Chat">
             <EntityTypeMapping TypeName="NetConnectModel.Chat">
               <MappingFragment StoreEntitySet="Chat">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="GameFlag" ColumnName="GameFlag" />
-                <ScalarProperty Name="GameTitle" ColumnName="GameTitle" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="GameTitle" ColumnName="GameTitle" />
+                <ScalarProperty Name="GameFlag" ColumnName="GameFlag" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Logs">
             <EntityTypeMapping TypeName="NetConnectModel.Logs">
               <MappingFragment StoreEntitySet="Logs">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="SQLTable" ColumnName="SQLTable" />
-                <ScalarProperty Name="SQLActionType" ColumnName="SQLActionType" />
-                <ScalarProperty Name="SQLQuery" ColumnName="SQLQuery" />
-                <ScalarProperty Name="ModelBefore" ColumnName="ModelBefore" />
-                <ScalarProperty Name="ModelAfter" ColumnName="ModelAfter" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="ModelAfter" ColumnName="ModelAfter" />
+                <ScalarProperty Name="ModelBefore" ColumnName="ModelBefore" />
+                <ScalarProperty Name="SQLQuery" ColumnName="SQLQuery" />
+                <ScalarProperty Name="SQLActionType" ColumnName="SQLActionType" />
+                <ScalarProperty Name="SQLTable" ColumnName="SQLTable" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Partner">
             <EntityTypeMapping TypeName="NetConnectModel.Partner">
               <MappingFragment StoreEntitySet="Partner">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Link" ColumnName="Link" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="ImageAlt" ColumnName="ImageAlt" />
-                <ScalarProperty Name="PartnerPackID" ColumnName="PartnerPackID" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="ClickCount" ColumnName="ClickCount" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PartnerPackID" ColumnName="PartnerPackID" />
+                <ScalarProperty Name="ImageAlt" ColumnName="ImageAlt" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PartnerPack">
             <EntityTypeMapping TypeName="NetConnectModel.PartnerPack">
               <MappingFragment StoreEntitySet="PartnerPack">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Seat">
             <EntityTypeMapping TypeName="NetConnectModel.Seat">
               <MappingFragment StoreEntitySet="Seat">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ReservationDate" ColumnName="ReservationDate" />
-                <ScalarProperty Name="Payed" ColumnName="Payed" />
-                <ScalarProperty Name="IsTeam" ColumnName="IsTeam" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsTeam" ColumnName="IsTeam" />
+                <ScalarProperty Name="Payed" ColumnName="Payed" />
+                <ScalarProperty Name="ReservationDate" ColumnName="ReservationDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Settings">
             <EntityTypeMapping TypeName="NetConnectModel.Settings">
               <MappingFragment StoreEntitySet="Settings">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="ReservationCost" ColumnName="ReservationCost" />
-                <ScalarProperty Name="Start" ColumnName="Start" />
-                <ScalarProperty Name="End" ColumnName="End" />
-                <ScalarProperty Name="IsActiveReservation" ColumnName="IsActiveReservation" />
-                <ScalarProperty Name="BankAccountCheck" ColumnName="BankAccountCheck" />
-                <ScalarProperty Name="ReservedDays" ColumnName="ReservedDays" />
-                <ScalarProperty Name="IsActiveCatering" ColumnName="IsActiveCatering" />
-                <ScalarProperty Name="IsActiveFeedback" ColumnName="IsActiveFeedback" />
-                <ScalarProperty Name="FeedbackLink" ColumnName="FeedbackLink" />
-                <ScalarProperty Name="IsActiveChat" ColumnName="IsActiveChat" />
-                <ScalarProperty Name="BankAccountOwner" ColumnName="BankAccountOwner" />
-                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
-                <ScalarProperty Name="BLZ" ColumnName="BLZ" />
-                <ScalarProperty Name="BankAccountNumber" ColumnName="BankAccountNumber" />
-                <ScalarProperty Name="BIC" ColumnName="BIC" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="BIC" ColumnName="BIC" />
+                <ScalarProperty Name="BankAccountNumber" ColumnName="BankAccountNumber" />
+                <ScalarProperty Name="BLZ" ColumnName="BLZ" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="BankAccountOwner" ColumnName="BankAccountOwner" />
+                <ScalarProperty Name="IsActiveChat" ColumnName="IsActiveChat" />
+                <ScalarProperty Name="FeedbackLink" ColumnName="FeedbackLink" />
+                <ScalarProperty Name="IsActiveFeedback" ColumnName="IsActiveFeedback" />
+                <ScalarProperty Name="IsActiveCatering" ColumnName="IsActiveCatering" />
+                <ScalarProperty Name="ReservedDays" ColumnName="ReservedDays" />
+                <ScalarProperty Name="BankAccountCheck" ColumnName="BankAccountCheck" />
+                <ScalarProperty Name="IsActiveReservation" ColumnName="IsActiveReservation" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="ReservationCost" ColumnName="ReservationCost" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tournament">
             <EntityTypeMapping TypeName="NetConnectModel.Tournament">
               <MappingFragment StoreEntitySet="Tournament">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="TournamentGameID" ColumnName="TournamentGameID" />
-                <ScalarProperty Name="TeamSize" ColumnName="TeamSize" />
-                <ScalarProperty Name="ChallongeLink" ColumnName="ChallongeLink" />
-                <ScalarProperty Name="Mode" ColumnName="Mode" />
-                <ScalarProperty Name="Start" ColumnName="Start" />
-                <ScalarProperty Name="End" ColumnName="End" />
-                <ScalarProperty Name="IsPauseGame" ColumnName="IsPauseGame" />
-                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="PartnerID" ColumnName="PartnerID" />
+                <ScalarProperty Name="IsPauseGame" ColumnName="IsPauseGame" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="ChallongeLink" ColumnName="ChallongeLink" />
+                <ScalarProperty Name="TeamSize" ColumnName="TeamSize" />
+                <ScalarProperty Name="TournamentGameID" ColumnName="TournamentGameID" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TournamentGame">
             <EntityTypeMapping TypeName="NetConnectModel.TournamentGame">
               <MappingFragment StoreEntitySet="TournamentGame">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Icon" ColumnName="Icon" />
-                <ScalarProperty Name="Rules" ColumnName="Rules" />
-                <ScalarProperty Name="BattleTag" ColumnName="BattleTag" />
-                <ScalarProperty Name="SteamID" ColumnName="SteamID" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="SteamID" ColumnName="SteamID" />
+                <ScalarProperty Name="BattleTag" ColumnName="BattleTag" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Rules" ColumnName="Rules" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TournamentParticipant">
             <EntityTypeMapping TypeName="NetConnectModel.TournamentParticipant">
               <MappingFragment StoreEntitySet="TournamentParticipant">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
-                <ScalarProperty Name="TournamentTeamID" ColumnName="TournamentTeamID" />
-                <ScalarProperty Name="Registered" ColumnName="Registered" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
+                <ScalarProperty Name="TournamentTeamID" ColumnName="TournamentTeamID" />
+                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TournamentTeam">
             <EntityTypeMapping TypeName="NetConnectModel.TournamentTeam">
               <MappingFragment StoreEntitySet="TournamentTeam">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User">
             <EntityTypeMapping TypeName="NetConnectModel.User">
               <MappingFragment StoreEntitySet="User">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="PasswordReset" ColumnName="PasswordReset" />
-                <ScalarProperty Name="Registered" ColumnName="Registered" />
-                <ScalarProperty Name="IsTeam" ColumnName="IsTeam" />
-                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
-                <ScalarProperty Name="IsVorstand" ColumnName="IsVorstand" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="SteamID" ColumnName="SteamID" />
-                <ScalarProperty Name="BattleTag" ColumnName="BattleTag" />
-                <ScalarProperty Name="Newsletter" ColumnName="Newsletter" />
                 <ScalarProperty Name="LastChange" ColumnName="LastChange" />
+                <ScalarProperty Name="Newsletter" ColumnName="Newsletter" />
+                <ScalarProperty Name="BattleTag" ColumnName="BattleTag" />
+                <ScalarProperty Name="SteamID" ColumnName="SteamID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsCEO" ColumnName="IsCEO" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsTeam" ColumnName="IsTeam" />
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
+                <ScalarProperty Name="PasswordReset" ColumnName="PasswordReset" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

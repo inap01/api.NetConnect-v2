@@ -34,7 +34,8 @@ namespace api.NetConnect.data.Entity
         public System.DateTime Registered { get; set; }
         public bool IsTeam { get; set; }
         public bool IsAdmin { get; set; }
-        public bool IsVorstand { get; set; }
+        public bool IsCEO { get; set; }
+        public bool IsActive { get; set; }
         public string Image { get; set; }
         public string SteamID { get; set; }
         public string BattleTag { get; set; }

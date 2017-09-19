@@ -1,4 +1,14 @@
+Delete  From CateringOrder
+DBCC CHECKIDENT ('[CateringOrder]', RESEED, 0);
+GO
+
 USE master
+GO
+
+ALTER DATABASE [NetConnect] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+GO
+
+ALTER DATABASE [NetConnect] SET OFFLINE;
 GO
 
 DROP DATABASE NetConnect
@@ -24,7 +34,8 @@ CREATE TABLE [dbo].[User] (
 	[Registered] datetime NOT NULL DEFAULT GETDATE(),
 	[IsTeam] bit NOT NULL DEFAULT 0,
 	[IsAdmin] bit NOT NULL DEFAULT 0,
-	[IsVorstand] bit NOT NULL DEFAULT 0,
+	[IsCEO] bit NOT NULL DEFAULT 0,
+	[IsActive] bit NOT NULL DEFAULT 1,
 	[Image] varchar(255),
 	[SteamID] varchar(25),
 	[BattleTag] varchar(25),
@@ -55,6 +66,7 @@ CREATE TABLE [dbo].[CateringProduct] (
 	[Description] text,
 	[Image] varchar(100) NOT NULL,
 	[Price] decimal(10,2) NOT NULL,
+	[IsActive] bit NOT NULL DEFAULT 1,
 	[Attributes] text,
 	[SingleChoice] bit NOT NULL DEFAULT 0,
 	[LastChange] timestamp NOT NULL
@@ -99,6 +111,7 @@ CREATE TABLE [dbo].[Partner] (
 CREATE TABLE [dbo].[PartnerPack] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
+	[IsActive] bit NOT NULL DEFAULT 1,
 	[LastChange] timestamp NOT NULL
 );
 
@@ -110,6 +123,7 @@ CREATE TABLE [dbo].[Seat] (
 	[ReservationDate] datetime NOT NULL,
 	[Payed] bit NOT NULL,
 	[IsTeam] bit NOT NULL,
+	[IsActive] bit NOT NULL DEFAULT 1,
 	[LastChange] timestamp NOT NULL
 );
 
@@ -142,9 +156,9 @@ CREATE TABLE [dbo].[Tournament] (
 	[ChallongeLink] text NOT NULL,
 	[Mode] VARCHAR(10) NOT NULL,
 	[Start] datetime NOT NULL,
-	[End] datetime NOT NULL,
+	[End] datetime,
 	[IsPauseGame] bit NOT NULL DEFAULT 0,
-	[PartnerID] INT NOT NULL DEFAULT 0,
+	[PartnerID] INT DEFAULT 0,
 	[LastChange] timestamp NOT NULL
 );
 
@@ -153,6 +167,7 @@ CREATE TABLE [dbo].[TournamentGame] (
 	[Name] VARCHAR(50) NOT NULL,
 	[Icon] VARCHAR(50) NOT NULL,
 	[Rules] text NOT NULL,
+	[IsActive] bit NOT NULL DEFAULT 1,
 	[BattleTag] bit NOT NULL DEFAULT 0,
 	[SteamID] bit NOT NULL DEFAULT 0,
 	[LastChange] timestamp NOT NULL
@@ -206,5 +221,8 @@ ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_PartnerID] FOREIGN 
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentTeamID] FOREIGN KEY (TournamentTeamID) REFERENCES [dbo].[TournamentTeam](ID);
+
+-- [dbo].[TournamentTeam]
+ALTER TABLE [dbo].[TournamentTeam] ADD CONSTRAINT [FK_TournamentTeam_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
 
 GO

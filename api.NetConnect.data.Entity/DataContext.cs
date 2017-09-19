@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace api.NetConnect.data.Entity
 {
+    public partial class NetConnectEntities
+    {
+        public NetConnectEntities(String conn)
+            : base(conn)
+        {
+
+        }
+    }
     public sealed class DataContext : NetConnect.data.Entity.NetConnectEntities
     {
         public DataContext(String ConnectionString)
@@ -13,5 +22,16 @@ namespace api.NetConnect.data.Entity
         {
 
         }
+        public override int SaveChanges()
+        {
+            DateTime saveTime = DateTime.UtcNow;
+            foreach (var entry in this.ChangeTracker.Entries().Where(e => e.State == (EntityState)System.Data.Entity.EntityState.Added || e.State == (EntityState)System.Data.Entity.EntityState.Modified))
+            {
+                if (entry.Property("LastChange").CurrentValue == null)
+                    entry.Property("LastChange").CurrentValue = BitConverter.GetBytes(DateTime.MinValue.Ticks+6);
+            }
+            return base.SaveChanges();
+        }
     }
+    
 }

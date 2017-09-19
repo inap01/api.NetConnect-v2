@@ -17,7 +17,7 @@ namespace api.NetConnect.data.Entity
         public int ID { get; set; }
         public int UserID { get; set; }
         public int TournamentID { get; set; }
-        public int TournamentTeamID { get; set; }
+        public Nullable<int> TournamentTeamID { get; set; }
         public System.DateTime Registered { get; set; }
         public byte[] LastChange { get; set; }
     

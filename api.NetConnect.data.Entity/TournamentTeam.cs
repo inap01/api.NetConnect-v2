@@ -26,6 +26,7 @@ namespace api.NetConnect.data.Entity
         public string Password { get; set; }
         public byte[] LastChange { get; set; }
     
+        public virtual Tournament Tournament { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TournamentParticipant> TournamentParticipant { get; set; }
     }

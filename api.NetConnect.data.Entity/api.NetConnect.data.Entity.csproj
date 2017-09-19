@@ -115,6 +115,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>NetConnect.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="App.Config" />
     <None Include="NetConnect.edmx.diagram">
       <DependentUpon>NetConnect.edmx</DependentUpon>
     </None>

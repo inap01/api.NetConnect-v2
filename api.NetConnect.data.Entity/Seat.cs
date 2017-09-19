@@ -27,6 +27,7 @@ namespace api.NetConnect.data.Entity
         public System.DateTime ReservationDate { get; set; }
         public bool Payed { get; set; }
         public bool IsTeam { get; set; }
+        public bool IsActive { get; set; }
         public byte[] LastChange { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

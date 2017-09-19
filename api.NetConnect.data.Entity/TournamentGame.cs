@@ -24,6 +24,7 @@ namespace api.NetConnect.data.Entity
         public string Name { get; set; }
         public string Icon { get; set; }
         public string Rules { get; set; }
+        public bool IsActive { get; set; }
         public bool BattleTag { get; set; }
         public bool SteamID { get; set; }
         public byte[] LastChange { get; set; }
