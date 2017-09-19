@@ -10,3 +10,6 @@ api.NetConnect.data.ViewModel/bin/Release/api.NetConnect.data.ViewModel.dll.conf
 api.NetConnect.data.ViewModel/bin/
 api.NetConnect.data.ViewModel/obj/
 api.NetConnect.data.Entity/bin/
+MYSQL Migration/MYSQL Migration/bin/
+MYSQL Migration/MYSQL Migration/obj/
+*.sln
