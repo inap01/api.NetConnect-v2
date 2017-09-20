@@ -177,7 +177,7 @@ CREATE TABLE [dbo].[TournamentParticipant] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[UserID] INT NOT NULL,
 	[TournamentID] int NOT NULL,
-	[TournamentTeamID] INT NOT NULL DEFAULT 0,
+	[TournamentTeamID] INT DEFAULT NULL,
 	[Registered] datetime NOT NULL,
 	[LastChange] timestamp NOT NULL
 );

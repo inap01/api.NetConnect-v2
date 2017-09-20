@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Profile
 {
-    public static class ProfileConverterExtensions
+    public static partial class ConverterExtensions
     {
         public static ProfileViewModelItem ToProfileViewModelItem(this User model)
         {
@@ -24,10 +24,5 @@ namespace api.NetConnect.data.ViewModel.Profile
                 Password2 = null
             };
         }
-    }
-
-    public class ProfileConverter
-    {
-
     }
 }

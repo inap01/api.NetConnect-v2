@@ -47,8 +47,7 @@ namespace MYSQL_Migration
 
                 //FinishedCalls(db, conn, set, adapter);
                 #region TournamentTeam
-                MigrateTournamentTeam(db, conn, set, adapter);
-                MigrateTournamentParticipants(db, conn, set, adapter);
+                
 
                 #endregion
 
@@ -172,6 +171,8 @@ namespace MYSQL_Migration
             MigrateOrdersAndDetails(db, conn, set, adapter);
 
             MigrateTournamentTeam(db, conn, set, adapter);
+
+            MigrateTournamentParticipants(db, conn, set, adapter);
         }
 
         public static DateTime? GetFromMySqlDate(MySqlDateTime date, bool IsNullable = false)
@@ -349,7 +350,7 @@ namespace MYSQL_Migration
                     Volume = Convert.ToInt32(entry["lan_id"]),
                     UserID = offsetID,
                     SeatID = Convert.ToInt32(entry["seat_id"]),
-                    CompletionState = Convert.ToInt32(entry["ID"]),
+                    CompletionState = Convert.ToInt32(entry["completion_state"]),
                 };
                 Detail test = null;
                 var _order = db.CateringOrder.Add(order);
