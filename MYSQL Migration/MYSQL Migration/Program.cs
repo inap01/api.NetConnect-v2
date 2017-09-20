@@ -45,7 +45,7 @@ namespace MYSQL_Migration
                 }
 
 
-                //FinishedCalls(db, conn, set, adapter);
+                FinishedCalls(db, conn, set, adapter);
                 #region TournamentTeam
                 
 
@@ -350,7 +350,7 @@ namespace MYSQL_Migration
                     Volume = Convert.ToInt32(entry["lan_id"]),
                     UserID = offsetID,
                     SeatID = Convert.ToInt32(entry["seat_id"]),
-                    CompletionState = Convert.ToInt32(entry["completion_state"]),
+                    CompletionState = Convert.ToInt32(entry["complete_status"]),
                 };
                 Detail test = null;
                 var _order = db.CateringOrder.Add(order);
