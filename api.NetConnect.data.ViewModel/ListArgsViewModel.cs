@@ -31,36 +31,4 @@ namespace api.NetConnect.data.ViewModel
             Pagination = p;
         }
     }
-
-    class ListArgsViewModel2<T> : BaseViewModel
-    {
-        public List<IBaseViewModelItem> Data { get; set; }
-        public IBaseFilter<T> Filter { get; set; }
-        public IBaseSortSetting<T> SortSettings { get; set; }
-        public IBasePagination<T> Pagination { get; set; }
-
-        public ListArgsViewModel2(IBaseFilter<T> f, IBaseSortSetting<T> s, IBasePagination<T> p)
-        {
-            Filter = f;
-            SortSettings = s;
-            Pagination = p;
-        }
-    }
-
-    public interface IBasePagination<T>
-    {
-    }
-
-    public interface IBaseSortSetting<T>
-    {
-    }
-
-    public interface IBaseFilter<T>
-    {
-    }
-
-    public class TournamentFilter : IBaseFilter<Tournament.TournamentViewModelItem>
-    {
-
-    }
 }
