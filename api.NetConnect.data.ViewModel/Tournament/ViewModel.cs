@@ -31,27 +31,32 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public Boolean BattleTag { get; set; }
         public Boolean Steam { get; set; }
         public Int32 TeilnehmerAnzahl { get; set; }
-        public List<TournamentParticipant> Player { get; set; }
-        public List<TournamentTeam> Teams { get; set; }
+        public List<TournamentParticipantViewModelItem> Player { get; set; }
+        public List<TournamentTeamViewModelItem> Teams { get; set; }
         public TournamentPartner Partner { get; set; }
 
         public TournamentViewModelItem()
         {
         }
 
-        public class TournamentTeam : BaseViewModelItem
-        {
-
-        }
-
-        public class TournamentParticipant : BaseViewModelItem
-        {
-
-        }
-
         public class TournamentPartner : BaseViewModelItem
         {
-
+            public String Name { get; set; }
+            public String Image { get; set; }
         }
+    }
+
+    public class TournamentTeamViewModelItem : BaseViewModelItem
+    {
+        public String Name { get; set; }
+        public Boolean HasPassword { get; set; }
+        public List<TournamentParticipantViewModelItem> Player { get; set; }
+    }
+
+    public class TournamentParticipantViewModelItem : BaseViewModelItem
+    {
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public String Nickname { get; set; }
     }
 }
