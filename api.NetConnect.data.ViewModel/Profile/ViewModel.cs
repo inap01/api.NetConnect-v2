@@ -17,7 +17,6 @@ namespace api.NetConnect.data.ViewModel.Profile
 
     public class ProfileViewModelItem : BaseViewModelItem
     {
-        public Int32 ID { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Nickname { get; set; }

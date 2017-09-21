@@ -18,8 +18,7 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                var model = UserDataController.GetItem(id);
-                viewmodel.Data = model.ToProfileViewModelItem();
+                viewmodel.Data.FromModel(UserDataController.GetItem(id));
             }
             catch(Exception ex)
             {

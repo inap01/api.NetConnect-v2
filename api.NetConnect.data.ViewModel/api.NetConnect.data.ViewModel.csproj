@@ -52,6 +52,7 @@
     <Compile Include="Profile\Converter.cs" />
     <Compile Include="Profile\ViewModel.cs" />
     <Compile Include="Status\StatusViewModel.cs" />
+    <Compile Include="Tournament\ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
