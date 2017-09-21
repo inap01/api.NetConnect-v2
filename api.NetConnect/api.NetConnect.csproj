@@ -94,8 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TournamentController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
+    <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\TournamentConverter.cs" />
+    <Compile Include="Converters\ProfileConverter.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />

@@ -19,6 +19,7 @@ namespace api.NetConnect.DataControllers
             db = new DataContext(ConfigurationManager.ConnectionStrings["NetConnectEntities"].ConnectionString);
             return db;
         }
+
         public static T GetItem(Int32 condition)
         {
             InitDB();

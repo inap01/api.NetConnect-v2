@@ -58,6 +58,21 @@ namespace api.NetConnect
             );
 
             #endregion
+
+            #region PROFILE
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Tournament_GetItem",
+               routeTemplate: "tournament/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "GetItem"
+               }
+            );
+
+            #endregion
         }
     }
 }

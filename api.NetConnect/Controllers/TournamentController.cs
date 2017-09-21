@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.data.ViewModel.Profile;
+using api.NetConnect.data.ViewModel.Tournament;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +10,16 @@ using api.NetConnect.Converters;
 
 namespace api.NetConnect.Controllers
 {
-    public class ProfileController : ApiController
+    public class TournamentController : ApiController
     {
         [HttpGet]
         public IHttpActionResult GetItem(Int32 id)
         {
-            ProfileViewModel viewmodel = new ProfileViewModel();
+            TournamentViewModel viewmodel = new TournamentViewModel();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(id));
+                viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }
             catch(Exception ex)
             {

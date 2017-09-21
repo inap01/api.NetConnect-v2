@@ -6,29 +6,27 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel
 {
-    class ListArgsViewModel<T, F, S, P> : BaseViewModel
+    class ListArgsQuery<T, F, S> : BaseViewModel
         where F : new()
         where S : new()
-        where P : new()
     {
         public List<T> Data { get; set; }
         public F Filter { get; set; }
         public S SortSettings { get; set; }
-        public P Pagination { get; set; }
+        public Pagination Pagination { get; set; }
 
-        public ListArgsViewModel()
+        public ListArgsQuery()
         {
             Data = new List<T>();
             Filter = new F();
             SortSettings = new S();
-            Pagination = new P();
+            Pagination = new Pagination();
         }
 
-        public ListArgsViewModel(F f, S s, P p)
+        public ListArgsQuery(F f, S s)
         {
             Filter = f;
             SortSettings = s;
-            Pagination = p;
         }
     }
 }

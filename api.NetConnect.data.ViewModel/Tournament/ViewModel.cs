@@ -17,13 +17,13 @@ namespace api.NetConnect.data.ViewModel.Tournament
 
     public class TournamentViewModelItem : BaseViewModelItem
     {
-        public Int32 LanID { get; set; }
-        public Int32 GameI { get; set; }
+        public Int32 Volume { get; set; }
+        public Int32 GameID { get; set; }
         public Int32 TeamSize { get; set; }
         public String ChallongeLink { get; set; }
         public String Mode { get; set; }
         public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; }
         public Boolean IsPauseGame { get; set; }
         public String Name { get; set; }
         public String Icon { get; set; }
