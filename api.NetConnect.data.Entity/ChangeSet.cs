@@ -15,19 +15,20 @@ namespace api.NetConnect.data.Entity
     public partial class ChangeSet
     {
         public int ID { get; set; }
-        public System.DateTime CateringOrder { get; set; }
-        public System.DateTime CateringProducts { get; set; }
-        public System.DateTime Chat { get; set; }
-        public System.DateTime Logs { get; set; }
-        public System.DateTime Partner { get; set; }
-        public System.DateTime PartnerPack { get; set; }
-        public System.DateTime Seat { get; set; }
-        public System.DateTime Settings { get; set; }
-        public System.DateTime Tournament { get; set; }
-        public System.DateTime TournamentGame { get; set; }
-        public System.DateTime TournamentTeam { get; set; }
-        public System.DateTime TournamentParticipant { get; set; }
-        public System.DateTime User { get; set; }
-        public System.DateTime RowVersion { get; set; }
+        public Nullable<System.DateTime> CateringOrder { get; set; }
+        public Nullable<System.DateTime> CateringProduct { get; set; }
+        public Nullable<System.DateTime> CateringOrderDetail { get; set; }
+        public Nullable<System.DateTime> Chat { get; set; }
+        public Nullable<System.DateTime> Logs { get; set; }
+        public Nullable<System.DateTime> Partner { get; set; }
+        public Nullable<System.DateTime> PartnerPack { get; set; }
+        public Nullable<System.DateTime> Seat { get; set; }
+        public Nullable<System.DateTime> Settings { get; set; }
+        public Nullable<System.DateTime> Tournament { get; set; }
+        public Nullable<System.DateTime> TournamentGame { get; set; }
+        public Nullable<System.DateTime> TournamentTeam { get; set; }
+        public Nullable<System.DateTime> TournamentParticipant { get; set; }
+        public Nullable<System.DateTime> User { get; set; }
+        public byte[] RowVersion { get; set; }
     }
 }

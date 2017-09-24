@@ -157,8 +157,10 @@
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\ChangeSetConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />
     <Compile Include="Converters\ProfileConverter.cs" />
+    <Compile Include="DataControllers\ChangeSetDataController.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />

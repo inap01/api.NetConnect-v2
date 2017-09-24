@@ -18,19 +18,17 @@ namespace api.NetConnect.data.ViewModel.ChangeSet
 
     public class ChangeSetViewModelItem : BaseViewModelItem
     {
-        DateTime CateringOrders { get; set; }
-        DateTime CateringProducts { get; set; }
-        DateTime Chat { get; set; }
-        DateTime News { get; set; }
-        DateTime NewsCategories { get; set; }
-        DateTime Partner { get; set; }
-        DateTime PartnerPacks { get; set; }
-        DateTime Seating { get; set; }
-        DateTime Settings { get; set; }
-        DateTime Tournament { get; set; }
-        DateTime TournamentGame { get; set; }
-        DateTime TournamentTeam { get; set; }
-        DateTime TournamentParticipant { get; set; }
-        DateTime User { get; set; }
+        public DateTime? CateringOrder { get; set; }
+        public DateTime? CateringProduct { get; set; }
+        public DateTime? Chat { get; set; }
+        public DateTime? Partner { get; set; }
+        public DateTime? PartnerPack { get; set; }
+        public DateTime? Seat { get; set; }
+        public DateTime? Settings { get; set; }
+        public DateTime? Tournament { get; set; }
+        public DateTime? TournamentGame { get; set; }
+        public DateTime? TournamentTeam { get; set; }
+        public DateTime? TournamentParticipant { get; set; }
+        public DateTime? User { get; set; }
     }
 }

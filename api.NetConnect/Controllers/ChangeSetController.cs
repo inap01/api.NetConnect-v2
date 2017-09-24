@@ -6,21 +6,20 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel.ChangeSet;
+using api.NetConnect.DataControllers;
 
 namespace api.NetConnect.Controllers
 {
     public class ChangeSetController : ApiController
     {
-        [HttpPost]
-        public IHttpActionResult GetItem(Int32 id)
+        [HttpGet]
+        public IHttpActionResult GetItem()
         {
             ChangeSetViewModel viewmodel = new ChangeSetViewModel();
 
             try
             {
-                viewmodel.Data.ID = 0;
-                viewmodel.Data.LastChange = DateTime.Now;
-                //viewmodel.Data.
+                viewmodel.FromModel(ChangeSetDataController.GetItem(1));
             }
             catch (Exception ex)
             {

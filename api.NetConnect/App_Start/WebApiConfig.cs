@@ -59,7 +59,7 @@ namespace api.NetConnect
 
             #endregion
 
-            #region PROFILE
+            #region TOURNAMENT
 
             config.Routes.MapHttpRoute(
                name: "GET_Tournament_GetItem",
@@ -68,6 +68,20 @@ namespace api.NetConnect
                defaults: new
                {
                    controller = "Tournament",
+                   action = "GetItem"
+               }
+            );
+
+            #endregion
+            #region CHANGESET
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Changes_GetItem",
+               routeTemplate: "Changes",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "ChangeSet",
                    action = "GetItem"
                }
             );
