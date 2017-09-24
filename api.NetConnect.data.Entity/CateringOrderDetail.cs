@@ -18,7 +18,7 @@ namespace api.NetConnect.data.Entity
         public int CateringOrderID { get; set; }
         public int CateringProductID { get; set; }
         public string Attributes { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual CateringOrder CateringOrder { get; set; }
         public virtual CateringProduct CateringProduct { get; set; }

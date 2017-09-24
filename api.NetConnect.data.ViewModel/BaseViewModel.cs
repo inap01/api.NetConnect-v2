@@ -5,7 +5,7 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel
 {
-    public class BaseViewModel
+    public partial class BaseViewModel
     {
         public Boolean Success { get; set; }
         public List<AlertMessage> AlertMessages { get; set; }

@@ -13,10 +13,10 @@ namespace api.NetConnect.data.Entity
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class NetConnectEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public NetConnectEntities()
-            : base("name=NetConnectEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     
@@ -28,6 +28,7 @@ namespace api.NetConnect.data.Entity
         public virtual DbSet<CateringOrder> CateringOrder { get; set; }
         public virtual DbSet<CateringOrderDetail> CateringOrderDetail { get; set; }
         public virtual DbSet<CateringProduct> CateringProduct { get; set; }
+        public virtual DbSet<ChangeSet> ChangeSet { get; set; }
         public virtual DbSet<Chat> Chat { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }

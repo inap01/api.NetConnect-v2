@@ -19,7 +19,7 @@ namespace api.NetConnect.data.Entity
         public int TournamentID { get; set; }
         public Nullable<int> TournamentTeamID { get; set; }
         public System.DateTime Registered { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual Tournament Tournament { get; set; }
         public virtual TournamentTeam TournamentTeam { get; set; }

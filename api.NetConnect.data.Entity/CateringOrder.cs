@@ -25,7 +25,7 @@ namespace api.NetConnect.data.Entity
         public int UserID { get; set; }
         public int SeatID { get; set; }
         public int CompletionState { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual Seat Seat { get; set; }
         public virtual User User { get; set; }

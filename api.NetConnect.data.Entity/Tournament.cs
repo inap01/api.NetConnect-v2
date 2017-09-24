@@ -31,7 +31,7 @@ namespace api.NetConnect.data.Entity
         public Nullable<System.DateTime> End { get; set; }
         public bool IsPauseGame { get; set; }
         public Nullable<int> PartnerID { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual Partner Partner { get; set; }
         public virtual TournamentGame TournamentGame { get; set; }

@@ -21,7 +21,7 @@ namespace api.NetConnect.data.Entity
         public string SQLQuery { get; set; }
         public string ModelBefore { get; set; }
         public string ModelAfter { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual User User { get; set; }
     }

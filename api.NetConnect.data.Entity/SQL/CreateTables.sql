@@ -1,7 +1,3 @@
-Delete  From CateringOrder
-DBCC CHECKIDENT ('[CateringOrder]', RESEED, 0);
-GO
-
 USE master
 GO
 
@@ -9,6 +5,9 @@ ALTER DATABASE [NetConnect] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 GO
 
 ALTER DATABASE [NetConnect] SET OFFLINE;
+GO
+
+USE master
 GO
 
 DROP DATABASE NetConnect
@@ -40,7 +39,7 @@ CREATE TABLE [dbo].[User] (
 	[SteamID] varchar(25),
 	[BattleTag] varchar(25),
 	[Newsletter] bit NOT NULL DEFAULT 1,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL,
 );
 
 CREATE TABLE [dbo].[CateringOrder] (
@@ -49,7 +48,7 @@ CREATE TABLE [dbo].[CateringOrder] (
 	[UserID] int NOT NULL,
 	[SeatID] int NOT NULL,
 	[CompletionState] int NOT NULL DEFAULT 0,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[CateringOrderDetail] (
@@ -57,7 +56,7 @@ CREATE TABLE [dbo].[CateringOrderDetail] (
 	[CateringOrderID] int NOT NULL,
 	[CateringProductID] int NOT NULL,
 	[Attributes] text,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
   
 CREATE TABLE [dbo].[CateringProduct] (
@@ -69,7 +68,7 @@ CREATE TABLE [dbo].[CateringProduct] (
 	[IsActive] bit NOT NULL DEFAULT 1,
 	[Attributes] text,
 	[SingleChoice] bit NOT NULL DEFAULT 0,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
   
 CREATE TABLE [dbo].[Chat] (
@@ -78,7 +77,7 @@ CREATE TABLE [dbo].[Chat] (
 	[Message] text NOT NULL,
 	[GameFlag] bit NOT NULL DEFAULT 0,
 	[GameTitle] varchar(50) DEFAULT NULL,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 
@@ -90,7 +89,7 @@ CREATE TABLE [dbo].[Logs] (
 	[SQLQuery] text NOT NULL,
 	[ModelBefore] text NOT NULL,
 	[ModelAfter] text NOT NULL,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 
@@ -105,14 +104,14 @@ CREATE TABLE [dbo].[Partner] (
 	[IsActive] bit NOT NULL DEFAULT 0,
 	[Position] int NOT NULL DEFAULT 0,
 	[ClickCount] int NOT NULL DEFAULT 0,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[PartnerPack] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
 	[IsActive] bit NOT NULL DEFAULT 1,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[Seat] (
@@ -124,7 +123,7 @@ CREATE TABLE [dbo].[Seat] (
 	[Payed] bit NOT NULL,
 	[IsTeam] bit NOT NULL,
 	[IsActive] bit NOT NULL DEFAULT 1,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[Settings] (
@@ -145,7 +144,7 @@ CREATE TABLE [dbo].[Settings] (
 	[BLZ] VARCHAR(50) NOT NULL,
 	[BankAccountNumber] VARCHAR(50) NOT NULL,
 	[BIC] VARCHAR(50) NOT NULL,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[Tournament] (
@@ -159,7 +158,7 @@ CREATE TABLE [dbo].[Tournament] (
 	[End] datetime,
 	[IsPauseGame] bit NOT NULL DEFAULT 0,
 	[PartnerID] INT DEFAULT 0,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[TournamentGame] (
@@ -170,7 +169,7 @@ CREATE TABLE [dbo].[TournamentGame] (
 	[IsActive] bit NOT NULL DEFAULT 1,
 	[BattleTag] bit NOT NULL DEFAULT 0,
 	[SteamID] bit NOT NULL DEFAULT 0,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[TournamentParticipant] (
@@ -179,7 +178,7 @@ CREATE TABLE [dbo].[TournamentParticipant] (
 	[TournamentID] int NOT NULL,
 	[TournamentTeamID] INT DEFAULT NULL,
 	[Registered] datetime NOT NULL,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
 CREATE TABLE [dbo].[TournamentTeam] (
@@ -187,11 +186,30 @@ CREATE TABLE [dbo].[TournamentTeam] (
 	[Name] VARCHAR(250) NOT NULL,
 	[TournamentID] INT NOT NULL,
 	[Password] VARCHAR(100) NOT NULL,
-	[LastChange] timestamp NOT NULL
+	[RowVersion] timestamp NOT NULL
 );
 
+CREATE TABLE [dbo].[ChangeSet] (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[CateringOrder] DateTime,
+	[CateringProduct] DateTime,
+	[CateringOrderDetail] DateTime,
+	[Chat] DateTime,
+	[Logs] DateTime,
+	[Partner] DateTime,
+	[PartnerPack] DateTime,
+	[Seat] DateTime,
+	[Settings] DateTime,
+	[Tournament] DateTime,
+	[TournamentGame] DateTime,
+	[TournamentTeam] DateTime,	
+	[TournamentParticipant] DateTime,
+	[User] DateTime,
+	[RowVersion] rowversion
+);
 GO
 
+INSERT INTO ChangeSet(CateringProduct)VALUES(NULL)
 
 -- [dbo].[CateringOrder]
 ALTER TABLE [dbo].[CateringOrder] ADD CONSTRAINT [FK_CateringOrder_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
@@ -226,3 +244,253 @@ ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_Tourname
 ALTER TABLE [dbo].[TournamentTeam] ADD CONSTRAINT [FK_TournamentTeam_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
 
 GO
+
+-- Trigger
+
+IF (OBJECT_ID(N'[dbo].[LimitChangeSet]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[LimitChangeSet];
+END;
+go
+
+create trigger [LimitChangeSet]
+on [dbo].[ChangeSet]
+after insert
+as
+    declare @tableCount int
+    select @tableCount = Count(*)
+    from [dbo].[ChangeSet]
+
+    if @tableCount > 1
+    begin
+        rollback
+    end
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateCateringOrder]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateCateringOrder];
+END;
+go
+
+create trigger [dbo].[UpdateCateringOrder]
+on [dbo].[CateringOrder]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET CateringOrder = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateCateringProduct]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateCateringProduct];
+END;
+go
+
+create trigger [dbo].[UpdateCateringProduct]
+on [dbo].[CateringProduct]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET CateringProduct = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateCaterinOrdergDetail]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateCaterinOrdergDetail];
+END;
+go
+
+create trigger [dbo].[UpdateCaterinOrdergDetail]
+on [dbo].[CateringOrderDetail]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET CateringOrderDetail = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateChat]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateChat];
+END;
+go
+
+create trigger [dbo].[UpdateChat]
+on [dbo].[Chat]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET Chat = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateLogs]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateLogs];
+END;
+go
+
+
+create trigger [dbo].[UpdateLogs]
+on [dbo].[Logs]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET Logs = @date
+go
+
+
+IF (OBJECT_ID(N'[dbo].[UpdatePartner]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdatePartner];
+END;
+go
+
+
+create trigger [dbo].[UpdatePartner]
+on [dbo].[Partner]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET [Partner] = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdatePartnerPack]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdatePartnerPack];
+END;
+go
+
+create trigger [dbo].[UpdatePartnerPack]
+on [dbo].[PartnerPack]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET [PartnerPack] = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateSeat]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateSeat];
+END;
+go
+
+create trigger [dbo].[UpdateSeat]
+on [dbo].[Seat]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET Seat = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateSettings]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateSettings];
+END;
+go
+
+create trigger [dbo].[UpdateSettings]
+on [dbo].[Settings]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET Settings = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateTournament]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateTournament];
+END;
+go
+
+create trigger [dbo].[UpdateTournament]
+on [dbo].[Tournament]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET Tournament = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateTournamentGame]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateTournamentGame];
+END;
+go
+
+create trigger [dbo].[UpdateTournamentGame]
+on [dbo].[TournamentGame]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET TournamentGame = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateTournamentParticipant]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateTournamentParticipant];
+END;
+go
+
+create trigger [dbo].[UpdateTournamentParticipant]
+on [dbo].[TournamentParticipant]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET TournamentParticipant = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateTournamentTeam]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateTournamentTeam];
+END;
+go
+
+create trigger [dbo].[UpdateTournamentTeam]
+on [dbo].[TournamentTeam]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET TournamentTeam = @date
+go
+
+IF (OBJECT_ID(N'[dbo].[UpdateUser]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateUser];
+END;
+go
+
+
+create trigger [dbo].[UpdateUser]
+on [dbo].[User]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET [User] = @date
+go

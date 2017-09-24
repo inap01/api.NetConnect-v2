@@ -19,7 +19,7 @@ namespace api.NetConnect.data.Entity
         public string Message { get; set; }
         public bool GameFlag { get; set; }
         public string GameTitle { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         public virtual User User { get; set; }
     }

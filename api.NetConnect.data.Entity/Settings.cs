@@ -31,6 +31,6 @@ namespace api.NetConnect.data.Entity
         public string BLZ { get; set; }
         public string BankAccountNumber { get; set; }
         public string BIC { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     }
 }

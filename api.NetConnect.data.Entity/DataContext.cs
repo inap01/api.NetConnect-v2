@@ -7,15 +7,21 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.Entity
 {
-    public partial class NetConnectEntities
+    public partial class Entities
     {
-        public NetConnectEntities(String conn)
+        public Entities(String conn)
             : base(conn)
         {
 
         }
+        //public Dictionary<Type, byte[]> GetChanges()
+        //{
+        //    var dic = new Dictionary<Type, byte[]>();
+
+        //    dic.Add(typeof(Partner), this.Partner.Max(x => x.LastChange));
+        //}
     }
-    public sealed class DataContext : NetConnect.data.Entity.NetConnectEntities
+    public sealed class DataContext : NetConnect.data.Entity.Entities
     {
         public DataContext(String ConnectionString)
             :base(ConnectionString)
@@ -28,7 +34,7 @@ namespace api.NetConnect.data.Entity
             foreach (var entry in this.ChangeTracker.Entries().Where(e => e.State == (EntityState)System.Data.Entity.EntityState.Added || e.State == (EntityState)System.Data.Entity.EntityState.Modified))
             {
                 if (entry.Property("LastChange").CurrentValue == null)
-                    entry.Property("LastChange").CurrentValue = BitConverter.GetBytes(DateTime.MinValue.Ticks+6);
+                    entry.Property("LastChange").CurrentValue = BitConverter.GetBytes(DateTime.MinValue.Ticks + 6);
             }
             return base.SaveChanges();
         }

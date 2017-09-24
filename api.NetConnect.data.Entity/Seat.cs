@@ -28,7 +28,7 @@ namespace api.NetConnect.data.Entity
         public bool Payed { get; set; }
         public bool IsTeam { get; set; }
         public bool IsActive { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CateringOrder> CateringOrder { get; set; }

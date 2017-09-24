@@ -59,6 +59,9 @@
     <Compile Include="CateringProduct.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
+    <Compile Include="ChangeSet.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="Chat.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
@@ -111,6 +114,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="NetConnect.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>NetConnect.Designer.cs</LastGenOutput>

@@ -27,7 +27,7 @@ namespace api.NetConnect.data.Entity
         public bool IsActive { get; set; }
         public bool BattleTag { get; set; }
         public bool SteamID { get; set; }
-        public byte[] LastChange { get; set; }
+        public byte[] RowVersion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tournament> Tournament { get; set; }

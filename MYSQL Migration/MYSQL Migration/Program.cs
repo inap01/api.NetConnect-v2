@@ -46,10 +46,10 @@ namespace MYSQL_Migration
 
 
                 FinishedCalls(db, conn, set, adapter);
-                #region TournamentTeam
-                
 
-                #endregion
+            }
+            catch(Exception ex)
+            {
 
             }
             finally{ conn.Close(); }
@@ -122,9 +122,14 @@ namespace MYSQL_Migration
             //Phase 1
             
             MigrateUser(db, userSet);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch(Exception ex)
+            {
 
-            db.SaveChanges();
-
+            }
             adapter.SelectCommand = new MySqlCommand("Select * from tournaments_games", conn);
             set = new DataSet();
             adapter.Fill(set, "tournaments_games");
