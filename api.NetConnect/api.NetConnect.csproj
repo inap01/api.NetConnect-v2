@@ -135,12 +135,14 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ChangeSetController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\SeatingController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
     <Compile Include="Converters\InfoConverter.cs" />
+    <Compile Include="Converters\SeatingConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />
     <Compile Include="Converters\ProfileConverter.cs" />
     <Compile Include="DataControllers\ChangeSetDataController.cs" />

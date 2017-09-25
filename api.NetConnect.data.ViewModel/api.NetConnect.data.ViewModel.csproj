@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Profile\ViewModel.cs" />
+    <Compile Include="Seating\ViewModel.cs" />
     <Compile Include="Status\StatusViewModel.cs" />
     <Compile Include="Tournament\Filter.cs" />
     <Compile Include="Tournament\SortSettings.cs" />
