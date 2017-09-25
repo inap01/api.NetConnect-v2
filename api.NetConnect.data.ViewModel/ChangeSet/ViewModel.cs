@@ -20,7 +20,9 @@ namespace api.NetConnect.data.ViewModel.ChangeSet
     {
         public DateTime? CateringOrder { get; set; }
         public DateTime? CateringProduct { get; set; }
+        public DateTime? CateringOrderDetail { get; set; }
         public DateTime? Chat { get; set; }
+        public DateTime? Logs { get; set; }
         public DateTime? Partner { get; set; }
         public DateTime? PartnerPack { get; set; }
         public DateTime? Seat { get; set; }
