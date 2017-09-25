@@ -44,6 +44,21 @@ namespace api.NetConnect
 
             #endregion
 
+            #region INFO
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Info_Get",
+               routeTemplate: "info",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Info",
+                   action = "Get"
+               }
+            );
+
+            #endregion
+
             #region PROFILE
 
             config.Routes.MapHttpRoute(
@@ -73,6 +88,7 @@ namespace api.NetConnect
             );
 
             #endregion
+
             #region CHANGESET
 
             config.Routes.MapHttpRoute(

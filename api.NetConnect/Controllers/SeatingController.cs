@@ -1,27 +1,34 @@
-﻿using System;
+﻿using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel.Seating;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
-using api.NetConnect.data.ViewModel.ChangeSet;
-using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    public class ChangeSetController : ApiController
+    public class SeatingController : ApiController
     {
-        [HttpGet]
-        public IHttpActionResult GetItem()
+        [HttpPut]
+        public IHttpActionResult FilterList()
         {
-            ChangeSetViewModel viewmodel = new ChangeSetViewModel();
+            return Ok();
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetItem(Int32 id)
+        {
+            SeatingViewModel viewmodel = new SeatingViewModel();
 
             try
             {
-                viewmodel.Data.FromModel(ChangeSetDataController.GetItem(1));
+                viewmodel.Data.FromModel(SeatDataController.GetItem(id));
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");

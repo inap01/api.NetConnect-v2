@@ -56,7 +56,6 @@ namespace api.NetConnect.data.ViewModel
     public class BaseViewModelItem
     {
         public Int32 ID { get; set; }
-        public byte[] LastChange { get; set; }
     }
 
     public enum AlertState { info, success, warning, danger }

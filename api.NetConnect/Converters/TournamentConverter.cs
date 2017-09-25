@@ -45,6 +45,7 @@ namespace api.NetConnect.Converters
             viewModel.Teams.ForEach(team => viewModel.TeilnehmerAnzahl += team.Player.Count);
         }
 
+        #region FromModel Private Functions
         private static void FromModel(this TournamentTeamViewModelItem viewModel, TournamentTeam model)
         {
             viewModel.ID = model.ID;
@@ -70,6 +71,44 @@ namespace api.NetConnect.Converters
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
             viewModel.Image = model.Image;
+        }
+        #endregion
+
+        public static void FromViewModel(this Tournament model, TournamentViewModelItem viewModel)
+        {
+            model.ID = viewModel.ID;
+            model.Volume = viewModel.Volume;
+            model.TeamSize = viewModel.TeamSize;
+            model.ChallongeLink = viewModel.ChallongeLink;
+            model.Mode = viewModel.Mode;
+            model.Start = viewModel.Start;
+            model.End = viewModel.End;
+            model.IsPauseGame = viewModel.IsPauseGame;
+            model.TournamentGameID = viewModel.GameID;
+
+            model.TournamentParticipant = viewModel.Player.ConvertAll(x =>
+            {
+                var m = new TournamentParticipant();
+                m.FromViewModel(x);
+                return m;
+            });
+
+            model.TournamentTeam = viewModel.Teams.ConvertAll(x =>
+            {
+                var m = new TournamentTeam();
+                m.FromViewModel(x);
+                return m;
+            });
+        }
+
+        public static void FromViewModel(this TournamentTeam model, TournamentTeamViewModelItem viewModel)
+        {
+
+        }
+
+        public static void FromViewModel(this TournamentParticipant model, TournamentParticipantViewModelItem viewModel)
+        {
+
         }
     }
 }

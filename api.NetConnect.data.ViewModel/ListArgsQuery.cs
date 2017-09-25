@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel
 {
-    class ListArgsQuery<T, F, S> : BaseViewModel
+    public class ListArgsQuery<T, F, S> : BaseViewModel
         where F : new()
         where S : new()
     {

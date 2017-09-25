@@ -1,27 +1,27 @@
-﻿using System;
+﻿using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel.Info;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
-using api.NetConnect.data.ViewModel.ChangeSet;
-using api.NetConnect.DataControllers;
 
 namespace api.NetConnect.Controllers
 {
-    public class ChangeSetController : ApiController
+    public class InfoController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult GetItem()
+        public IHttpActionResult Get()
         {
-            ChangeSetViewModel viewmodel = new ChangeSetViewModel();
+            InfoViewModel viewmodel = new InfoViewModel();
 
             try
             {
-                viewmodel.Data.FromModel(ChangeSetDataController.GetItem(1));
+                viewmodel.Data.FromModel(SettingsDataController.GetFirst());
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");

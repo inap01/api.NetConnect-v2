@@ -8,6 +8,11 @@ namespace api.NetConnect.DataControllers
 {
     public class SettingsDataController : GenericDataController<Settings>
     {
+        public static Settings GetFirst()
+        {
+            return db.Settings.FirstOrDefault();
+        }
+
         public static Settings Update (Settings item)
         {
             Settings dbItem = GetItem(item.ID);
