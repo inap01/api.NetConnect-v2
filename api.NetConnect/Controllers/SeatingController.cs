@@ -8,15 +8,36 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel;
+using api.NetConnect.Helper;
+using api.NetConnect.data.Entity;
 
 namespace api.NetConnect.Controllers
 {
+    using SeatingListViewModel = ListArgsViewModel<SeatingViewModelItem, SeatingFilter, SeatingSortSettings>;
+    using SeatingArgsRequest = ListArgsRequest<SeatingFilter, SeatingSortSettings>;
+
     public class SeatingController : ApiController
     {
         [HttpPut]
-        public IHttpActionResult FilterList()
+        public IHttpActionResult FilterList(SeatingArgsRequest args)
         {
-            return Ok();
+            SeatingListViewModel viewmodel = new SeatingListViewModel();
+
+            if (args == null)
+                args = new SeatingArgsRequest();
+
+            try
+            {
+                viewmodel = SeatingConverter.FilterList(args);
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
         }
 
         [HttpGet]
@@ -32,7 +53,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ex.Message);
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);

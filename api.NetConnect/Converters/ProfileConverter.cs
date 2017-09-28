@@ -19,8 +19,19 @@ namespace api.NetConnect.Converters
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
             viewModel.Newsletter = model.Newsletter;
-            viewModel.Password1 = null;
-            viewModel.Password2 = null;
+            viewModel.NewPassword1 = null;
+            viewModel.NewPassword2 = null;
+        }
+
+        public static void FromViewModel(this User model, ProfileViewModelItem viewModel)
+        {
+            model.FirstName = viewModel.FirstName;
+            model.LastName = viewModel.LastName;
+            model.Nickname = viewModel.Nickname;
+            model.Email = viewModel.Email;
+            model.SteamID = viewModel.SteamID;
+            model.BattleTag = viewModel.BattleTag;
+            model.Newsletter = viewModel.Newsletter;
         }
     }
 }

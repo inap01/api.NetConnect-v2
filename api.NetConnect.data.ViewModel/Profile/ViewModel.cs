@@ -24,8 +24,9 @@ namespace api.NetConnect.data.ViewModel.Profile
         public String SteamID { get; set; }
         public String BattleTag { get; set; }
         public Boolean Newsletter { get; set; }
-        public String Password1 { get; set; }
-        public String Password2 { get; set; }
+        public String OldPassword { get; set; }
+        public String NewPassword1 { get; set; }
+        public String NewPassword2 { get; set; }
 
         public ProfileViewModelItem()
         {

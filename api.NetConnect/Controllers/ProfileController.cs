@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
+using api.NetConnect.Helper;
+using static api.NetConnect.Helper.PasswordHelper;
 
 namespace api.NetConnect.Controllers
 {
@@ -25,10 +27,46 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ex.Message);
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Update(Int32 id, ProfileViewModelItem request)
+        {
+            ProfileViewModel viewmodel = new ProfileViewModel();
+
+            try
+            {
+                var updateModel = UserDataController.GetItem(id);
+                updateModel.FromViewModel(request);
+
+                if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
+                    updateModel.Password = PasswordHelper.ChangePassword(id, request.OldPassword, request.NewPassword1, request.NewPassword2);
+
+                updateModel = UserDataController.Update(updateModel);
+                viewmodel.Data.FromModel(updateModel);
+            }
+            catch (WrongPasswordException ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
+            }
+            catch (PasswordsNotEqualException ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok();
         }
     }
 }

@@ -8,10 +8,11 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel;
+using api.NetConnect.Helper;
 
 namespace api.NetConnect.Controllers
 {
-    using TournamentListViewModel = ListArgsQuery<TournamentViewModelItem, TournamentFilter, TournamentSortSettings>;
+    using TournamentListViewModel = ListArgsViewModel<TournamentViewModelItem, TournamentFilter, TournamentSortSettings>;
 
     public class TournamentController : ApiController
     {
@@ -36,7 +37,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ex.Message);
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);
@@ -55,7 +56,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ex.Message);
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);

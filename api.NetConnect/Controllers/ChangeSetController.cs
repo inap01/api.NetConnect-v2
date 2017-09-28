@@ -7,6 +7,7 @@ using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel.ChangeSet;
 using api.NetConnect.DataControllers;
+using api.NetConnect.Helper;
 
 namespace api.NetConnect.Controllers
 {
@@ -25,7 +26,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ex.Message);
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);

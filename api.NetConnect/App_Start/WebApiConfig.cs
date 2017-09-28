@@ -72,6 +72,17 @@ namespace api.NetConnect
                }
             );
 
+            config.Routes.MapHttpRoute(
+               name: "GET_Profile_Update",
+               routeTemplate: "profile/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Profile",
+                   action = "Update"
+               }
+            );
+
             #endregion
 
             #region TOURNAMENT

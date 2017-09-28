@@ -6,16 +6,25 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel
 {
-    public class ListArgsQuery<T, F, S> : BaseViewModel
+    public class ListViewModel<T> : BaseViewModel
+    {
+        public List<T> Data { get; set; }
+
+        public ListViewModel()
+        {
+            Data = new List<T>();
+        }
+    }
+
+    public class ListArgsViewModel<T, F, S> : ListViewModel<T>
         where F : new()
         where S : new()
     {
-        public List<T> Data { get; set; }
         public F Filter { get; set; }
         public S SortSettings { get; set; }
         public Pagination Pagination { get; set; }
 
-        public ListArgsQuery()
+        public ListArgsViewModel()
         {
             Data = new List<T>();
             Filter = new F();
@@ -23,10 +32,42 @@ namespace api.NetConnect.data.ViewModel
             Pagination = new Pagination();
         }
 
-        public ListArgsQuery(F f, S s)
+        public ListArgsViewModel(F f, S s, Pagination p)
+        {
+            Data = new List<T>();
+            Filter = f;
+            SortSettings = s;
+            Pagination = p;
+        }
+
+        public ListArgsViewModel(ListArgsRequest<F, S> request)
+        {
+            Data = new List<T>();
+            Filter = request.Filter;
+            SortSettings = request.SortSettings;
+            Pagination = request.Pagination;
+        }
+    }
+
+    public class ListArgsRequest<F, S>
+        where F : new()
+        where S : new()
+    {
+        public F Filter { get; set; }
+        public S SortSettings { get; set; }
+        public Pagination Pagination { get; set; }
+        public ListArgsRequest()
+        {
+            Filter = new F();
+            SortSettings = new S();
+            Pagination = new Pagination();
+        }
+
+        public ListArgsRequest(F f, S s, Pagination p)
         {
             Filter = f;
             SortSettings = s;
+            Pagination = p;
         }
     }
 }
