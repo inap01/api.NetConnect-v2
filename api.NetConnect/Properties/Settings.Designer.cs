@@ -49,5 +49,59 @@ namespace api.NetConnect.Properties {
                 return ((string)(this["APIStatus_Text"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int ReservedDays {
+            get {
+                return ((int)(this["ReservedDays"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Net.Connect e.V.")]
+        public string BankAccountOwner {
+            get {
+                return ((string)(this["BankAccountOwner"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DE40 3126 3359 3303 2840 19")]
+        public string IBAN {
+            get {
+                return ((string)(this["IBAN"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("312 633 59")]
+        public string BLZ {
+            get {
+                return ((string)(this["BLZ"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("330 328 401 9")]
+        public string BankAccountNumber {
+            get {
+                return ((string)(this["BankAccountNumber"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("GENODED1LOE")]
+        public string BIC {
+            get {
+                return ((string)(this["BIC"]));
+            }
+        }
     }
 }

@@ -11,5 +11,23 @@
     <Setting Name="APIStatus_Text" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Wir sind bald wieder da!</Value>
     </Setting>
+    <Setting Name="ReservedDays" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="BankAccountOwner" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Net.Connect e.V.</Value>
+    </Setting>
+    <Setting Name="IBAN" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DE40 3126 3359 3303 2840 19</Value>
+    </Setting>
+    <Setting Name="BLZ" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">312 633 59</Value>
+    </Setting>
+    <Setting Name="BankAccountNumber" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">330 328 401 9</Value>
+    </Setting>
+    <Setting Name="BIC" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">GENODED1LOE</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
