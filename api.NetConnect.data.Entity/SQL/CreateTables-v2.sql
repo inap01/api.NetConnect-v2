@@ -109,7 +109,7 @@ CREATE TABLE [dbo].[Partner] (
 );
 
 CREATE TABLE [dbo].[PartnerDetails] (
-	[PartnerID] int NOT NULL,
+	[PartnerID] int NOT NULL PRIMARY KEY,
 	[DisplayStage] bit NOT NULL DEFAULT 0,
 	[DisplaySidebar] bit NOT NULL DEFAULT 0,
 	[RowVersion] timestamp NOT NULL
@@ -224,11 +224,16 @@ ALTER TABLE [dbo].[Logs] ADD CONSTRAINT [FK_Logs_UserID] FOREIGN KEY (UserID) RE
 ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_PartnerPackID] FOREIGN KEY (PartnerPackID) REFERENCES [dbo].[PartnerPack](ID);
 
 -- [dbo].[PartnerDetails]
-ALTER TABLE [dbo].[PartnerDetails] ADD CONSTRAINT [FK_PartnerDetails_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID);
+ALTER TABLE [dbo].[PartnerDetails] ADD CONSTRAINT [FK_PartnerDetails_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID) ON DELETE CASCADE;
 
 -- [dbo].[Seat]
 ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_EventID] FOREIGN KEY (EventID) REFERENCES [dbo].[Event](ID);
 ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+
+-- [dbo].[SeatTransferLog]
+ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SeatID] FOREIGN KEY (SeatID) REFERENCES [dbo].[Seat](ID) ON DELETE CASCADE;
+ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SourceUserID] FOREIGN KEY (SourceUserID) REFERENCES [dbo].[Seat](ID);
+ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_DestinationUserID] FOREIGN KEY (DestinationUserID) REFERENCES [dbo].[Seat](ID);
 
 -- [dbo].[Tournament]
 ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_EventID] FOREIGN KEY (EventID) REFERENCES [dbo].[Event](ID);
@@ -237,11 +242,11 @@ ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_PartnerID] FOREIGN 
 
 -- [dbo].[TournamentParticipant]
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
-ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
-ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentTeamID] FOREIGN KEY (TournamentTeamID) REFERENCES [dbo].[TournamentTeam](ID);
+ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID) ON DELETE CASCADE;
+ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_Tournament_TournamentTeamID] FOREIGN KEY (TournamentTeamID) REFERENCES [dbo].[TournamentTeam](ID) ON DELETE CASCADE;
 
 -- [dbo].[TournamentTeam]
-ALTER TABLE [dbo].[TournamentTeam] ADD CONSTRAINT [FK_TournamentTeam_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID);
+ALTER TABLE [dbo].[TournamentTeam] ADD CONSTRAINT [FK_TournamentTeam_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID) ON DELETE CASCADE;
 
 GO
 
