@@ -54,6 +54,7 @@
     <Compile Include="Info\ViewModel.cs" />
     <Compile Include="ListArgsQuery.cs" />
     <Compile Include="Pagination.cs" />
+    <Compile Include="Partner\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseViewModel.cs" />
     <Compile Include="Profile\ViewModel.cs" />
