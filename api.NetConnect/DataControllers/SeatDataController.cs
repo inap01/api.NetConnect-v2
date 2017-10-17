@@ -61,12 +61,4 @@ namespace api.NetConnect.DataControllers
             return dbItem;
         }
     }
-    public static class ListExtension
-    {
-        public static List<T> WithFilter<T>(this List<T> list, IFilter filter)
-        {
-            return filter.ApplyFilter<T>();
-        }
-    }
-
 }

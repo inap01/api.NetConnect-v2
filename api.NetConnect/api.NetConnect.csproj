@@ -138,6 +138,8 @@
     <Compile Include="Controllers\ChangeSetController.cs" />
     <Compile Include="Controllers\InfoController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\SeatingController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -211,7 +213,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>49764</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49764/</IISUrl>
+          <IISUrl>http://localhost:8080/api/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

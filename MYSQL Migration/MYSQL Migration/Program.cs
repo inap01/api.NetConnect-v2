@@ -27,7 +27,7 @@ namespace MYSQL_Migration
             string name = ConfigurationManager.ConnectionStrings["NetConnectEntities"].ConnectionString;
             DataContext db = new DataContext(name);
 
-            string connString = @"server=lan-netconnect.de;uid=netconnect;pwd=L77bk12?;database=netconnect;convert zero datetime=True;";
+            string connString = @"server=https://pub01.schlenter-simon.de;uid=netconnect-db01;pwd=7uneqa9eb;database=lannetconnect_db01;convert zero datetime=True;";
 
             MySqlConnection conn = new MySqlConnection(connString);
             conn.Open();

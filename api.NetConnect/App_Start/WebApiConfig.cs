@@ -59,6 +59,36 @@ namespace api.NetConnect
 
             #endregion
 
+            #region NEWS
+
+            config.Routes.MapHttpRoute(
+               name: "GET_News_Get",
+               routeTemplate: "news",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "News",
+                   action = "Get"
+               }
+            );
+
+            #endregion
+
+            #region PARTNER
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Partner_Get",
+               routeTemplate: "partner",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Partner",
+                   action = "Get"
+               }
+            );
+
+            #endregion
+
             #region PROFILE
 
             config.Routes.MapHttpRoute(

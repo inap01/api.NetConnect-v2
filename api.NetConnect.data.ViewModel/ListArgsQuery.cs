@@ -14,6 +14,17 @@ namespace api.NetConnect.data.ViewModel
         {
             Data = new List<T>();
         }
+        public T this[int key]
+        {
+            get
+            {
+                return Data[key];
+            }
+            set
+            {
+                Data[key] = value;
+            }
+        }
     }
 
     public class ListArgsViewModel<T, F, S> : ListViewModel<T>
