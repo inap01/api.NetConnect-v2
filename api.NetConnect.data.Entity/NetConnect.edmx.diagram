@@ -5,35 +5,82 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b28a5b3c74e24256aed6f07c30a875e6" Name="Diagram1">
-        <EntityTypeShape EntityType="NetConnectModel.CateringOrder" Width="1.5" PointX="5.25" PointY="11.75" />
-        <EntityTypeShape EntityType="NetConnectModel.CateringOrderDetail" Width="1.5" PointX="7.5" PointY="11.875" />
-        <EntityTypeShape EntityType="NetConnectModel.CateringProduct" Width="1.5" PointX="5.25" PointY="7.625" />
-        <EntityTypeShape EntityType="NetConnectModel.ChangeSet" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="NetConnectModel.Chat" Width="1.5" PointX="3" PointY="19.5" />
-        <EntityTypeShape EntityType="NetConnectModel.Logs" Width="1.5" PointX="3" PointY="12.125" />
-        <EntityTypeShape EntityType="NetConnectModel.Partner" Width="1.5" PointX="1.5" PointY="23.125" />
-        <EntityTypeShape EntityType="NetConnectModel.PartnerPack" Width="1.5" PointX="1.5" PointY="27.875" />
-        <EntityTypeShape EntityType="NetConnectModel.Seat" Width="1.5" PointX="3" PointY="15.625" />
-        <EntityTypeShape EntityType="NetConnectModel.Settings" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="NetConnectModel.Tournament" Width="1.5" PointX="0.75" PointY="15.625" />
-        <EntityTypeShape EntityType="NetConnectModel.TournamentGame" Width="1.5" PointX="1.5" PointY="31.375" />
-        <EntityTypeShape EntityType="NetConnectModel.TournamentParticipant" Width="1.5" PointX="3" PointY="8.625" />
-        <EntityTypeShape EntityType="NetConnectModel.TournamentTeam" Width="1.5" PointX="0.75" PointY="4" />
-        <EntityTypeShape EntityType="NetConnectModel.User" Width="1.5" PointX="0.75" PointY="7.375" />
+        <EntityTypeShape EntityType="NetConnectModel.CateringOrder" Width="1.5" PointX="8.25" PointY="29.125" />
+        <EntityTypeShape EntityType="NetConnectModel.CateringOrderDetail" Width="1.5" PointX="5.25" PointY="15.5" />
+        <EntityTypeShape EntityType="NetConnectModel.CateringProduct" Width="1.5" PointX="3" PointY="18.25" />
+        <EntityTypeShape EntityType="NetConnectModel.CateringProductAttribute" Width="1.5" PointX="3" PointY="14.75" />
+        <EntityTypeShape EntityType="NetConnectModel.CateringProductAttributeRelation" Width="1.5" PointX="5.25" PointY="18.625" />
+        <EntityTypeShape EntityType="NetConnectModel.ChangeSet" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="NetConnectModel.Event" Width="1.5" PointX="6" PointY="22.25" />
+        <EntityTypeShape EntityType="NetConnectModel.EventType" Width="1.5" PointX="3.75" PointY="27.875" />
+        <EntityTypeShape EntityType="NetConnectModel.FaqCategory" Width="1.5" PointX="0.75" PointY="1.125" />
+        <EntityTypeShape EntityType="NetConnectModel.FaqQuestion" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="NetConnectModel.ImageContainer" Width="1.5" PointX="0.75" PointY="23.5" />
+        <EntityTypeShape EntityType="NetConnectModel.Logs" Width="1.5" PointX="5.25" PointY="40.375" />
+        <EntityTypeShape EntityType="NetConnectModel.Partner" Width="1.5" PointX="3" PointY="23" />
+        <EntityTypeShape EntityType="NetConnectModel.PartnerDisplay" Width="1.5" PointX="6" PointY="29.125" />
+        <EntityTypeShape EntityType="NetConnectModel.PartnerDisplayRelation" Width="1.5" PointX="8.25" PointY="23.875" />
+        <EntityTypeShape EntityType="NetConnectModel.PartnerPack" Width="1.5" PointX="0.75" PointY="20" />
+        <EntityTypeShape EntityType="NetConnectModel.Seat" Width="1.5" PointX="11.25" PointY="28.625" />
+        <EntityTypeShape EntityType="NetConnectModel.SeatTransferLog" Width="1.5" PointX="13.5" PointY="29.25" />
+        <EntityTypeShape EntityType="NetConnectModel.Tournament" Width="1.5" PointX="8.25" PointY="33.375" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentGame" Width="1.5" PointX="3" PointY="39.75" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentParticipant" Width="1.5" PointX="10.5" PointY="34.625" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentTeam" Width="1.5" PointX="10.5" PointY="40.75" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentTeamParticipant" Width="1.5" PointX="12.75" PointY="36.875" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentWinner" Width="1.5" PointX="13.5" PointY="25.125" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentWinnerPlayer" Width="1.5" PointX="15.75" PointY="30.125" />
+        <EntityTypeShape EntityType="NetConnectModel.TournamentWinnerTeam" Width="1.5" PointX="15.75" PointY="33.25" />
+        <EntityTypeShape EntityType="NetConnectModel.User" Width="1.5" PointX="3" PointY="32.75" />
+        <EntityTypeShape EntityType="NetConnectModel.UserPrivilege" Width="1.5" PointX="3" PointY="43.875" />
+        <EntityTypeShape EntityType="NetConnectModel.UserPrivilegeRelation" Width="1.5" PointX="5.25" PointY="31.75" />
+        <EntityTypeShape EntityType="NetConnectModel.UserRole" Width="1.5" PointX="3" PointY="50" />
+        <EntityTypeShape EntityType="NetConnectModel.UserRolePrivilegeRelation" Width="1.5" PointX="5.25" PointY="44.75" />
+        <EntityTypeShape EntityType="NetConnectModel.UserTask" Width="1.5" PointX="3" PointY="47" />
+        <EntityTypeShape EntityType="NetConnectModel.UserTaskRelation" Width="1.5" PointX="5.25" PointY="34.75" />
+        <AssociationConnector Association="NetConnectModel.FK_CateringOrder_EventID" />
         <AssociationConnector Association="NetConnectModel.FK_CateringOrder_SeatID" />
         <AssociationConnector Association="NetConnectModel.FK_CateringOrder_UserID" />
         <AssociationConnector Association="NetConnectModel.FK_CateringOrderDetail_CateringOrderID" />
         <AssociationConnector Association="NetConnectModel.FK_CateringOrderDetail_CateringProductID" />
-        <AssociationConnector Association="NetConnectModel.FK_Chat_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_CateringProduct_ImageContainerID" />
+        <AssociationConnector Association="NetConnectModel.FK_CateringProductAttributeRelation_CateringProductID" />
+        <AssociationConnector Association="NetConnectModel.FK_CateringProductAttributeRelation_CateringProductAttributeID" />
+        <AssociationConnector Association="NetConnectModel.FK_Event_EventTypeID" />
+        <AssociationConnector Association="NetConnectModel.FK_Event_ImageContainerID" />
+        <AssociationConnector Association="NetConnectModel.FK_Seat_EventID" />
+        <AssociationConnector Association="NetConnectModel.FK_Tournament_EventID" />
+        <AssociationConnector Association="NetConnectModel.FK_FaqQuestion_FaqCategoryID" />
+        <AssociationConnector Association="NetConnectModel.FK_Partner_ImageContainerID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentGame_ImageContainerID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinner_ImageContainerID" />
+        <AssociationConnector Association="NetConnectModel.FK_User_ImageContainerID" />
         <AssociationConnector Association="NetConnectModel.FK_Logs_UserID" />
         <AssociationConnector Association="NetConnectModel.FK_Partner_PartnerPackID" />
+        <AssociationConnector Association="NetConnectModel.FK_PartnerDisplayRelation_PartnerID" />
         <AssociationConnector Association="NetConnectModel.FK_Tournament_PartnerID" />
+        <AssociationConnector Association="NetConnectModel.FK_PartnerDisplayRelation_PartnerDisplayID" />
         <AssociationConnector Association="NetConnectModel.FK_Seat_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_SeatTransferLog_DestinationUserID" />
+        <AssociationConnector Association="NetConnectModel.FK_SeatTransferLog_SeatID" />
+        <AssociationConnector Association="NetConnectModel.FK_SeatTransferLog_SourceUserID" />
         <AssociationConnector Association="NetConnectModel.FK_Tournament_TournamentGameID" />
-        <AssociationConnector Association="NetConnectModel.FK_Tournament_TournamentID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentParticipant_TournamentID" />
         <AssociationConnector Association="NetConnectModel.FK_TournamentTeam_TournamentID" />
-        <AssociationConnector Association="NetConnectModel.FK_Tournament_TournamentTeamID" />
-        <AssociationConnector Association="NetConnectModel.FK_Tournament_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinner_TournamentID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentParticipant_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentTeamParticipant_TournamentTeamID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinnerTeam_TournamentTeamID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentTeamParticipant_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinnerPlayer_TournamentWinnerID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinnerTeam_TournamentWinnerID" />
+        <AssociationConnector Association="NetConnectModel.FK_TournamentWinnerPlayer_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserPrivilegeRelation_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserTaskRelation_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserPrivilegeRelation_UserPrivilegeID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserRolePrivilegeRelation_UserPrivilegeID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserRolePrivilegeRelation_UserID" />
+        <AssociationConnector Association="NetConnectModel.FK_UserTaskRelation_UserTaskID" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

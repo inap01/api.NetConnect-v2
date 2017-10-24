@@ -148,7 +148,7 @@
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
-    <Compile Include="Converters\InfoConverter.cs" />
+    <Compile Include="Converters\EventConverter.cs" />
     <Compile Include="Converters\PartnerConverter.cs" />
     <Compile Include="Converters\SeatingConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />

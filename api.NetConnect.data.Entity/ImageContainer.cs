@@ -12,35 +12,35 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Tournament
+    public partial class ImageContainer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tournament()
+        public ImageContainer()
         {
-            this.TournamentParticipant = new HashSet<TournamentParticipant>();
-            this.TournamentTeam = new HashSet<TournamentTeam>();
+            this.CateringProduct = new HashSet<CateringProduct>();
+            this.Event = new HashSet<Event>();
+            this.Partner = new HashSet<Partner>();
+            this.TournamentGame = new HashSet<TournamentGame>();
             this.TournamentWinner = new HashSet<TournamentWinner>();
+            this.User = new HashSet<User>();
         }
     
-        public int ID { get; set; }
-        public int EventID { get; set; }
-        public int TournamentGameID { get; set; }
-        public Nullable<int> PartnerID { get; set; }
-        public int TeamSize { get; set; }
-        public string ChallongeLink { get; set; }
-        public string Mode { get; set; }
-        public System.DateTime Start { get; set; }
-        public Nullable<System.DateTime> End { get; set; }
+        public System.Guid SID { get; set; }
+        public string ThumbnailPath { get; set; }
+        public string OriginalPath { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Event Event { get; set; }
-        public virtual Partner Partner { get; set; }
-        public virtual TournamentGame TournamentGame { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TournamentParticipant> TournamentParticipant { get; set; }
+        public virtual ICollection<CateringProduct> CateringProduct { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TournamentTeam> TournamentTeam { get; set; }
+        public virtual ICollection<Event> Event { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Partner> Partner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TournamentGame> TournamentGame { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TournamentWinner> TournamentWinner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> User { get; set; }
     }
 }

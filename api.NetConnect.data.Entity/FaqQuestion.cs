@@ -12,15 +12,15 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TournamentParticipant
+    public partial class FaqQuestion
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
-        public int TournamentID { get; set; }
-        public System.DateTime Registered { get; set; }
+        public int FaqCategoryID { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public int Position { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Tournament Tournament { get; set; }
-        public virtual User User { get; set; }
+        public virtual FaqCategory FaqCategory { get; set; }
     }
 }

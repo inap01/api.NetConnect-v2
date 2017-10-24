@@ -59,13 +59,31 @@
     <Compile Include="CateringProduct.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
+    <Compile Include="CateringProductAttribute.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CateringProductAttributeRelation.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="ChangeSet.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="Chat.cs">
+    <Compile Include="DataContext.cs" />
+    <Compile Include="Event.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataContext.cs" />
+    <Compile Include="EventType.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FaqCategory.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FaqQuestion.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ImageContainer.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="Logs.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
@@ -87,6 +105,12 @@
     <Compile Include="Partner.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartnerDisplay.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartnerDisplayRelation.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="PartnerPack.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
@@ -94,7 +118,7 @@
     <Compile Include="Seat.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs">
+    <Compile Include="SeatTransferLog.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
     <Compile Include="Tournament.cs">
@@ -109,7 +133,37 @@
     <Compile Include="TournamentTeam.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
+    <Compile Include="TournamentTeamParticipant.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentWinner.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentWinnerPlayer.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TournamentWinnerTeam.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserPrivilege.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserPrivilegeRelation.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRole.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserRolePrivilegeRelation.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserTask.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserTaskRelation.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
   </ItemGroup>

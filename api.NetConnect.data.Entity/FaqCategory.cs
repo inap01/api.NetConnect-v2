@@ -12,15 +12,20 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TournamentParticipant
+    public partial class FaqCategory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public FaqCategory()
+        {
+            this.FaqQuestion = new HashSet<FaqQuestion>();
+        }
+    
         public int ID { get; set; }
-        public int UserID { get; set; }
-        public int TournamentID { get; set; }
-        public System.DateTime Registered { get; set; }
+        public string Name { get; set; }
+        public int Position { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Tournament Tournament { get; set; }
-        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FaqQuestion> FaqQuestion { get; set; }
     }
 }

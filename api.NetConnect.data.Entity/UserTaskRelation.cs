@@ -12,15 +12,14 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TournamentParticipant
+    public partial class UserTaskRelation
     {
         public int ID { get; set; }
         public int UserID { get; set; }
-        public int TournamentID { get; set; }
-        public System.DateTime Registered { get; set; }
+        public int UserTaskID { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Tournament Tournament { get; set; }
         public virtual User User { get; set; }
+        public virtual UserTask UserTask { get; set; }
     }
 }

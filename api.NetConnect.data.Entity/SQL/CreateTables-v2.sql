@@ -76,12 +76,11 @@ CREATE TABLE [dbo].[Event] (
 	[IsActiveFeedback] bit NOT NULL DEFAULT 0,
 	[IsPrivate] bit NOT NULL DEFAULT 0,
 	[FeedbackLink] VARCHAR(255) NOT NULL,
-	[City] varchar(80) NOT NULL,
+	[District] varchar(80) NOT NULL,
 	[Street] varchar(80) NOT NULL,
 	[Housenumber] varchar(5) NOT NULL,
 	[Postcode] varchar(10) NOT NULL,
-	[Country] varchar(80) NOT NULL,
-	[RouteLink] text NOT NULL,
+	[City] varchar(80) NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -445,22 +444,22 @@ GO
 INSERT INTO ChangeSet(CateringProduct)VALUES(NULL)
 
 -- EVENTS erstellen
-INSERT INTO dbo.EventType ([Name], [PublicAccess], [RouteLink])
-VALUES ('Playground', 1, 'https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland'), 
-       ('NetConnect & Friends', 0, 'https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland')
+INSERT INTO dbo.EventType ([Name], [PublicAccess], [Description])
+VALUES ('Playground', 1, ''), 
+       ('NetConnect & Friends', 0, '')
 GO
 
-INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink])
-VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de'),
-	   (2, 1, '20171215', '20171217', 10, 1, 0, 0, 'http://lan-netconnect.de'),
-	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de')
+INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink], [District], [Street], [Housenumber], [Postcode], [City])
+VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+	   (2, 1, '20171215', '20171217', 10, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
+	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich')
 GO
 
 

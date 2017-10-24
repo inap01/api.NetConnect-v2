@@ -12,15 +12,19 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TournamentParticipant
+    public partial class PartnerDisplay
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public PartnerDisplay()
+        {
+            this.PartnerDisplayRelation = new HashSet<PartnerDisplayRelation>();
+        }
+    
         public int ID { get; set; }
-        public int UserID { get; set; }
-        public int TournamentID { get; set; }
-        public System.DateTime Registered { get; set; }
+        public bool Name { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Tournament Tournament { get; set; }
-        public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PartnerDisplayRelation> PartnerDisplayRelation { get; set; }
     }
 }

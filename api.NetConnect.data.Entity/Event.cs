@@ -12,31 +12,41 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Partner
+    public partial class Event
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Partner()
+        public Event()
         {
-            this.PartnerDisplayRelation = new HashSet<PartnerDisplayRelation>();
+            this.CateringOrder = new HashSet<CateringOrder>();
+            this.Seat = new HashSet<Seat>();
             this.Tournament = new HashSet<Tournament>();
         }
     
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Link { get; set; }
-        public string RefLink { get; set; }
-        public string Content { get; set; }
-        public System.Guid ImageContainerID { get; set; }
-        public int PartnerPackID { get; set; }
-        public bool IsActive { get; set; }
-        public int Position { get; set; }
-        public int ClickCount { get; set; }
+        public int EventTypeID { get; set; }
+        public int Volume { get; set; }
+        public Nullable<System.Guid> ImageContainerID { get; set; }
+        public System.DateTime Start { get; set; }
+        public System.DateTime End { get; set; }
+        public double ReservationCost { get; set; }
+        public int IsActiveReservation { get; set; }
+        public bool IsActiveCatering { get; set; }
+        public bool IsActiveFeedback { get; set; }
+        public bool IsPrivate { get; set; }
+        public string FeedbackLink { get; set; }
+        public string District { get; set; }
+        public string Street { get; set; }
+        public string Housenumber { get; set; }
+        public string Postcode { get; set; }
+        public string City { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual ImageContainer ImageContainer { get; set; }
-        public virtual PartnerPack PartnerPack { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartnerDisplayRelation> PartnerDisplayRelation { get; set; }
+        public virtual ICollection<CateringOrder> CateringOrder { get; set; }
+        public virtual EventType EventType { get; set; }
+        public virtual ImageContainer ImageContainer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Seat> Seat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tournament> Tournament { get; set; }
     }

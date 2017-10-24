@@ -12,25 +12,22 @@ namespace api.NetConnect.data.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CateringOrder
+    public partial class UserPrivilege
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public CateringOrder()
+        public UserPrivilege()
         {
-            this.CateringOrderDetail = new HashSet<CateringOrderDetail>();
+            this.UserPrivilegeRelation = new HashSet<UserPrivilegeRelation>();
+            this.UserRolePrivilegeRelation = new HashSet<UserRolePrivilegeRelation>();
         }
     
         public int ID { get; set; }
-        public int EventID { get; set; }
-        public int UserID { get; set; }
-        public int SeatID { get; set; }
-        public int OrderState { get; set; }
+        public string Name { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual Event Event { get; set; }
-        public virtual Seat Seat { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CateringOrderDetail> CateringOrderDetail { get; set; }
+        public virtual ICollection<UserPrivilegeRelation> UserPrivilegeRelation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserRolePrivilegeRelation> UserRolePrivilegeRelation { get; set; }
     }
 }
