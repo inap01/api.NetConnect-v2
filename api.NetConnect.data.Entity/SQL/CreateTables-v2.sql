@@ -76,6 +76,12 @@ CREATE TABLE [dbo].[Event] (
 	[IsActiveFeedback] bit NOT NULL DEFAULT 0,
 	[IsPrivate] bit NOT NULL DEFAULT 0,
 	[FeedbackLink] VARCHAR(255) NOT NULL,
+	[City] varchar(80) NOT NULL,
+	[Street] varchar(80) NOT NULL,
+	[Housenumber] varchar(5) NOT NULL,
+	[Postcode] varchar(10) NOT NULL,
+	[Country] varchar(80) NOT NULL,
+	[RouteLink] text NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -83,12 +89,6 @@ CREATE TABLE [dbo].[EventType] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(255) NOT NULL,
 	[PublicAccess] bit NOT NULL DEFAULT 1,
-	[City] varchar(80) NOT NULL,
-	[Street] varchar(80) NOT NULL,
-	[Housenumber] varchar(5) NOT NULL,
-	[Postcode] varchar(10) NOT NULL,
-	[Country] varchar(80) NOT NULL,
-	[RouteLink] text NOT NULL,
 	[Description] text NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
@@ -111,8 +111,8 @@ CREATE TABLE [dbo].[FaqCategory] (
 
 CREATE TABLE [dbo].[ImageContainer] (
 	[SID] uniqueidentifier PRIMARY KEY,
-	[ThumbnailPath] int NOT NULL,
-	[OriginalPath] int NOT NULL,
+	[ThumbnailPath] varchar(MAX) NOT NULL,
+	[OriginalPath] varchar(MAX) NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
