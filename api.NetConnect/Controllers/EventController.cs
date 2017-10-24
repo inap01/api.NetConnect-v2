@@ -33,9 +33,11 @@ namespace api.NetConnect.Controllers
                     Start = new DateTime(2017, 9, 8, 17, 0, 0),
                     End = new DateTime(2017, 9, 10, 12, 0, 0),
                     Description = "",
-                    AddressLine1 = "Körrenzig",
-                    AddressLine2 = "Hauptstraße 91",
-                    AddressLine3 = "52441 Linnich",
+                    City = "Körrenzig",
+                    Street = "Hauptstraße",
+                    Housenumber = "91",
+                    Postcode = "52441",
+                    Country = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
                     Price = 15
                 });
@@ -47,9 +49,11 @@ namespace api.NetConnect.Controllers
                     Start = new DateTime(2018, 3, 9, 17, 0, 0),
                     End = new DateTime(2018, 3, 11, 12, 0, 0),
                     Description = "",
-                    AddressLine1 = "Körrenzig",
-                    AddressLine2 = "Hauptstraße 91",
-                    AddressLine3 = "52441 Linnich",
+                    City = "Körrenzig",
+                    Street = "Hauptstraße",
+                    Housenumber = "91",
+                    Postcode = "52441",
+                    Country = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
                     Price = 15
                 });
@@ -81,9 +85,11 @@ namespace api.NetConnect.Controllers
                     Description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
                     "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. " +
                     "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-                    AddressLine1 = "Körrenzig",
-                    AddressLine2 = "Hauptstraße 91",
-                    AddressLine3 = "52441 Linnich",
+                    City = "Körrenzig",
+                    Street = "Hauptstraße",
+                    Housenumber = "91",
+                    Postcode = "52441",
+                    Country = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
                     Price = 15
                 };

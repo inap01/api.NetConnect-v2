@@ -82,7 +82,12 @@ CREATE TABLE [dbo].[Event] (
 CREATE TABLE [dbo].[EventType] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(255) NOT NULL,
-	[PublicAccess] bit NOT NULL DEFAULT 1, 
+	[PublicAccess] bit NOT NULL DEFAULT 1,
+	[City] varchar(80) NOT NULL,
+	[Street] varchar(80) NOT NULL,
+	[Housenumber] varchar(5) NOT NULL,
+	[Postcode] varchar(10) NOT NULL,
+	[Country] varchar(80) NOT NULL,
 	[RouteLink] text NOT NULL,
 	[Description] text NOT NULL,
 	[RowVersion] timestamp NOT NULL
