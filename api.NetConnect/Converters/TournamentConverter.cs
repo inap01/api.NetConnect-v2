@@ -12,19 +12,14 @@ namespace api.NetConnect.Converters
     {
         public static void FromModel(this TournamentViewModelItem viewModel, Tournament model)
         {
-            viewModel.Volume = model.Volume;
             viewModel.GameID = model.TournamentGameID;
             viewModel.TeamSize = model.TeamSize;
             viewModel.ChallongeLink = model.ChallongeLink;
             viewModel.Mode = model.Mode;
             viewModel.Start = model.Start;
             viewModel.End = model.End;
-            viewModel.IsPauseGame = model.IsPauseGame;
             viewModel.Name = model.TournamentGame.Name;
-            viewModel.Icon = model.TournamentGame.Icon;
             viewModel.Rules = model.TournamentGame.Rules;
-            viewModel.BattleTag = model.TournamentGame.BattleTag;
-            viewModel.Steam = model.TournamentGame.SteamID;
 
             viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();
@@ -51,9 +46,9 @@ namespace api.NetConnect.Converters
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
             viewModel.HasPassword = !String.IsNullOrEmpty(model.Password);
-            viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
+            viewModel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();
-                vm.FromModel(x);
+                //vm.FromModel(x);
                 return vm;
             });
         }
@@ -70,20 +65,17 @@ namespace api.NetConnect.Converters
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
-            viewModel.Image = model.Image;
         }
         #endregion
 
         public static void FromViewModel(this Tournament model, TournamentViewModelItem viewModel)
         {
             model.ID = viewModel.ID;
-            model.Volume = viewModel.Volume;
             model.TeamSize = viewModel.TeamSize;
             model.ChallongeLink = viewModel.ChallongeLink;
             model.Mode = viewModel.Mode;
             model.Start = viewModel.Start;
             model.End = viewModel.End;
-            model.IsPauseGame = viewModel.IsPauseGame;
             model.TournamentGameID = viewModel.GameID;
 
             model.TournamentParticipant = viewModel.Player.ConvertAll(x =>

@@ -388,8 +388,8 @@ ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_UserID] FOREIGN KEY (UserID) RE
 
 -- [dbo].[SeatTransferLog]
 ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SeatID] FOREIGN KEY (SeatID) REFERENCES [dbo].[Seat](ID) ON DELETE CASCADE;
-ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SourceUserID] FOREIGN KEY (SourceUserID) REFERENCES [dbo].[Seat](ID);
-ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_DestinationUserID] FOREIGN KEY (DestinationUserID) REFERENCES [dbo].[Seat](ID);
+ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SourceUserID] FOREIGN KEY (SourceUserID) REFERENCES [dbo].[User](ID);
+ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_DestinationUserID] FOREIGN KEY (DestinationUserID) REFERENCES [dbo].[User](ID);
 
 -- [dbo].[Tournament]
 ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_EventID] FOREIGN KEY (EventID) REFERENCES [dbo].[Event](ID);

@@ -15,7 +15,7 @@ namespace api.NetConnect.Converters
         {
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
-            viewModel.Image = model.Image;
+            viewModel.Image = model.ImageContainer.OriginalPath;
             viewModel.Link = model.Link;
             viewModel.RefLink = model.Link;
 
@@ -40,7 +40,6 @@ namespace api.NetConnect.Converters
         {
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
-            viewModel.Image = model.Image;
             viewModel.Link = model.Link;
             viewModel.RefLink = model.Link;
 

@@ -13,11 +13,6 @@ namespace api.NetConnect.DataControllers
             CateringProduct dbItem = GetItem(item.ID);
 
             dbItem.Name = item.Name;
-            dbItem.Description = item.Description;
-            dbItem.Image = item.Image;
-            dbItem.Price = item.Price;
-            dbItem.Attributes = item.Attributes;
-            dbItem.SingleChoice = item.SingleChoice;
 
             db.SaveChanges();
 
@@ -31,10 +26,7 @@ namespace api.NetConnect.DataControllers
         {
             CateringOrder dbItem = GetItem(item.ID);
 
-            dbItem.Volume = item.Volume;
-            dbItem.UserID = item.UserID;
-            dbItem.SeatID = item.SeatID;
-            dbItem.CompletionState = item.CompletionState;
+
 
             db.SaveChanges();
 

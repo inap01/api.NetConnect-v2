@@ -22,7 +22,6 @@ namespace api.NetConnect.Converters
             viewModel.ReservationDate = model.ReservationDate;
             viewModel.Description = model.Description;
             viewModel.IsPayed = model.Payed;
-            viewModel.IsTeam = model.IsTeam;
             viewModel.User = null;
 
             if(model.IsActive && model.State != 0 && model.User != null)

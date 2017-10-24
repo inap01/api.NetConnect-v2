@@ -157,11 +157,9 @@
     <Compile Include="DataControllers\CateringDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />
-    <Compile Include="DataControllers\SettingsDataController.cs" />
     <Compile Include="DataControllers\SeatDataController.cs" />
     <Compile Include="DataControllers\PartnerDataController.cs" />
     <Compile Include="DataControllers\LogsDataController.cs" />
-    <Compile Include="DataControllers\ChatDataController.cs" />
     <Compile Include="DataControllers\UserDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

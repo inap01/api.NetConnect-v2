@@ -9,7 +9,7 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static void FromModel(this EventViewModelItem viewModel, Settings model)
+        public static void FromModel(this EventViewModelItem viewModel, Event model)
         {
 
         }

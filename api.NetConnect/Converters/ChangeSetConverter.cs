@@ -14,12 +14,9 @@ namespace api.NetConnect.Converters
             viewModel.CateringOrder = model.CateringOrder;
             viewModel.CateringProduct = model.CateringOrderDetail;
             viewModel.CateringOrderDetail = model.CateringProduct;
-            viewModel.Chat = model.Chat;
-            viewModel.Logs = model.Logs;
             viewModel.Partner = model.Partner;
             viewModel.PartnerPack = model.PartnerPack;
             viewModel.Seat = model.Seat;
-            viewModel.Settings = model.Settings;
             viewModel.Tournament = model.Tournament;
             viewModel.TournamentGame = model.TournamentGame;
             viewModel.TournamentParticipant = model.TournamentParticipant;

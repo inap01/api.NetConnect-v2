@@ -15,8 +15,6 @@ namespace api.NetConnect.DataControllers
             dbItem.Name = item.Name;
             dbItem.Link = item.Link;
             dbItem.Content = item.Content;
-            dbItem.Image = item.Image;
-            dbItem.ImageAlt = item.ImageAlt;
             dbItem.PartnerPackID = item.PartnerPackID;
             dbItem.IsActive = item.IsActive;
             dbItem.Position = item.Position;

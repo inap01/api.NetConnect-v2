@@ -55,7 +55,6 @@ namespace api.NetConnect.DataControllers
             dbItem.Description = item.Description;
             dbItem.ReservationDate = item.ReservationDate;
             dbItem.Payed = item.Payed;
-            dbItem.IsTeam = item.IsTeam;
 
             db.SaveChanges();
 
