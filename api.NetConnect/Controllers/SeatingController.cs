@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.DataControllers;
 using api.NetConnect.data.ViewModel.Seating;
+using api.NetConnect.data.ViewModel.Seating.Backend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,35 @@ using api.NetConnect.data.Entity;
 
 namespace api.NetConnect.Controllers
 {
-    using SeatingListViewModel = ListArgsViewModel<SeatingViewModelItem, SeatingFilter, SeatingSortSettings>;
-    using SeatingArgsRequest = ListArgsRequest<SeatingFilter, SeatingSortSettings>;
+    using SeatingListViewModel = ListViewModel<SeatingViewModelItem>;
+    using BackendSeatingListViewModel = ListViewModel<BackendSeatingViewModelItem>;
 
     public class SeatingController : ApiController
     {
-        [HttpPut]
-        public IHttpActionResult FilterList(SeatingArgsRequest args)
+        #region Frontend
+        [HttpGet]
+        public IHttpActionResult Get()
         {
             SeatingListViewModel viewmodel = new SeatingListViewModel();
 
-            if (args == null)
-                args = new SeatingArgsRequest();
+            for (int i = 1; i <= 70; i++)
+            {
+                SeatingViewModelItem item = new SeatingViewModelItem();
+                item.FromModel(SeatDataController.GetItem(i));
+                viewmodel.Data.Add(item);
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Detail(Int32 id)
+        {
+            SeatingViewModel viewmodel = new SeatingViewModel();
 
             try
             {
-                viewmodel = SeatingConverter.FilterList(args);
+                viewmodel.Data.FromModel(SeatDataController.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -39,24 +53,55 @@ namespace api.NetConnect.Controllers
 
             return Ok(viewmodel);
         }
-
+        #endregion
+        #region Backend
         [HttpGet]
-        public IHttpActionResult GetItem(Int32 id)
+        public IHttpActionResult Backend_Get([FromUri] BackendSeatingFilter filter)
         {
-            SeatingViewModel viewmodel = new SeatingViewModel();
+            BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
 
-            try
-            {
-                viewmodel.Data.FromModel(SeatDataController.GetItem(id));
-            }
-            catch(Exception ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
-            }
+            // TODO
 
             return Ok(viewmodel);
         }
+
+        [HttpGet]
+        public IHttpActionResult Backend_Detail(Int32 id)
+        {
+            BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Backend_Detail_Insert(BackendSeatingViewModelItem request)
+        {
+            BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendSeatingViewModelItem request)
+        {
+            BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Backend_Delete(BackendSeatingDeleteRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            return Ok(viewmodel);
+        }
+        #endregion
     }
 }

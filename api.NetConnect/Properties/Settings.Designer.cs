@@ -103,5 +103,14 @@ namespace api.NetConnect.Properties {
                 return ((string)(this["BIC"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("~/App_Data/Uploads")]
+        public string imageTmpUpload {
+            get {
+                return ((string)(this["imageTmpUpload"]));
+            }
+        }
     }
 }

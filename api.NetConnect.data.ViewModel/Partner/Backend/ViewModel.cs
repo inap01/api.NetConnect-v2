@@ -5,35 +5,30 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Partner.Backend
 {
-    public class PartnerViewModel : BackendBaseViewModel
+    public class BackendPartnerViewModel : BackendBaseViewModel
     {
-        public PartnerViewModelItem Data { get; set; }
+        public BackendPartnerViewModelItem Data { get; set; }
 
-        public PartnerViewModel()
+        public BackendPartnerViewModel()
         {
-            Data = new PartnerViewModelItem();
+            Data = new BackendPartnerViewModelItem();
         }
     }
 
-    public class PartnerViewModelItem : BaseViewModelItem
+    public class BackendPartnerViewModelItem : BaseViewModelItem
     {
         public String Name { get; set; }
         public String Description { get; set; }
         public String Image { get; set; }
         public String Link { get; set; }
         public String RefLink { get; set; }
-        public PartnerPack PartnerType { get; set; }
+        public PartnerType PartnerType { get; set; }
         public Dictionary<String, Boolean> Display { get; set; }
 
-        public PartnerViewModelItem()
+        public BackendPartnerViewModelItem()
         {
-            PartnerType = new PartnerPack();
+            PartnerType = new PartnerType();
             Display = new Dictionary<string, bool>();
         }
-    }
-
-    public class PartnerPack
-    {
-        public String Name { get; set; }
     }
 }

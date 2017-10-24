@@ -21,7 +21,12 @@ namespace api.NetConnect.data.ViewModel.Event
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public String Image { get; set; }
-        public String Text { get; set; }
+        public String Description { get; set; }
+        public String AddressLine1 { get; set; }
+        public String AddressLine2 { get; set; }
+        public String AddressLine3 { get; set; }
+        public String RouteLink { get; set; }
+        public Double Price { get; set; }
 
         public EventViewModelItem()
         {

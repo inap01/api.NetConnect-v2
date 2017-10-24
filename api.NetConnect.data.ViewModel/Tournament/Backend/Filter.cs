@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace api.NetConnect.data.ViewModel.Tournament
+namespace api.NetConnect.data.ViewModel.Tournament.Backend
 {
-    public class TournamentFilter
+    public class BackendTournamentFilter
     {
         public String Volume { get; set; }
         public String Game { get; set; }
         public String Day { get; set; }
 
-        public TournamentFilter()
+        public BackendTournamentFilter()
         {
             Volume = "";
             Game = "";

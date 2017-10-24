@@ -136,8 +136,10 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ChangeSetController.cs" />
-    <Compile Include="Controllers\InfoController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\MediumController.cs" />
+    <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\SeatingController.cs" />
@@ -147,6 +149,7 @@
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
     <Compile Include="Converters\InfoConverter.cs" />
+    <Compile Include="Converters\PartnerConverter.cs" />
     <Compile Include="Converters\SeatingConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />
     <Compile Include="Converters\ProfileConverter.cs" />

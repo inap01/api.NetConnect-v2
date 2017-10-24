@@ -8,18 +8,26 @@ namespace api.NetConnect.data.ViewModel
 {
     public class BackendBaseViewModel : BaseViewModel
     {
-        public List<InputInformation> Form { get; set; }
+        public Dictionary<String, InputInformation> Form { get; set; }
 
         public BackendBaseViewModel() : base()
         {
-            Form = new List<InputInformation>();
+            Form = new Dictionary<String, InputInformation>();
         }
 
         public class InputInformation
         {
-            public String Key { get; set; }
             public String Type { get; set; }
             public Boolean Readonly { get; set; }
+            public Boolean Required { get; set; }
+            public String Reference { get; set; }
+            public Dictionary<String, InputInformation> ReferenceForm { get; set; }
+
+            public InputInformation()
+            {
+                Readonly = false;
+                Required = false;
+            }
         }
     }
 }

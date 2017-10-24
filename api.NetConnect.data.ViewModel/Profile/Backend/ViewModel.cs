@@ -5,17 +5,17 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Profile.Backend
 {
-    public class ProfileViewModel : BackendBaseViewModel
+    public class BackendProfileViewModel : BaseViewModel
     {
-        public ProfileViewModelItem Data { get; set; }
+        public BackendProfileViewModelItem Data { get; set; }
 
-        public ProfileViewModel()
+        public BackendProfileViewModel()
         {
-            Data = new ProfileViewModelItem();
+            Data = new BackendProfileViewModelItem();
         }
     }
 
-    public class ProfileViewModelItem : BaseViewModelItem
+    public class BackendProfileViewModelItem : BaseViewModelItem
     {
         public String FirstName { get; set; }
         public String LastName { get; set; }
@@ -28,7 +28,7 @@ namespace api.NetConnect.data.ViewModel.Profile.Backend
         public String NewPassword1 { get; set; }
         public String NewPassword2 { get; set; }
 
-        public ProfileViewModelItem()
+        public BackendProfileViewModelItem()
         {
         }
     }

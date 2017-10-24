@@ -5,58 +5,66 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Tournament.Backend
 {
-    public class TournamentViewModel : BackendBaseViewModel
+    public class BackendTournamentViewModel : BackendBaseViewModel
     {
-        public TournamentViewModelItem Data { get; set; }
+        public BackendTournamentViewModelItem Data { get; set; }
 
-        public TournamentViewModel()
+        public BackendTournamentViewModel()
         {
-            Data = new TournamentViewModelItem();
+            Data = new BackendTournamentViewModelItem();
         }
     }
 
-    public class TournamentViewModelItem : BaseViewModelItem
+    public class BackendTournamentViewModelItem : BaseViewModelItem
     {
-        public Int32 Volume { get; set; }
-        public Int32 GameID { get; set; }
-        public Int32 TeamSize { get; set; }
         public String ChallongeLink { get; set; }
         public String Mode { get; set; }
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
-        public Boolean IsPauseGame { get; set; }
-        public String Name { get; set; }
-        public String Icon { get; set; }
-        public String Rules { get; set; }
-        public Boolean BattleTag { get; set; }
-        public Boolean Steam { get; set; }
         public Int32 TeilnehmerAnzahl { get; set; }
-        public List<TournamentParticipantViewModelItem> Player { get; set; }
-        public List<TournamentTeamViewModelItem> Teams { get; set; }
-        public TournamentPartner Partner { get; set; }
+        public BackendTournamentGameViewModelItem Game { get; set; }
+        public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
+        public List<BackendTournamentTeamViewModelItem> Teams { get; set; }
+        public BackendTournamentPartner Partner { get; set; }
 
-        public TournamentViewModelItem()
+        public BackendTournamentViewModelItem()
         {
+            Player = new List<BackendTournamentParticipantViewModelItem>();
+            Teams = new List<BackendTournamentTeamViewModelItem>();
         }
 
-        public class TournamentPartner : BaseViewModelItem
+        public class BackendTournamentPartner : BaseViewModelItem
         {
             public String Name { get; set; }
-            public String Image { get; set; }
+            public String ImagePath { get; set; }
         }
     }
 
-    public class TournamentTeamViewModelItem : BaseViewModelItem
+    public class BackendTournamentGameViewModelItem : BaseViewModelItem
+    {
+        public String Name { get; set; }
+        public Int32 TeamSize { get; set; }
+        public String ImagePath { get; set; }
+        public String RulesPath { get; set; }
+        public Boolean RequireBattleTag { get; set; }
+        public Boolean RequireSteamID { get; set; }
+    }
+
+    public class BackendTournamentTeamViewModelItem : BaseViewModelItem
     {
         public String Name { get; set; }
         public Boolean HasPassword { get; set; }
-        public List<TournamentParticipantViewModelItem> Player { get; set; }
+        public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
+
+        public BackendTournamentTeamViewModelItem()
+        {
+            Player = new List<BackendTournamentParticipantViewModelItem>();
+        }
     }
 
-    public class TournamentParticipantViewModelItem : BaseViewModelItem
+    public class BackendTournamentParticipantViewModelItem : BaseViewModelItem
     {
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
+        public String Name { get; set; }
         public String Nickname { get; set; }
     }
 }

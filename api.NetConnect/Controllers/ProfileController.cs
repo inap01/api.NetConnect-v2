@@ -9,13 +9,17 @@ using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
 using static api.NetConnect.Helper.PasswordHelper;
+using api.NetConnect.data.ViewModel.Profile.Backend;
+using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
+    using BackendProfileListViewModel = ListViewModel<BackendProfileViewModelItem>;
     public class ProfileController : ApiController
     {
+        #region Frontend
         [HttpGet]
-        public IHttpActionResult GetItem(Int32 id)
+        public IHttpActionResult Detail(Int32 id)
         {
             ProfileViewModel viewmodel = new ProfileViewModel();
 
@@ -34,7 +38,7 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Update(Int32 id, ProfileViewModelItem request)
+        public IHttpActionResult Detail_Update(Int32 id, ProfileViewModelItem request)
         {
             ProfileViewModel viewmodel = new ProfileViewModel();
 
@@ -66,7 +70,58 @@ namespace api.NetConnect.Controllers
                 viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
-            return Ok();
+            return Ok(viewmodel);
         }
+        #endregion
+
+        #region Backend
+        [HttpGet]
+        public IHttpActionResult Backend_Get([FromUri] BackendProfileFilter filter)
+        {
+            BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Backend_Detail(Int32 id)
+        {
+            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult BackendDetail_Insert(ProfileViewModelItem request)
+        {
+            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult BackendDetail_Update(Int32 id, ProfileViewModelItem request)
+        {
+            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+
+            // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Backend_Delete(BackendProfileDeleteRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            return Ok(viewmodel);
+        }
+        #endregion
     }
 }

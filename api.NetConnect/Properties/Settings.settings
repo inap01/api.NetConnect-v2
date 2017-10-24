@@ -29,5 +29,8 @@
     <Setting Name="BIC" Type="System.String" Scope="Application">
       <Value Profile="(Default)">GENODED1LOE</Value>
     </Setting>
+    <Setting Name="imageTmpUpload" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">~/App_Data/Uploads</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

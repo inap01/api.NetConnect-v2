@@ -5,55 +5,27 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.News.Backend
 {
-    public class NewsViewModel : BackendBaseViewModel
+    public class BackendNewsViewModel : BackendBaseViewModel
     {
-        public NewsViewModelItem Data { get; set; }
+        public BackendNewsViewModelItem Data { get; set; }
 
-        public NewsViewModel()
+        public BackendNewsViewModel()
         {
-            Data = new NewsViewModelItem();
+            Data = new BackendNewsViewModelItem();
         }
     }
 
-    public class NewsViewModelItem : BaseViewModelItem
+    public class BackendNewsViewModelItem : BaseViewModelItem
     {
         public String Title { get; set; }
         public DateTime Date { get; set; }
         public String Image { get; set; }
         public String Text { get; set; }
         public String Link { get; set; }
-        public List<FbLike> Likes { get; set; }
-        public List<FbComment> Comments { get; set; }
 
-        public NewsViewModelItem()
+        public BackendNewsViewModelItem()
         {
-            Likes = new List<FbLike>();
-            Comments = new List<FbComment>();
+
         }
-    }
-
-    public class FbLike
-    {
-        public String Name { get; set; }
-        public String Image { get; set; }
-        public String Link { get; set; }
-    }
-
-    public class FbComment : FbBaseComment
-    {
-        public List<FbBaseComment> Comments { get; set; }
-
-        public FbComment()
-        {
-            Comments = new List<FbBaseComment>();
-        }
-    }
-
-    public class FbBaseComment
-    {
-        public String Name { get; set; }
-        public String Link { get; set; }
-        public DateTime Date { get; set; }
-        public String Text { get; set; }
     }
 }

@@ -5,17 +5,17 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Seating.Backend
 {
-    public class SeatingViewModel : BackendBaseViewModel
+    public class BackendSeatingViewModel : BackendBaseViewModel
     {
-        public SeatingViewModelItem Data { get; set; }
+        public BackendSeatingViewModelItem Data { get; set; }
 
-        public SeatingViewModel()
+        public BackendSeatingViewModel()
         {
-            Data = new SeatingViewModelItem();
+            Data = new BackendSeatingViewModelItem();
         }
     }
 
-    public class SeatingViewModelItem : BaseViewModelItem
+    public class BackendSeatingViewModelItem : BaseViewModelItem
     {
         public Int32 ReservationState { get; set; }
         public DateTime ReservationDate { get; set; }
@@ -24,7 +24,7 @@ namespace api.NetConnect.data.ViewModel.Seating.Backend
         public Boolean IsTeam { get; set; }
         public SeatingUser User { get; set; }
 
-        public SeatingViewModelItem()
+        public BackendSeatingViewModelItem()
         {
         }
 

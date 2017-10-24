@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel.Seating.Backend
 {
-    public partial class SeatingFilter
+    public partial class BackendSeatingFilter
     {
         public String SeatNumber { get; set; }
         public String Name { get; set; }
         public String UsageString { get; set; }
         public SeatingStatusFilter Status { get; set; }
 
-        public SeatingFilter()
+        public BackendSeatingFilter()
         {
             SeatNumber = "";
             Name = "";

@@ -1,6 +1,7 @@
 ﻿using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Seating;
+using api.NetConnect.data.ViewModel.Seating.Backend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    using SeatingArgsRequest = ListArgsRequest<SeatingFilter, SeatingSortSettings>;
+    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter, SeatingSortSettings>;
 
     public class SeatDataController : GenericDataController<Seat>
     {

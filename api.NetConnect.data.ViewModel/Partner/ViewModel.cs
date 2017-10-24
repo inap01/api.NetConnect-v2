@@ -22,18 +22,19 @@ namespace api.NetConnect.data.ViewModel.Partner
         public String Image { get; set; }
         public String Link { get; set; }
         public String RefLink { get; set; }
-        public PartnerPack PartnerType { get; set; }
+        public PartnerType PartnerType { get; set; }
         public Dictionary<String, Boolean> Display { get; set; }
 
         public PartnerViewModelItem()
         {
-            PartnerType = new PartnerPack();
+            PartnerType = new PartnerType();
             Display = new Dictionary<string, bool>();
         }
     }
 
-    public class PartnerPack
+    public class PartnerType
     {
+        public Int32 ID { get; set; }
         public String Name { get; set; }
     }
 }

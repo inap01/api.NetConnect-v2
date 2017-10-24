@@ -5,17 +5,17 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Event.Backend
 {
-    public class EventViewModel : BackendBaseViewModel
+    public class BackendEventViewModel : BackendBaseViewModel
     {
-        public EventViewModelItem Data { get; set; }
+        public BackendEventViewModelItem Data { get; set; }
 
-        public EventViewModel()
+        public BackendEventViewModel()
         {
-            Data = new EventViewModelItem();
+            Data = new BackendEventViewModelItem();
         }
     }
 
-    public class EventViewModelItem : BaseViewModelItem
+    public class BackendEventViewModelItem : BaseViewModelItem
     {
         public String Title { get; set; }
         public DateTime Start { get; set; }
@@ -23,7 +23,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
         public String Image { get; set; }
         public String Text { get; set; }
 
-        public EventViewModelItem()
+        public BackendEventViewModelItem()
         {
 
         }

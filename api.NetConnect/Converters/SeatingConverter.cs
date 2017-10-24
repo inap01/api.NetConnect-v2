@@ -6,11 +6,12 @@ using System.Web;
 using api.NetConnect.data.ViewModel.Seating;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel.Seating.Backend;
 
 namespace api.NetConnect.Converters
 {
-    using SeatingListViewModel = ListArgsViewModel<SeatingViewModelItem, SeatingFilter, SeatingSortSettings>;
-    using SeatingArgsRequest = ListArgsRequest<SeatingFilter, SeatingSortSettings>;
+    using SeatingBackendListViewModel = ListArgsViewModel<SeatingViewModelItem, BackendSeatingFilter, SeatingSortSettings>;
+    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter, SeatingSortSettings>;
 
     public static partial class ConverterExtensions
     {
@@ -40,9 +41,9 @@ namespace api.NetConnect.Converters
 
     public static class SeatingConverter
     {
-        public static SeatingListViewModel FilterList(SeatingArgsRequest args)
+        public static SeatingBackendListViewModel FilterList(SeatingArgsRequest args)
         {
-            SeatingListViewModel result = new SeatingListViewModel(args);
+            SeatingBackendListViewModel result = new SeatingBackendListViewModel(args);
 
             List<Seat> filteredSeats = SeatDataController.FilterList(args);
 
