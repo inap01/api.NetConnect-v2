@@ -83,6 +83,8 @@ CREATE TABLE [dbo].[EventType] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(255) NOT NULL,
 	[PublicAccess] bit NOT NULL DEFAULT 1, 
+	[RouteLink] text NOT NULL,
+	[Description] text NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -265,6 +267,19 @@ CREATE TABLE [dbo].[User] (
 	[RowVersion] timestamp NOT NULL,
 );
 
+CREATE TABLE [dbo].[UserTask] (
+	[ID] int IDENTITY(1,1) PRIMARY KEY,
+	[Description] varchar(50) NOT NULL UNIQUE,
+	[RowVersion] timestamp NOT NULL
+);
+
+CREATE TABLE [dbo].[UserTaskRelation] (
+	[ID] int IDENTITY(1,1) PRIMARY KEY,
+	[UserID] int NOT NULL,
+	[UserTaskID] int NOT NULL,
+	[RowVersion] timestamp NOT NULL
+);
+
 CREATE TABLE [dbo].[UserRole] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(250) NOT NULL UNIQUE,
@@ -318,6 +333,8 @@ CREATE TABLE [dbo].[ChangeSet] (
 	[TournamentWinnerPlayer] DateTime,
 	[TournamentWinnerTeam] DateTime,
 	[User] DateTime,
+	[UserTask] DateTime,
+	[UserTaskRelation] DateTime,
 	[UserRole] DateTime,
 	[UserPrivilege] DateTime,
 	[UserPrivilegeRelation] DateTime,
@@ -404,6 +421,10 @@ ALTER TABLE [dbo].[TournamentWinnerTeam] ADD CONSTRAINT [FK_TournamentWinnerTeam
 -- [dbo].[User]
 ALTER TABLE [dbo].[User] ADD CONSTRAINT [FK_User_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
 
+-- [dbo].[UserTaskRelation]
+ALTER TABLE [dbo].[UserTaskRelation] ADD CONSTRAINT [FK_UserTaskRelation_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+ALTER TABLE [dbo].[UserTaskRelation] ADD CONSTRAINT [FK_UserTaskRelation_UserTaskID] FOREIGN KEY (UserTaskID) REFERENCES [dbo].[UserTask](ID);
+
 -- [dbo].[UserPrivilegeRelation]
 ALTER TABLE [dbo].[UserPrivilegeRelation] ADD CONSTRAINT [FK_UserPrivilegeRelation_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
 ALTER TABLE [dbo].[UserPrivilegeRelation] ADD CONSTRAINT [FK_UserPrivilegeRelation_UserPrivilegeID] FOREIGN KEY (UserID) REFERENCES [dbo].[UserPrivilege](ID);
@@ -419,8 +440,9 @@ GO
 INSERT INTO ChangeSet(CateringProduct)VALUES(NULL)
 
 -- EVENTS erstellen
-INSERT INTO dbo.EventType ([Name], [PublicAccess])
-VALUES ('Playground', 1), ('NetConnect & Friends', 0)
+INSERT INTO dbo.EventType ([Name], [PublicAccess], [RouteLink])
+VALUES ('Playground', 1, 'https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland'), 
+       ('NetConnect & Friends', 0, 'https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland')
 GO
 
 INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink])
@@ -867,6 +889,40 @@ as
 	Select @date = GETDATE()
 	UPDATE [dbo].[ChangeSet]
 	SET [User] = @date
+go
+
+
+IF (OBJECT_ID(N'[dbo].[UpdateUserTask]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateUserTask];
+END;
+go
+
+create trigger [dbo].[UpdateUserTask]
+on [dbo].[UserTask]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET [UserTask] = @date
+go
+
+
+IF (OBJECT_ID(N'[dbo].[UpdateUserTaskRelation]') IS NOT NULL)
+BEGIN
+      DROP TRIGGER [dbo].[UpdateUserTaskRelation];
+END;
+go
+
+create trigger [dbo].[UpdateUserTaskRelation]
+on [dbo].[UserTaskRelation]
+after update, insert, delete
+as	
+	declare @date DateTime
+	Select @date = GETDATE()
+	UPDATE [dbo].[ChangeSet]
+	SET [UserTaskRelation] = @date
 go
 
 
