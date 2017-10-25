@@ -9,14 +9,13 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
-using de.schlentersimon.webapi.hsg.hsgmanager;
 
-namespace de.schlentersimon.webapi.hsg.hsgmanager.Controllers
+namespace api.NetConnect.Controllers
 {
     [Authorize()]
     public class MediumController : ApiController
     {
-        String uploadDir = System.Web.HttpContext.Current.Server.MapPath(api.NetConnect.Properties.Settings.Default.imageTmpUpload);
+        String uploadDir = System.Web.HttpContext.Current.Server.MapPath(Properties.Settings.Default.imageTmpUpload);
 
         [HttpPost]
         public async Task<IHttpActionResult> Upload()

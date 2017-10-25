@@ -618,10 +618,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SeatTransferLog_DestinationUserID">
-          <End Role="Seat" Type="Self.Seat" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="SeatTransferLog" Type="Self.SeatTransferLog" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Seat">
+            <Principal Role="User">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="SeatTransferLog">
@@ -644,10 +644,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_SeatTransferLog_SourceUserID">
-          <End Role="Seat" Type="Self.Seat" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="SeatTransferLog" Type="Self.SeatTransferLog" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Seat">
+            <Principal Role="User">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="SeatTransferLog">
@@ -1040,7 +1040,7 @@
             <End Role="Seat" EntitySet="Seat" />
           </AssociationSet>
           <AssociationSet Name="FK_SeatTransferLog_DestinationUserID" Association="Self.FK_SeatTransferLog_DestinationUserID">
-            <End Role="Seat" EntitySet="Seat" />
+            <End Role="User" EntitySet="User" />
             <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
           </AssociationSet>
           <AssociationSet Name="FK_SeatTransferLog_SeatID" Association="Self.FK_SeatTransferLog_SeatID">
@@ -1048,7 +1048,7 @@
             <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
           </AssociationSet>
           <AssociationSet Name="FK_SeatTransferLog_SourceUserID" Association="Self.FK_SeatTransferLog_SourceUserID">
-            <End Role="Seat" EntitySet="Seat" />
+            <End Role="User" EntitySet="User" />
             <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
           </AssociationSet>
           <AssociationSet Name="FK_Tournament_EventID" Association="Self.FK_Tournament_EventID">
@@ -1270,16 +1270,16 @@
             <End Role="User" EntitySet="User" />
             <End Role="Seat" EntitySet="Seat" />
           </AssociationSet>
-          <AssociationSet Name="FK_SeatTransferLog_DestinationUserID" Association="NetConnectModel.FK_SeatTransferLog_DestinationUserID">
-            <End Role="Seat" EntitySet="Seat" />
-            <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
-          </AssociationSet>
           <AssociationSet Name="FK_SeatTransferLog_SeatID" Association="NetConnectModel.FK_SeatTransferLog_SeatID">
             <End Role="Seat" EntitySet="Seat" />
             <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
           </AssociationSet>
+          <AssociationSet Name="FK_SeatTransferLog_DestinationUserID" Association="NetConnectModel.FK_SeatTransferLog_DestinationUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
+          </AssociationSet>
           <AssociationSet Name="FK_SeatTransferLog_SourceUserID" Association="NetConnectModel.FK_SeatTransferLog_SourceUserID">
-            <End Role="Seat" EntitySet="Seat" />
+            <End Role="User" EntitySet="User" />
             <End Role="SeatTransferLog" EntitySet="SeatTransferLog" />
           </AssociationSet>
           <AssociationSet Name="FK_Tournament_TournamentGameID" Association="NetConnectModel.FK_Tournament_TournamentGameID">
@@ -1609,9 +1609,7 @@
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_SeatID" FromRole="Seat" ToRole="CateringOrder" />
           <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_Seat_EventID" FromRole="Seat" ToRole="Event" />
           <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="Seat" ToRole="User" />
-          <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="Seat" ToRole="SeatTransferLog" />
-          <NavigationProperty Name="SeatTransferLog1" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="Seat" ToRole="SeatTransferLog" />
-          <NavigationProperty Name="SeatTransferLog2" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="Seat" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="Seat" ToRole="SeatTransferLog" />
         </EntityType>
         <EntityType Name="SeatTransferLog">
           <Key>
@@ -1623,9 +1621,9 @@
           <Property Name="DestinationUserID" Type="Int32" Nullable="false" />
           <Property Name="TransferDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="SeatTransferLog" ToRole="Seat" />
-          <NavigationProperty Name="Seat1" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="SeatTransferLog" ToRole="Seat" />
-          <NavigationProperty Name="Seat2" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="SeatTransferLog" ToRole="Seat" />
+          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="SeatTransferLog" ToRole="Seat" />
+          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="SeatTransferLog" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="SeatTransferLog" ToRole="User" />
         </EntityType>
         <EntityType Name="Tournament">
           <Key>
@@ -1760,6 +1758,8 @@
           <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_User_ImageContainerID" FromRole="User" ToRole="ImageContainer" />
           <NavigationProperty Name="Logs" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
           <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
+          <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="SeatTransferLog1" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="User" ToRole="SeatTransferLog" />
           <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_TournamentParticipant_UserID" FromRole="User" ToRole="TournamentParticipant" />
           <NavigationProperty Name="TournamentTeamParticipant" Relationship="NetConnectModel.FK_TournamentTeamParticipant_UserID" FromRole="User" ToRole="TournamentTeamParticipant" />
           <NavigationProperty Name="TournamentWinnerPlayer" Relationship="NetConnectModel.FK_TournamentWinnerPlayer_UserID" FromRole="User" ToRole="TournamentWinnerPlayer" />
@@ -2109,18 +2109,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SeatTransferLog_DestinationUserID">
-          <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="1" />
-          <End Type="NetConnectModel.SeatTransferLog" Role="SeatTransferLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Seat">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="SeatTransferLog">
-              <PropertyRef Name="DestinationUserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SeatTransferLog_SeatID">
           <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2135,11 +2123,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SeatTransferLog_SourceUserID">
-          <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="1" />
+        <Association Name="FK_SeatTransferLog_DestinationUserID">
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
           <End Type="NetConnectModel.SeatTransferLog" Role="SeatTransferLog" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Seat">
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="SeatTransferLog">
+              <PropertyRef Name="DestinationUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatTransferLog_SourceUserID">
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
+          <End Type="NetConnectModel.SeatTransferLog" Role="SeatTransferLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="SeatTransferLog">

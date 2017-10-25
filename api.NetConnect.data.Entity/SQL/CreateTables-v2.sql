@@ -51,7 +51,7 @@ CREATE TABLE [dbo].[CateringProduct] (
 
 CREATE TABLE [dbo].[CateringProductAttribute] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
-	[Name] varchar(250) NOT NULL,
+	[Name] varchar(250) NOT NULL unique,
 	[IsActive] bit NOT NULL DEFAULT 1,
 	[RowVersion] timestamp NOT NULL
 );

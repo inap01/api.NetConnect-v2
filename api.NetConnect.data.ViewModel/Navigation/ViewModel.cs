@@ -20,14 +20,14 @@ namespace api.NetConnect.data.ViewModel.Navigation
         public List<NavItem> NavigationUser { get; set; }
         public List<NavItem> NavigationTop { get; set; }
         public List<NavItem> NavigationAside { get; set; }
-        public List<NavItem> NavigationBottom { get; set; }
+        public List<LinkItem> NavigationBottom { get; set; }
 
         public NavigationViewModelItem()
         {
             NavigationUser = new List<NavItem>();
             NavigationTop = new List<NavItem>();
             NavigationAside = new List<NavItem>();
-            NavigationBottom = new List<NavItem>();
+            NavigationBottom = new List<LinkItem>();
         }
     }
 
@@ -37,5 +37,11 @@ namespace api.NetConnect.data.ViewModel.Navigation
         public String State { get; set; }
         public String StateCompare { get; set; }
         public List<NavItem> SubMenu { get; set; }
+    }
+
+    public class LinkItem
+    {
+        public String Text { get; set; }
+        public String Link { get; set; }
     }
 }

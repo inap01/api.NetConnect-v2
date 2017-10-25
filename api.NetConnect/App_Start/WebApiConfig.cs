@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Routing;
 
@@ -13,7 +14,19 @@ namespace api.NetConnect
         public static void Register(HttpConfiguration config)
         {
             // Web-API-Konfiguration und -Dienste
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+            config.Formatters.Clear();
+            config.Formatters.Add(new JsonMediaTypeFormatter());
+
+            config.Formatters.JsonFormatter.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+            config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
+
+            config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+            config.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Local;
+            config.Formatters.JsonFormatter.SerializerSettings.Culture = System.Globalization.CultureInfo.GetCultureInfo("de-DE");
+
+
 
             // Web-API-Routen
             config.MapHttpAttributeRoutes();
@@ -82,31 +95,6 @@ namespace api.NetConnect
 
             #endregion
 
-            #region EVENT
-            #region Frontend
-            config.Routes.MapHttpRoute(
-               name: "GET_Event_Get",
-               routeTemplate: "event",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new
-               {
-                   controller = "Event",
-                   action = "Get"
-               }
-            );
-            config.Routes.MapHttpRoute(
-               name: "GET_Event_Detail",
-               routeTemplate: "event/{id}",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new
-               {
-                   controller = "Event",
-                   action = "Detail"
-               }
-            );
-            #endregion
-            #endregion
-
             #region NEWS
             #region Frontend
             config.Routes.MapHttpRoute(
@@ -149,6 +137,46 @@ namespace api.NetConnect
                {
                    controller = "News",
                    action = "Backend_Detail"
+               }
+            );
+            #endregion
+            #endregion
+
+            #region EVENT
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_Event_Get",
+               routeTemplate: "event",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Event_Detail",
+               routeTemplate: "event/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Detail"
+               }
+            );
+            #endregion
+            #endregion
+
+            #region EVENT
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_Gallery_Get",
+               routeTemplate: "gallery",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Gallery",
+                   action = "Get"
                }
             );
             #endregion

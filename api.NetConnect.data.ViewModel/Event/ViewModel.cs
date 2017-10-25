@@ -22,11 +22,11 @@ namespace api.NetConnect.data.ViewModel.Event
         public DateTime End { get; set; }
         public String Image { get; set; }
         public String Description { get; set; }
-        public String City { get; set; }
+        public String District { get; set; }
         public String Street { get; set; }
         public String Housenumber { get; set; }
         public String Postcode { get; set; }
-        public String Country { get; set; }
+        public String City { get; set; }
         public String RouteLink { get; set; }
         public Double Price { get; set; }
 

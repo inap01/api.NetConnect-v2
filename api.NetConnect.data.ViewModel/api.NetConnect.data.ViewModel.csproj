@@ -54,6 +54,7 @@
     <Compile Include="ChangeSet\ViewModel.cs" />
     <Compile Include="Event\Backend\ViewModel.cs" />
     <Compile Include="Event\ViewModel.cs" />
+    <Compile Include="Gallery\ViewModel.cs" />
     <Compile Include="ListArgsQuery.cs" />
     <Compile Include="Navigation\Backend\ViewModel.cs" />
     <Compile Include="Navigation\ViewModel.cs" />
