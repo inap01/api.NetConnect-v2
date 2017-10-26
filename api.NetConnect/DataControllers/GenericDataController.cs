@@ -16,7 +16,7 @@ namespace api.NetConnect.DataControllers
         {
             if (db != null)
                 return db;
-            db = new DataContext(ConfigurationManager.ConnectionStrings["NetConnectEntities"].ConnectionString);
+            db = new DataContext(ConfigurationManager.ConnectionStrings["Entities"].ConnectionString);
             return db;
         }
 

@@ -178,7 +178,8 @@
           <Property Name="Link" Type="varchar(max)" Nullable="false" />
           <Property Name="RefLink" Type="varchar(max)" Nullable="false" />
           <Property Name="Content" Type="text" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ImageOriginalID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ImagePassiveID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="PartnerPackID" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Position" Type="int" Nullable="false" />
@@ -541,7 +542,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Partner_ImageContainerID">
+        <Association Name="FK_Partner_ImageOriginalID">
           <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
           <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
           <ReferentialConstraint>
@@ -549,7 +550,19 @@
               <PropertyRef Name="SID" />
             </Principal>
             <Dependent Role="Partner">
-              <PropertyRef Name="ImageContainerID" />
+              <PropertyRef Name="ImageOriginalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Partner_ImagePassiveID">
+          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
+          <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="Partner">
+              <PropertyRef Name="ImagePassiveID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1015,7 +1028,11 @@
             <End Role="User" EntitySet="User" />
             <End Role="Logs" EntitySet="Logs" />
           </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImageContainerID" Association="Self.FK_Partner_ImageContainerID">
+          <AssociationSet Name="FK_Partner_ImageOriginalID" Association="Self.FK_Partner_ImageOriginalID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="Partner" EntitySet="Partner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Partner_ImagePassiveID" Association="Self.FK_Partner_ImagePassiveID">
             <End Role="ImageContainer" EntitySet="ImageContainer" />
             <End Role="Partner" EntitySet="Partner" />
           </AssociationSet>
@@ -1230,7 +1247,11 @@
             <End Role="FaqCategory" EntitySet="FaqCategory" />
             <End Role="FaqQuestion" EntitySet="FaqQuestion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImageContainerID" Association="NetConnectModel.FK_Partner_ImageContainerID">
+          <AssociationSet Name="FK_Partner_ImageOriginalID" Association="NetConnectModel.FK_Partner_ImageOriginalID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="Partner" EntitySet="Partner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Partner_ImagePassiveID" Association="NetConnectModel.FK_Partner_ImagePassiveID">
             <End Role="ImageContainer" EntitySet="ImageContainer" />
             <End Role="Partner" EntitySet="Partner" />
           </AssociationSet>
@@ -1523,7 +1544,8 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringProduct_ImageContainerID" FromRole="ImageContainer" ToRole="CateringProduct" />
           <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_Event_ImageContainerID" FromRole="ImageContainer" ToRole="Event" />
-          <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Partner_ImageContainerID" FromRole="ImageContainer" ToRole="Partner" />
+          <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Partner_ImageOriginalID" FromRole="ImageContainer" ToRole="Partner" />
+          <NavigationProperty Name="Partner1" Relationship="NetConnectModel.FK_Partner_ImagePassiveID" FromRole="ImageContainer" ToRole="Partner" />
           <NavigationProperty Name="TournamentGame" Relationship="NetConnectModel.FK_TournamentGame_ImageContainerID" FromRole="ImageContainer" ToRole="TournamentGame" />
           <NavigationProperty Name="TournamentWinner" Relationship="NetConnectModel.FK_TournamentWinner_ImageContainerID" FromRole="ImageContainer" ToRole="TournamentWinner" />
           <NavigationProperty Name="User" Relationship="NetConnectModel.FK_User_ImageContainerID" FromRole="ImageContainer" ToRole="User" />
@@ -1551,13 +1573,15 @@
           <Property Name="Link" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RefLink" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="ImageOriginalID" Type="Guid" Nullable="false" />
+          <Property Name="ImagePassiveID" Type="Guid" Nullable="false" />
           <Property Name="PartnerPackID" Type="Int32" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="ClickCount" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_Partner_ImageContainerID" FromRole="Partner" ToRole="ImageContainer" />
+          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_Partner_ImageOriginalID" FromRole="Partner" ToRole="ImageContainer" />
+          <NavigationProperty Name="ImageContainer1" Relationship="NetConnectModel.FK_Partner_ImagePassiveID" FromRole="Partner" ToRole="ImageContainer" />
           <NavigationProperty Name="PartnerPack" Relationship="NetConnectModel.FK_Partner_PartnerPackID" FromRole="Partner" ToRole="PartnerPack" />
           <NavigationProperty Name="PartnerDisplayRelation" Relationship="NetConnectModel.FK_PartnerDisplayRelation_PartnerID" FromRole="Partner" ToRole="PartnerDisplayRelation" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_PartnerID" FromRole="Partner" ToRole="Tournament" />
@@ -1985,7 +2009,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Partner_ImageContainerID">
+        <Association Name="FK_Partner_ImageOriginalID">
           <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
           <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1993,7 +2017,19 @@
               <PropertyRef Name="SID" />
             </Principal>
             <Dependent Role="Partner">
-              <PropertyRef Name="ImageContainerID" />
+              <PropertyRef Name="ImageOriginalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Partner_ImagePassiveID">
+          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
+          <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="Partner">
+              <PropertyRef Name="ImagePassiveID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2555,7 +2591,8 @@
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PartnerPackID" ColumnName="PartnerPackID" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="ImagePassiveID" ColumnName="ImagePassiveID" />
+                <ScalarProperty Name="ImageOriginalID" ColumnName="ImageOriginalID" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="RefLink" ColumnName="RefLink" />
                 <ScalarProperty Name="Link" ColumnName="Link" />

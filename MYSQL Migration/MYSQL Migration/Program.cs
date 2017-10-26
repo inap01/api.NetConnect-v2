@@ -26,7 +26,7 @@ namespace MYSQL_Migration
         public Dictionary<int, int> oldIDTonewID = new Dictionary<int, int>();
         public void RunMigration()
         {
-            string name = ConfigurationManager.ConnectionStrings["NetConnectEntities"].ConnectionString;
+            string name = ConfigurationManager.ConnectionStrings["Entities"].ConnectionString;
             DataContext db = new DataContext(name);
 
             string connString = @"server=localhost;Port=3306;uid=root;database=netconnect;convert zero datetime=True;";
@@ -253,6 +253,7 @@ namespace MYSQL_Migration
                     ClickCount = Convert.ToInt32(entry["click_count"]),
                     Content = Convert.ToString(entry["content"]),
                     ImageContainer = img,
+                    ImageContainer1 = img,
                     IsActive = Convert.ToBoolean(entry["active"]),
                     Link = Convert.ToString(entry["link"]),
                     Name = Convert.ToString(entry["name"]),

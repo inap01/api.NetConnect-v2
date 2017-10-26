@@ -26,7 +26,8 @@ namespace api.NetConnect.data.Entity
         public string Link { get; set; }
         public string RefLink { get; set; }
         public string Content { get; set; }
-        public System.Guid ImageContainerID { get; set; }
+        public System.Guid ImageOriginalID { get; set; }
+        public System.Guid ImagePassiveID { get; set; }
         public int PartnerPackID { get; set; }
         public bool IsActive { get; set; }
         public int Position { get; set; }
@@ -34,6 +35,7 @@ namespace api.NetConnect.data.Entity
         public byte[] RowVersion { get; set; }
     
         public virtual ImageContainer ImageContainer { get; set; }
+        public virtual ImageContainer ImageContainer1 { get; set; }
         public virtual PartnerPack PartnerPack { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartnerDisplayRelation> PartnerDisplayRelation { get; set; }

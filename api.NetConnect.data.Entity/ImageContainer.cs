@@ -20,6 +20,7 @@ namespace api.NetConnect.data.Entity
             this.CateringProduct = new HashSet<CateringProduct>();
             this.Event = new HashSet<Event>();
             this.Partner = new HashSet<Partner>();
+            this.Partner1 = new HashSet<Partner>();
             this.TournamentGame = new HashSet<TournamentGame>();
             this.TournamentWinner = new HashSet<TournamentWinner>();
             this.User = new HashSet<User>();
@@ -36,6 +37,8 @@ namespace api.NetConnect.data.Entity
         public virtual ICollection<Event> Event { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Partner> Partner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Partner> Partner1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TournamentGame> TournamentGame { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
