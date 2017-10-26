@@ -22,6 +22,7 @@ GO
 USE NetConnect
 GO
 
+--CateringOrder.OrderState => -1: Storniert, 0: Neu, 1: Bezahlt, 2: Fertig
 CREATE TABLE [dbo].[CateringOrder] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[EventID] int NOT NULL,
@@ -132,7 +133,8 @@ CREATE TABLE [dbo].[Partner] (
 	[Link] varchar(MAX) NOT NULL,
 	[RefLink] varchar(MAX) NOT NULL,
 	[Content] text,
-	[ImageContainerID] uniqueidentifier NOT NULL,
+	[ImageOriginalID] uniqueidentifier NOT NULL,
+	[ImagePassiveID] uniqueidentifier NOT NULL,
 	[PartnerPackID] int NOT NULL DEFAULT 1,
 	[IsActive] bit NOT NULL DEFAULT 0,
 	[Position] int NOT NULL DEFAULT 0,
@@ -160,6 +162,7 @@ CREATE TABLE [dbo].[PartnerPack] (
 	[RowVersion] timestamp NOT NULL
 );
 
+-- Seat.State => -1: Gesperrt, 1: Vorgemerkt, 2: Reserviert, 3: NetConnect
 CREATE TABLE [dbo].[Seat] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[SeatNumber] int NOT NULL,
@@ -230,6 +233,7 @@ CREATE TABLE [dbo].[TournamentTeamParticipant] (
 	[RowVersion] timestamp NOT NULL
 );
 
+-- TournamentWinner.Placement => "Siegertreppchen"
 CREATE TABLE [dbo].[TournamentWinner] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[TournamentID] int NOT NULL,
@@ -250,6 +254,7 @@ CREATE TABLE [dbo].[TournamentWinnerTeam] (
 	[RowVersion] timestamp NOT NULL
 );
 
+-- User.CEO => "Vorstand"
 CREATE TABLE [dbo].[User] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[FirstName] varchar(255) NOT NULL,
@@ -376,7 +381,8 @@ ALTER TABLE [dbo].[Logs] ADD CONSTRAINT [FK_Logs_UserID] FOREIGN KEY (UserID) RE
 
 -- [dbo].[Partner]
 ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_PartnerPackID] FOREIGN KEY (PartnerPackID) REFERENCES [dbo].[PartnerPack](ID);
-ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
+ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImageOriginalID] FOREIGN KEY (ImageOriginalID) REFERENCES [dbo].[ImageContainer](SID);
+ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImagePassiveID] FOREIGN KEY (ImagePassiveID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[PartnerDetails]
 ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRelation_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID) ON DELETE CASCADE;
