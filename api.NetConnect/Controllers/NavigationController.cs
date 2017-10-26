@@ -16,6 +16,118 @@ namespace api.NetConnect.Controllers
         {
             NavigationViewModel viewmodel = new NavigationViewModel();
 
+            #region NavigationTop
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "News",
+                State = "news",
+                StateCompare = "news"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Events",
+                State = "event.all",
+                StateCompare = "event"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Galerie",
+                State = "gallery.all",
+                StateCompare = "gallery"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Turniere",
+                State = "tournaments",
+                StateCompare = "tournaments"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Sitzplan",
+                State = "seating",
+                StateCompare = "seating"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Sponsoren",
+                State = "partner",
+                StateCompare = "partner"
+            });
+            #endregion
+            #region NavigationTop
+            viewmodel.Data.NavigationUser.Add(new NavItem()
+            {
+                Text = "Registrieren",
+                State = "register",
+                StateCompare = "register"
+            });
+            viewmodel.Data.NavigationUser.Add(new NavItem()
+            {
+                Text = "Einloggen",
+                State = "login",
+                StateCompare = "login"
+            });
+            #endregion
+            #region NavigationAside
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Informationen",
+                State = "event.details({id: 1})"
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Teilnahme",
+                State = "event.seating({id: 1})"
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Jungendschutz",
+                State = "jungendschutz"
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Teilnahmebedingungen",
+                State = "teilnahmebedingungen"
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Kontakt",
+                State = "contact"
+            });
+            #endregion
+            #region NavigationAside
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 1",
+                Link = "http://google.de"
+            });
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 2",
+                Link = "http://google.de"
+            });
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 3",
+                Link = "http://google.de"
+            });
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 4",
+                Link = "http://google.de"
+            });
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 5",
+                Link = "http://google.de"
+            });
+            viewmodel.Data.NavigationBottom.Add(new LinkItem()
+            {
+                Text = "Sponsor 6",
+                Link = "http://google.de"
+            });
+            #endregion
+
             return Ok(viewmodel);
         }
 

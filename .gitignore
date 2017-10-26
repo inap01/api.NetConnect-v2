@@ -13,3 +13,4 @@ api.NetConnect.data.Entity/bin/
 MYSQL Migration/MYSQL Migration/bin/
 MYSQL Migration/MYSQL Migration/obj/
 *.sln
+api.NetConnect.data.ViewModel/api.NetConnect.data.ViewModel.csproj.vspscc

@@ -112,5 +112,32 @@ namespace api.NetConnect.Properties {
                 return ((string)(this["imageTmpUpload"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".Application")]
+        public string AuthCookieName {
+            get {
+                return ((string)(this["AuthCookieName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int AuthCookieExpireTimeSpanMinutes {
+            get {
+                return ((int)(this["AuthCookieExpireTimeSpanMinutes"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost:8080/#/login")]
+        public string LoginAbosulteUrl {
+            get {
+                return ((string)(this["LoginAbosulteUrl"]));
+            }
+        }
     }
 }
