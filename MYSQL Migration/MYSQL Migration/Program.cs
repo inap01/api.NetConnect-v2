@@ -307,7 +307,7 @@ namespace MYSQL_Migration
                     ReservationDate = GetFromMySqlDate(new MySqlDateTime(entry["date"].ToString())).Value,
                     Payed = Convert.ToInt32(entry["payed"]) > 0,
                     EventID = 10,
-                    SeatNumber = id,
+                    SeatNumber = Convert.ToInt32(entry["ID"].ToString()),
                     IsActive = true,
                 };
                 db.Seat.Add(s);
@@ -431,7 +431,9 @@ namespace MYSQL_Migration
             foreach (DataRow entry in set.Tables["tournaments_teams"].Rows)
             {
                 if (Convert.ToInt32(entry["tournament_id"]) == 0)
+                {
                     continue;
+                }
                 int tid = Convert.ToInt32(entry["tournament_id"]) - 7;
                 if (Convert.ToInt32(entry["tournament_id"]) > 20)
                     tid -= 4;
@@ -464,6 +466,8 @@ namespace MYSQL_Migration
             {
                 foreach (DataRow entry in set.Tables["tournaments_participants"].Rows)
                 {
+                    
+
                     if (Convert.ToInt32(entry["user_id"]) == 0 || new int[] { 12, 14, 20 }.Contains(Convert.ToInt32(entry["tournament_id"])))
                         continue;
                     int tournamentTeamID = -1;
@@ -496,7 +500,8 @@ namespace MYSQL_Migration
                         var ID = Convert.ToInt32(internalSet.Tables["tournaments_teams"].Rows[0]["ID"]);
                         tournamentTeamID = TournamentOldToNew[ID];
                     }
-
+                    TournamentParticipant part1 = null;
+                    TournamentTeamParticipant part2 = null;
 
                     var tournament = db.Tournament.Find(tid);
                     if (tournament.TeamSize > 1)
@@ -504,9 +509,12 @@ namespace MYSQL_Migration
                         var participant = new TournamentTeamParticipant()
                         {
                             Registered = GetFromMySqlDate(new MySqlDateTime(entry["registered"].ToString())).Value,
-                            TournamentTeamID = tournamentTeamID,
+                            TournamentTeam = db.TournamentTeam.Find(tournamentTeamID),
                             UserID = offsetID,
                         };
+                        part2 = participant;
+                        if (participant.TournamentTeam == null)
+                            continue;
                         db.TournamentTeamParticipant.Add(participant);
                     }
                     else
@@ -514,10 +522,19 @@ namespace MYSQL_Migration
                         var participant = new TournamentParticipant()
                         {
                             Registered = GetFromMySqlDate(new MySqlDateTime(entry["registered"].ToString())).Value,
-                            TournamentID = tid,
+                            Tournament = db.Tournament.Find(tid),
                             UserID = offsetID,
                         };
+                        part1 = participant;
+                        if (participant.Tournament == null)
+                            continue;
                         db.TournamentParticipant.Add(participant);
+                    }
+                    try {                        
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
                     }
                 }
             }
