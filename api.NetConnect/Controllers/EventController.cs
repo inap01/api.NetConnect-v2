@@ -27,8 +27,8 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Data.Add(new EventViewModelItem()
                 {
-                    ID = 1,
-                    Title = "Playground Vol. 8",
+                    ID = 9,
+                    Title = "NetConnect & Friends Vol. 1",
                     Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
                     Start = new DateTime(2017, 9, 8, 17, 0, 0),
                     End = new DateTime(2017, 9, 10, 12, 0, 0),
@@ -39,11 +39,18 @@ namespace api.NetConnect.Controllers
                     Postcode = "52441",
                     City = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15
+                    Price = 15,
+                    Seating = new EventViewModelItem.SeatingReservation()
+                    {
+                        SeatsCount = 40,
+                        Free = 15,
+                        Flagged = 5,
+                        Reserved = 20
+                    }
                 });
                 viewmodel.Data.Add(new EventViewModelItem()
                 {
-                    ID = 1,
+                    ID = 10,
                     Title = "Playground Vol. 9",
                     Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
                     Start = new DateTime(2018, 3, 9, 17, 0, 0),
@@ -55,7 +62,13 @@ namespace api.NetConnect.Controllers
                     Postcode = "52441",
                     City = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15
+                    Price = 15,
+                    Seating = new EventViewModelItem.SeatingReservation()
+                    {
+                        SeatsCount = 70,
+                        Free = 30,
+                        Reserved = 40
+                    }
                 });
             }
             catch (Exception ex)
@@ -77,7 +90,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Data = new EventViewModelItem()
                 {
-                    ID = 1,
+                    ID = id,
                     Title = "Playground Vol. 8",
                     Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
                     Start = new DateTime(2017, 9, 8, 17, 0, 0),
@@ -91,7 +104,13 @@ namespace api.NetConnect.Controllers
                     Postcode = "52441",
                     City = "Linnich",
                     RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15
+                    Price = 15,
+                    Seating = new EventViewModelItem.SeatingReservation()
+                    {
+                        SeatsCount = 70,
+                        Free = 30,
+                        Reserved = 40
+                    }
                 };
             }
             catch (Exception ex)

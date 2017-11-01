@@ -18,8 +18,9 @@ namespace api.NetConnect.Converters
             viewModel.Mode = model.Mode;
             viewModel.Start = model.Start;
             viewModel.End = model.End;
-            viewModel.Name = model.TournamentGame.Name;
+            viewModel.GameTitel = model.TournamentGame.Name;
             viewModel.Rules = model.TournamentGame.Rules;
+            viewModel.Image = "http://lan-netconnect.de/_api/images/" + model.TournamentGame.ImageContainer.ThumbnailPath;
 
             viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();
@@ -36,11 +37,19 @@ namespace api.NetConnect.Converters
             if(model.Partner != null)
                 viewModel.Partner.FromModel(model.Partner);
 
-            viewModel.TeilnehmerAnzahl = model.TournamentParticipant.Count;
-            viewModel.Teams.ForEach(team => viewModel.TeilnehmerAnzahl += team.Player.Count);
+            viewModel.ParticipantCount = model.TournamentParticipant.Count;
+            viewModel.Teams.ForEach(team => viewModel.ParticipantCount += team.Player.Count);
         }
 
         #region FromModel Private Functions
+        private static void FromModel(this TournamentParticipantViewModelItem viewModel, TournamentParticipant model)
+        {
+            viewModel.ID = model.ID;
+            viewModel.FirstName = model.User.FirstName;
+            viewModel.LastName = model.User.LastName;
+            viewModel.Nickname = model.User.Nickname;
+        }
+
         private static void FromModel(this TournamentTeamViewModelItem viewModel, TournamentTeam model)
         {
             viewModel.ID = model.ID;
@@ -48,12 +57,12 @@ namespace api.NetConnect.Converters
             viewModel.HasPassword = !String.IsNullOrEmpty(model.Password);
             viewModel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();
-                //vm.FromModel(x);
+                vm.FromModel(x);
                 return vm;
             });
         }
 
-        private static void FromModel(this TournamentParticipantViewModelItem viewModel, TournamentParticipant model)
+        private static void FromModel(this TournamentParticipantViewModelItem viewModel, TournamentTeamParticipant model)
         {
             viewModel.ID = model.ID;
             viewModel.FirstName = model.User.FirstName;

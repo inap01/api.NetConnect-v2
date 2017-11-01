@@ -160,7 +160,7 @@
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\SeatingController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
-    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="Converters\PartnerConverter.cs" />
     <Compile Include="Converters\SeatingConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />
-    <Compile Include="Converters\ProfileConverter.cs" />
+    <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="DataControllers\ChangeSetDataController.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />

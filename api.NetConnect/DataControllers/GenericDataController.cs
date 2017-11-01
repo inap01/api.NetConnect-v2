@@ -12,7 +12,7 @@ namespace api.NetConnect.DataControllers
     {
         protected static DataContext db = null;
 
-        private static DataContext InitDB()
+        protected static DataContext InitDB()
         {
             if (db != null)
                 return db;

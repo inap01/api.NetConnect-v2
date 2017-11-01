@@ -95,6 +95,21 @@ namespace api.NetConnect
 
             #endregion
 
+            #region USER
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_User_Detail",
+               routeTemplate: "user/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "User",
+                   action = "Detail"
+               }
+            );
+            #endregion
+            #endregion
+
             #region NEWS
             #region Frontend
             config.Routes.MapHttpRoute(
@@ -167,7 +182,7 @@ namespace api.NetConnect
             #endregion
             #endregion
 
-            #region EVENT
+            #region GALLERY
             #region Frontend
             config.Routes.MapHttpRoute(
                name: "GET_Gallery_Get",
@@ -177,6 +192,31 @@ namespace api.NetConnect
                {
                    controller = "Gallery",
                    action = "Get"
+               }
+            );
+            #endregion
+            #endregion
+
+            #region SEATING
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_Seating_Get",
+               routeTemplate: "seating/{eventID}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Seating_Detail",
+               routeTemplate: "seating/{eventID}/{seatNumber}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Detail"
                }
             );
             #endregion
@@ -299,7 +339,7 @@ namespace api.NetConnect
             #region Frontend
             config.Routes.MapHttpRoute(
                name: "GET_Tournament_Get",
-               routeTemplate: "tournament",
+               routeTemplate: "tournament/{eventID}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {
@@ -309,7 +349,7 @@ namespace api.NetConnect
             );
             config.Routes.MapHttpRoute(
                name: "GET_Tournament_GetItem",
-               routeTemplate: "tournament/{id}",
+               routeTemplate: "tournament/{eventID}/{id}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {

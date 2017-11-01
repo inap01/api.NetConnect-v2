@@ -38,14 +38,14 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "Turniere",
-                State = "tournaments",
-                StateCompare = "tournaments"
+                State = "event.tournaments({id: 10})",
+                StateCompare = "event.tournaments"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "Sitzplan",
-                State = "seating",
-                StateCompare = "seating"
+                State = "event.seating({id: 10})",
+                StateCompare = "event.seating"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
@@ -72,12 +72,12 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Informationen",
-                State = "event.details({id: 1})"
+                State = "event.details({id: 10})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Teilnahme",
-                State = "event.seating({id: 1})"
+                State = "event.seating({id: 10})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
@@ -95,7 +95,7 @@ namespace api.NetConnect.Controllers
                 State = "contact"
             });
             #endregion
-            #region NavigationAside
+            #region NavigationBottom
             viewmodel.Data.NavigationBottom.Add(new LinkItem()
             {
                 Text = "Sponsor 1",

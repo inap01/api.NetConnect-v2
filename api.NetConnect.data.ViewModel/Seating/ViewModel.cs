@@ -17,6 +17,7 @@ namespace api.NetConnect.data.ViewModel.Seating
 
     public class SeatingViewModelItem : BaseViewModelItem
     {
+        public Int32 SeatNumber { get; set; }
         public Int32 ReservationState { get; set; }
         public DateTime ReservationDate { get; set; }
         public String Description { get; set; }

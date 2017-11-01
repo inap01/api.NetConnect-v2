@@ -29,10 +29,27 @@ namespace api.NetConnect.data.ViewModel.Event
         public String City { get; set; }
         public String RouteLink { get; set; }
         public Double Price { get; set; }
+        public SeatingReservation Seating { get; set; }
 
         public EventViewModelItem()
         {
+            Seating = new SeatingReservation();
+        }
 
+        public class SeatingReservation
+        {
+            public Int32 SeatsCount { get; set; }
+            public Int32 Free { get; set; }
+            public Int32 Flagged { get; set; }
+            public Int32 Reserved { get; set; }
+
+            public SeatingReservation()
+            {
+                SeatsCount = 0;
+                Free = 0;
+                Flagged = 0;
+                Reserved = 0;
+            }
         }
     }
 }

@@ -8,6 +8,12 @@ namespace api.NetConnect.DataControllers
 {
     public class TournamentDataController : GenericDataController<Tournament>
     {
+        public static List<Tournament> GetByEvent(Int32 eventID)
+        {
+            db = InitDB();
+
+            return db.Tournament.Where(x => x.EventID == eventID).OrderBy(x => x.Start).ToList();
+        }
         public static Tournament Update(Tournament item)
         {
             Tournament dbItem = GetItem(item.ID);

@@ -21,14 +21,22 @@ namespace api.NetConnect.Controllers
     {
         #region Frontend
         [HttpGet]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(Int32 eventID)
         {
             SeatingListViewModel viewmodel = new SeatingListViewModel();
+            var seats = SeatDataController.GetByEvent(eventID);
 
             for (int i = 1; i <= 70; i++)
             {
                 SeatingViewModelItem item = new SeatingViewModelItem();
-                item.FromModel(SeatDataController.GetItem(i));
+                Seat model = seats.FirstOrDefault(x => x.SeatNumber == i);
+                if (model == null)
+                    model = new Seat()
+                    {
+                        SeatNumber = i,
+                        State = 0
+                    };
+                item.FromModel(model);
                 viewmodel.Data.Add(item);
             }
 
@@ -36,13 +44,13 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult Detail(Int32 id)
+        public IHttpActionResult Detail(Int32 eventID, Int32 seatNumber)
         {
             SeatingViewModel viewmodel = new SeatingViewModel();
 
             try
             {
-                viewmodel.Data.FromModel(SeatDataController.GetItem(id));
+                viewmodel.Data.FromModel(SeatDataController.GetItem(seatNumber, eventID));
             }
             catch (Exception ex)
             {

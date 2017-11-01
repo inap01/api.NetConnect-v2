@@ -21,6 +21,7 @@ namespace api.NetConnect.data.ViewModel.Profile
         public String LastName { get; set; }
         public String Nickname { get; set; }
         public String Email { get; set; }
+        public String Image { get; set; }
         public String SteamID { get; set; }
         public String BattleTag { get; set; }
         public Boolean Newsletter { get; set; }

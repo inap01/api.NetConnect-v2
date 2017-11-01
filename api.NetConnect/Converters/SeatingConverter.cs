@@ -18,6 +18,7 @@ namespace api.NetConnect.Converters
         public static void FromModel(this SeatingViewModelItem viewModel, Seat model)
         {
             viewModel.ID = model.ID;
+            viewModel.SeatNumber = model.SeatNumber;
             viewModel.ReservationState = model.State;
             viewModel.ReservationDate = model.ReservationDate;
             viewModel.Description = model.Description;
@@ -35,29 +36,6 @@ namespace api.NetConnect.Converters
                     Email = model.User.Email
                 };
             }
-        }
-    }
-
-    public static class SeatingConverter
-    {
-        public static SeatingBackendListViewModel FilterList(SeatingArgsRequest args)
-        {
-            SeatingBackendListViewModel result = new SeatingBackendListViewModel(args);
-
-            List<Seat> filteredSeats = SeatDataController.FilterList(args);
-
-            result.Pagination.TotalItemsCount = filteredSeats.Count;
-
-            filteredSeats = filteredSeats.Skip(args.Pagination.ItemsPerPage * args.Pagination.CurrentPage)
-                                         .Take(args.Pagination.ItemsPerPage).ToList();
-
-            result.Data = filteredSeats.ConvertAll(x => {
-                var vm = new SeatingViewModelItem();
-                vm.FromModel(x);
-                return vm;
-            });
-
-            return result;
         }
     }
 }

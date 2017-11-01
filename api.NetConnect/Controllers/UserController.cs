@@ -15,7 +15,7 @@ using api.NetConnect.data.ViewModel;
 namespace api.NetConnect.Controllers
 {
     using BackendProfileListViewModel = ListViewModel<BackendProfileViewModelItem>;
-    public class ProfileController : ApiController
+    public class UserController : ApiController
     {
         #region Frontend
         [HttpGet]

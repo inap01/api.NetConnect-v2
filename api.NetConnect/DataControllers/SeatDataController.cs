@@ -13,37 +13,27 @@ namespace api.NetConnect.DataControllers
 
     public class SeatDataController : GenericDataController<Seat>
     {
-        public static List<Seat> FilterList(SeatingArgsRequest args)
+        public static List<Seat> GetByEvent(Int32 eventID)
         {
-            List<Seat> result = new List<Seat>();
+            db = InitDB();
 
-            var seats = db.Seat.AsQueryable();
+            return db.Seat.Where(x => x.EventID == eventID).ToList();
+        }
 
-            if(args.Filter.Status != SeatingStatusFilter.Ungefiltert)
+        public static Seat GetItem(Int32 seatNumber, Int32 eventID)
+        {
+            db = InitDB();
+
+            var seat = db.Seat.FirstOrDefault(x => x.SeatNumber == seatNumber && x.EventID == eventID);
+            if (seat != null)
+                return seat;
+
+            return new Seat()
             {
-                if (args.Filter.Status == SeatingStatusFilter.Frei)
-                    seats = seats.Where(x => x.State == 0);
-                else if (args.Filter.Status == SeatingStatusFilter.Vorgemerkt)
-                    seats = seats.Where(x => x.State == 1);
-                else if (args.Filter.Status == SeatingStatusFilter.Reserviert)
-                    seats = seats.Where(x => x.State == 2);
-            }
-
-            foreach(var seat in seats)
-            {
-                String name = seat.User.FirstName + " " + seat.User.LastName;
-                String usageString = "Netconnect-" + seat.UserID + "-" + seat.ID;
-
-                if (seat.ID.ToString().IndexOf(args.Filter.SeatNumber) != -1 &&
-                    name.ToLower().IndexOf(args.Filter.Name.ToLower()) != -1 && 
-                    usageString.ToLower().IndexOf(args.Filter.UsageString.ToLower()) != -1)
-                {
-                    result.Add(seat);
-                }
-            }
-
-
-            return result;
+                SeatNumber = seatNumber,
+                State = 0,
+                Payed = false
+            };
         }
 
         public static Seat Update (Seat item)

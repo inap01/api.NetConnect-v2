@@ -20,11 +20,18 @@ namespace api.NetConnect.Controllers
     {
         #region Frontend
         [HttpGet]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(Int32 eventID)
         {
             TournamentListViewModel viewmodel = new TournamentListViewModel();
+            //var tournaments = TournamentDataController.GetByEvent(eventID);
+            var tournaments = TournamentDataController.GetByEvent(8);
 
-            // TODO
+            foreach (var tournament in tournaments)
+            {
+                TournamentViewModelItem item = new TournamentViewModelItem();
+                item.FromModel(tournament);
+                viewmodel.Data.Add(item);
+            }
 
             return Ok(viewmodel);
         }
