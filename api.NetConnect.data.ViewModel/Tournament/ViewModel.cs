@@ -22,7 +22,7 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public String ChallongeLink { get; set; }
         public String Mode { get; set; }
         public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; }
         public String GameTitel { get; set; }
         public String Image { get; set; }
         public String Rules { get; set; }
