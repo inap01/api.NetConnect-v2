@@ -195,6 +195,21 @@ namespace api.NetConnect
                }
             );
             #endregion
+
+            #region GALLERYIMAGE
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_GalleryImage_Get",
+               routeTemplate: "galleryimage/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "GalleryImage",
+                   action = "Get"
+               }
+            );
+            #endregion
+            #endregion
             #endregion
 
             #region SEATING

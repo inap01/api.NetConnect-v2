@@ -34,7 +34,7 @@ namespace api.NetConnect.Controllers
 
             return Ok(viewmodel);
         }
-
+        //TODO Fertig implementieren
         [HttpGet]
         public IHttpActionResult Detail(Int32 id)
         {
