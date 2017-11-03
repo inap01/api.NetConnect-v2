@@ -12,6 +12,9 @@ namespace api.NetConnect.Controllers
 {
     using PartnerListViewModel = ListViewModel<PartnerViewModelItem>;
     using BackendPartnerListViewModel = ListViewModel<BackendPartnerViewModelItem>;
+    using data.Entity;
+    using DataControllers;
+    using Converters;
 
     public class PartnerController : ApiController
     {
@@ -20,20 +23,12 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get()
         {
             PartnerListViewModel viewmodel = new PartnerListViewModel();
-            for (int i = 0; i < 10; i++)
+            var partners = PartnerDataController.GetItems();
+            foreach(var model in partners)
             {
-                PartnerViewModelItem item = new PartnerViewModelItem()
-                {
-                    ID = 1,
-                    Name = "Partner " + (i + 1),
-                    Description = "",
-                    PartnerType = new PartnerType() { Name = "Grandmaster" },
-                    Image = "",
-                    Link = "http://google.de",
-                    RefLink = "http://google.de"
-                };
-                item.Display.Add("Header", false);
-                item.Display.Add("Footer", true);
+                PartnerViewModelItem item = new PartnerViewModelItem();
+                
+                item.FromModel(model);
                 viewmodel.Data.Add(item);
             }
 

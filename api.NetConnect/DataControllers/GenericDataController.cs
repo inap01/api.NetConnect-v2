@@ -26,7 +26,12 @@ namespace api.NetConnect.DataControllers
             var list = GetPropertyMatchingTypeT(typeof(T));
             return GetPropertyFromSetMatchingCondition<Int32>(list, condition, "ID");
         }
-
+        public static List<T> GetItems()
+        {
+            InitDB();
+            var list = GetPropertyMatchingTypeT(typeof(T));
+            return list.ToList();
+        }
         #region GETITEM
         public static T GetItem<ConditionPropType>(ConditionPropType condition, String ParameterName)
         {
