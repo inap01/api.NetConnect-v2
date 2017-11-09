@@ -8,10 +8,12 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
     public class BackendPartnerViewModel : BackendBaseViewModel
     {
         public BackendPartnerViewModelItem Data { get; set; }
+        public List<PartnerType> PartnerTypeOptions { get; set; }
 
         public BackendPartnerViewModel()
         {
             Data = new BackendPartnerViewModelItem();
+            PartnerTypeOptions = new List<PartnerType>();
         }
     }
 
@@ -22,13 +24,31 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
         public String Image { get; set; }
         public String Link { get; set; }
         public String RefLink { get; set; }
-        public PartnerType PartnerType { get; set; }
-        public Dictionary<String, Boolean> Display { get; set; }
+        public PartnerType PartnerTypeSelected { get; set; }
+        public List<PartnerDisplay> Display { get; set; }
+        public Boolean IsActive { get; set; }
 
         public BackendPartnerViewModelItem()
         {
-            PartnerType = new PartnerType();
-            Display = new Dictionary<string, bool>();
+            PartnerTypeSelected = new PartnerType();
+            Display = new List<PartnerDisplay>();
+        }
+    }
+
+    public class BackendPartnerPositionViewModel : BaseViewModel
+    {
+        public List<BackendPartnerPositionViewModelItem> Data { get; set; }
+        public List<String> PartnerTypeOptions { get; set; }
+
+        public BackendPartnerPositionViewModel()
+        {
+            Data = new List<BackendPartnerPositionViewModelItem>();
+        }
+
+        public class BackendPartnerPositionViewModelItem : BaseViewModelItem
+        {
+            public String Name { get; set; }
+            public Int32 Position { get; set; }
         }
     }
 }

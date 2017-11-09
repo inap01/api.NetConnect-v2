@@ -23,13 +23,20 @@ namespace api.NetConnect.data.ViewModel.Partner
         public String Link { get; set; }
         public String RefLink { get; set; }
         public PartnerType PartnerType { get; set; }
-        public Dictionary<String, Boolean> Display { get; set; }
+        public List<PartnerDisplay> Display { get; set; }
 
         public PartnerViewModelItem()
         {
             PartnerType = new PartnerType();
-            Display = new Dictionary<string, bool>();
+            Display = new List<PartnerDisplay>();
         }
+    }
+
+    public class PartnerDisplay
+    {
+        public Int32 ID { get; set; }
+        public String Name { get; set; }
+        public Boolean Value { get; set; }
     }
 
     public class PartnerType

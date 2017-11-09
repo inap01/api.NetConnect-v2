@@ -249,7 +249,7 @@ namespace MYSQL_Migration
 
                 var p = new Partner()
                 {
-                    RefLink = "TmpLink not available",
+                    RefLink = null,
                     ClickCount = Convert.ToInt32(entry["click_count"]),
                     Content = Convert.ToString(entry["content"]),
                     ImageContainer = img,
