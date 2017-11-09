@@ -54,7 +54,7 @@ namespace api.NetConnect.Controllers
                 StateCompare = "partner"
             });
             #endregion
-            #region NavigationTop
+            #region NavigationUser
             viewmodel.Data.NavigationUser.Add(new NavItem()
             {
                 Text = "Registrieren",
@@ -184,6 +184,11 @@ namespace api.NetConnect.Controllers
                         Text = "Neuer Partner",
                         State = "admin.partner.new",
                         StateCompare = "admin.partner.new"
+                    },
+                    new NavItem() {
+                        Text = "Sortieren",
+                        State = "admin.partner.position",
+                        StateCompare = "admin.partner.position"
                     },
                     new NavItem() {
                         Text = "Typen",

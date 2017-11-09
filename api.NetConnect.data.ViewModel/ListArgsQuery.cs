@@ -27,57 +27,48 @@ namespace api.NetConnect.data.ViewModel
         }
     }
 
-    public class ListArgsViewModel<T, F, S> : ListViewModel<T>
+    public class ListArgsViewModel<T, F> : ListViewModel<T>
         where F : new()
-        where S : new()
     {
         public F Filter { get; set; }
-        public S SortSettings { get; set; }
         public Pagination Pagination { get; set; }
 
         public ListArgsViewModel()
         {
             Data = new List<T>();
             Filter = new F();
-            SortSettings = new S();
             Pagination = new Pagination();
         }
 
-        public ListArgsViewModel(F f, S s, Pagination p)
+        public ListArgsViewModel(F f, Pagination p)
         {
             Data = new List<T>();
             Filter = f;
-            SortSettings = s;
             Pagination = p;
         }
 
-        public ListArgsViewModel(ListArgsRequest<F, S> request)
+        public ListArgsViewModel(ListArgsRequest<F> request)
         {
             Data = new List<T>();
             Filter = request.Filter;
-            SortSettings = request.SortSettings;
             Pagination = request.Pagination;
         }
     }
 
-    public class ListArgsRequest<F, S>
+    public class ListArgsRequest<F>
         where F : new()
-        where S : new()
     {
         public F Filter { get; set; }
-        public S SortSettings { get; set; }
         public Pagination Pagination { get; set; }
         public ListArgsRequest()
         {
             Filter = new F();
-            SortSettings = new S();
             Pagination = new Pagination();
         }
 
-        public ListArgsRequest(F f, S s, Pagination p)
+        public ListArgsRequest(F f, Pagination p)
         {
             Filter = f;
-            SortSettings = s;
             Pagination = p;
         }
     }

@@ -176,7 +176,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Link" Type="varchar(max)" Nullable="false" />
-          <Property Name="RefLink" Type="varchar(max)" Nullable="false" />
+          <Property Name="RefLink" Type="varchar(max)" />
           <Property Name="Content" Type="text" />
           <Property Name="ImageOriginalID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ImagePassiveID" Type="uniqueidentifier" Nullable="false" />
@@ -191,7 +191,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="PartnerDisplayRelation">
@@ -588,7 +588,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="PartnerDisplayRelation">
-              <PropertyRef Name="PartnerID" />
+              <PropertyRef Name="PartnerDisplayID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1571,7 +1571,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Link" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="RefLink" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RefLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ImageOriginalID" Type="Guid" Nullable="false" />
           <Property Name="ImagePassiveID" Type="Guid" Nullable="false" />
@@ -1591,7 +1591,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="PartnerDisplayRelation" Relationship="NetConnectModel.FK_PartnerDisplayRelation_PartnerDisplayID" FromRole="PartnerDisplay" ToRole="PartnerDisplayRelation" />
         </EntityType>
@@ -2129,7 +2129,7 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="PartnerDisplayRelation">
-              <PropertyRef Name="PartnerID" />
+              <PropertyRef Name="PartnerDisplayID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

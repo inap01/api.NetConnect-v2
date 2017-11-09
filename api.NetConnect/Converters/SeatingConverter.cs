@@ -10,8 +10,8 @@ using api.NetConnect.data.ViewModel.Seating.Backend;
 
 namespace api.NetConnect.Converters
 {
-    using SeatingBackendListViewModel = ListArgsViewModel<SeatingViewModelItem, BackendSeatingFilter, SeatingSortSettings>;
-    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter, SeatingSortSettings>;
+    using SeatingBackendListViewModel = ListArgsViewModel<SeatingViewModelItem, BackendSeatingFilter>;
+    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter>;
 
     public static partial class ConverterExtensions
     {

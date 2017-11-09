@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace api.NetConnect.Controllers
 {
     using PartnerListViewModel = ListViewModel<PartnerViewModelItem>;
-    using BackendPartnerListViewModel = ListViewModel<BackendPartnerViewModelItem>;
+    using BackendPartnerListViewModel = ListArgsViewModel<BackendPartnerViewModelItem, BackendPartnerFilter>;
     using data.Entity;
     using DataControllers;
     using Converters;
@@ -23,8 +23,8 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get()
         {
             PartnerListViewModel viewmodel = new PartnerListViewModel();
-            var partners = PartnerDataController.GetItems();
-            foreach(var model in partners)
+
+            foreach(var model in PartnerDataController.GetItems())
             {
                 PartnerViewModelItem item = new PartnerViewModelItem();
                 
@@ -39,18 +39,8 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             PartnerViewModel viewmodel = new PartnerViewModel();
-            viewmodel.Data = new PartnerViewModelItem()
-            {
-                ID = 1,
-                Name = "Partner 1",
-                Description = "",
-                PartnerType = new PartnerType() { Name = "Grandmaster" },
-                Image = "",
-                Link = "http://google.de",
-                RefLink = "http://google.de"
-            };
-            viewmodel.Data.Display.Add("Header", false);
-            viewmodel.Data.Display.Add("Footer", true);
+
+            viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
 
             return Ok(viewmodel);
         }
@@ -61,22 +51,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Get([FromUri] BackendPartnerFilter filter)
         {
             BackendPartnerListViewModel viewmodel = new BackendPartnerListViewModel();
-            for (int i = 0; i < 10; i++)
+
+            foreach (var model in PartnerDataController.GetItems())
             {
-                BackendPartnerViewModelItem item = new BackendPartnerViewModelItem()
-                {
-                    ID = 1,
-                    Name = "Partner " + (i + 1),
-                    Description = "",
-                    PartnerType = new PartnerType() { Name = "Grandmaster" },
-                    Image = "",
-                    Link = "http://google.de",
-                    RefLink = "http://google.de"
-                };
-                item.Display.Add("Header", false);
-                item.Display.Add("Footer", true);
+                BackendPartnerViewModelItem item = new BackendPartnerViewModelItem();
+                item.FromModel(model);
                 viewmodel.Data.Add(item);
             }
+
+            viewmodel.Pagination.TotalItemsCount = viewmodel.Data.Count;
 
             return Ok(viewmodel);
         }
@@ -85,28 +68,22 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
-            viewmodel.Data = new BackendPartnerViewModelItem()
-            {
-                ID = 1,
-                Name = "Partner 1",
-                Description = "",
-                PartnerType = new PartnerType() { ID = 1, Name = "Grandmaster" },
-                Image = "",
-                Link = "http://google.de",
-                RefLink = "http://google.de"
-            };
-            viewmodel.Data.Display.Add("Header", false);
-            viewmodel.Data.Display.Add("Footer", true);
 
-            viewmodel.Form.Add("ID", new BackendBaseViewModel.InputInformation() { Type = "integer", Readonly = true });
-            viewmodel.Form.Add("Name", new BackendBaseViewModel.InputInformation() { Type = "string" });
+            viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
+            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x => 
+            {
+                return new PartnerType() { ID = x.ID, Name = x.Name };
+            }).OrderBy(x => x.Name).ToList();
+
+            viewmodel.Form.Add("ID", new BackendBaseViewModel.InputInformation() { Type = "integer", Required = true, Readonly = true });
+            viewmodel.Form.Add("Name", new BackendBaseViewModel.InputInformation() { Type = "string", Required = true, });
             viewmodel.Form.Add("Description", new BackendBaseViewModel.InputInformation() { Type = "text" });
             var refForm = new Dictionary<string, BackendBaseViewModel.InputInformation>();
-            refForm.Add("ID", new BackendBaseViewModel.InputInformation() { Type = "integer", Readonly = true });
-            refForm.Add("Name", new BackendBaseViewModel.InputInformation() { Type = "string", Readonly = true });
-            viewmodel.Form.Add("PartnerType", new BackendBaseViewModel.InputInformation() { Type = "reference", Reference = "PartnerType", ReferenceForm = refForm });
-            viewmodel.Form.Add("Image", new BackendBaseViewModel.InputInformation() { Type = "image" });
-            viewmodel.Form.Add("Link", new BackendBaseViewModel.InputInformation() { Type = "string" });
+            refForm.Add("ID", new BackendBaseViewModel.InputInformation() { Type = "integer", Required = true, Readonly = true });
+            refForm.Add("Name", new BackendBaseViewModel.InputInformation() { Type = "string", Required = true, Readonly = true });
+            viewmodel.Form.Add("PartnerType", new BackendBaseViewModel.InputInformation() { Type = "reference", Required = true, Reference = "PartnerType", ReferenceForm = refForm });
+            viewmodel.Form.Add("Image", new BackendBaseViewModel.InputInformation() { Type = "image", Required = true });
+            viewmodel.Form.Add("Link", new BackendBaseViewModel.InputInformation() { Type = "string", Required = true });
             viewmodel.Form.Add("RefLink", new BackendBaseViewModel.InputInformation() { Type = "string" });
 
             return Ok(viewmodel);
@@ -116,6 +93,10 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_New()
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
+            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x =>
+            {
+                return new PartnerType() { ID = x.ID, Name = x.Name };
+            }).OrderBy(x => x.Name).ToList();
 
             viewmodel.Form.Add("ID", new BackendBaseViewModel.InputInformation() { Type = "integer", Readonly = true });
             viewmodel.Form.Add("Name", new BackendBaseViewModel.InputInformation() { Type = "string" });
@@ -157,6 +138,31 @@ namespace api.NetConnect.Controllers
             BaseViewModel viewmodel = new BaseViewModel();
 
             // TODO
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Backend_Position_Get([FromUri] PositionPartnerTypeRequest args)
+        {
+            BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
+
+            if (args.PartnerType == null) args.PartnerType = PartnerPackDataController.GetItems().First().Name;
+            
+            viewmodel.Data = PartnerDataController.GetItems().Where(x => x.PartnerPack.Name == args.PartnerType).ToList().ConvertAll(x =>
+            {
+                return new BackendPartnerPositionViewModel.BackendPartnerPositionViewModelItem()
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    Position = x.Position
+                };
+            }).OrderBy(x => x.Position).ToList();
+
+            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x =>
+            {
+                return x.Name;
+            });
 
             return Ok(viewmodel);
         }

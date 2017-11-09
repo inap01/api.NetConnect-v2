@@ -9,7 +9,7 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter, SeatingSortSettings>;
+    using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter>;
 
     public class SeatDataController : GenericDataController<Seat>
     {

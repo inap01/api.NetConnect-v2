@@ -63,6 +63,7 @@
     <Compile Include="Pagination.cs" />
     <Compile Include="Partner\Backend\DeleteRequest.cs" />
     <Compile Include="Partner\Backend\Filter.cs" />
+    <Compile Include="Partner\Backend\PositionPartnerTypeRequest.cs" />
     <Compile Include="Partner\Backend\ViewModel.cs" />
     <Compile Include="Partner\ViewModel.cs" />
     <Compile Include="Profile\Backend\DeleteRequest.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="Seating\Backend\DeleteRequest.cs" />
     <Compile Include="Seating\Backend\ViewModel.cs" />
     <Compile Include="Seating\Backend\Filter.cs" />
-    <Compile Include="Seating\Backend\SortSettings.cs" />
     <Compile Include="Seating\ViewModel.cs" />
     <Compile Include="Status\StatusViewModel.cs" />
     <Compile Include="Tournament\Backend\DeleteRequest.cs" />

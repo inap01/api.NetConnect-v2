@@ -247,6 +247,16 @@ namespace api.NetConnect
             #endregion
             #region Backend
             config.Routes.MapHttpRoute(
+               name: "GET_Partner_Backend_Position_Get",
+               routeTemplate: "backend/partner/position",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Partner",
+                   action = "Backend_Position_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
                name: "GET_Partner_Backend_Get",
                routeTemplate: "backend/partner",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },

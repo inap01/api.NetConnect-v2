@@ -21,7 +21,7 @@ namespace api.NetConnect.data.Entity
         }
     
         public int ID { get; set; }
-        public bool Name { get; set; }
+        public string Name { get; set; }
         public byte[] RowVersion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
