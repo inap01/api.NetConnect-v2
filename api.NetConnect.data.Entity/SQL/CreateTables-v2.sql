@@ -131,7 +131,7 @@ CREATE TABLE [dbo].[Partner] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
 	[Link] varchar(MAX) NOT NULL,
-	[RefLink] varchar(MAX) NOT NULL,
+	[RefLink] varchar(MAX),
 	[Content] text,
 	[ImageOriginalID] uniqueidentifier NOT NULL,
 	[ImagePassiveID] uniqueidentifier NOT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE [dbo].[Partner] (
 
 CREATE TABLE [dbo].[PartnerDisplay] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
-	[Name] bit NOT NULL DEFAULT 0,
+	[Name] varchar(MAX) NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -386,7 +386,7 @@ ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImagePassiveID] FOREIGN K
 
 -- [dbo].[PartnerDetails]
 ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRelation_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID) ON DELETE CASCADE;
-ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRelation_PartnerDisplayID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[PartnerDisplay](ID) ON DELETE CASCADE;
+ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRelation_PartnerDisplayID] FOREIGN KEY (PartnerDisplayID) REFERENCES [dbo].[PartnerDisplay](ID) ON DELETE CASCADE;
 
 -- [dbo].[Seat]
 ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_EventID] FOREIGN KEY (EventID) REFERENCES [dbo].[Event](ID);
@@ -466,6 +466,10 @@ VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', '
        (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
 	   (2, 1, '20171215', '20171217', 10, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
 	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich')
+GO
+
+INSERT INTO dbo.PartnerDisplay([Name])
+VALUES ('Header'), ('Footer')
 GO
 
 
