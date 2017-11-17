@@ -15,6 +15,7 @@ namespace api.NetConnect.Controllers
     using data.Entity;
     using DataControllers;
     using Converters;
+    using api.NetConnect.Helper;
 
     public class PartnerController : ApiController
     {
@@ -85,6 +86,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Form.Add("Image", new BackendBaseViewModel.InputInformation() { Type = "image", Required = true });
             viewmodel.Form.Add("Link", new BackendBaseViewModel.InputInformation() { Type = "string", Required = true });
             viewmodel.Form.Add("RefLink", new BackendBaseViewModel.InputInformation() { Type = "string" });
+            viewmodel.Form.Add("IsActive", new BackendBaseViewModel.InputInformation() { Type = "boolean" });
 
             return Ok(viewmodel);
         }
@@ -108,6 +110,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Form.Add("Image", new BackendBaseViewModel.InputInformation() { Type = "image" });
             viewmodel.Form.Add("Link", new BackendBaseViewModel.InputInformation() { Type = "string" });
             viewmodel.Form.Add("RefLink", new BackendBaseViewModel.InputInformation() { Type = "string" });
+            viewmodel.Form.Add("IsActive", new BackendBaseViewModel.InputInformation() { Type = "boolean" });
 
             return Ok(viewmodel);
         }
@@ -117,7 +120,20 @@ namespace api.NetConnect.Controllers
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
 
-            // TODO
+            try
+            {
+                viewmodel.Data.FromModel(PartnerDataController.Create(request.ToModel()));
+
+                viewmodel.AddSuccessAlert("Partner wurde erstellt.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
 
             return Ok(viewmodel);
         }
@@ -127,7 +143,18 @@ namespace api.NetConnect.Controllers
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
 
-            // TODO
+            try
+            {
+                viewmodel.Data.FromModel(PartnerDataController.Update(request.ToModel()));
+
+                viewmodel.AddSuccessAlert("Partner wurde erfolgreich aktualisiert.");
+            }
+            catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
@@ -148,20 +175,38 @@ namespace api.NetConnect.Controllers
             BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
 
             if (args.PartnerType == null) args.PartnerType = PartnerPackDataController.GetItems().First().Name;
-            
-            viewmodel.Data = PartnerDataController.GetItems().Where(x => x.PartnerPack.Name == args.PartnerType).ToList().ConvertAll(x =>
+
+            int position = 1;
+            viewmodel.Data = PartnerDataController.GetItems()
+                .Where(x => x.PartnerPack.Name == args.PartnerType)
+                .OrderBy(x => x.Position).ToList()
+                .ConvertAll(x =>
             {
-                return new BackendPartnerPositionViewModel.BackendPartnerPositionViewModelItem()
+                return new BackendPartnerPositionViewModelItem()
                 {
                     ID = x.ID,
                     Name = x.Name,
-                    Position = x.Position
+                    Position = position++
                 };
-            }).OrderBy(x => x.Position).ToList();
+            }).ToList();
 
-            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x =>
+            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems()
+                .ConvertAll(x =>
             {
                 return x.Name;
+            });
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Backend_Position_Update(PositionPartnerUpdateRequest request)
+        {
+            BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
+
+            request.Partner.ForEach(x =>
+            {
+                PartnerDataController.Update(x.ToModel());
             });
 
             return Ok(viewmodel);

@@ -1,5 +1,4 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.data.ViewModel.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,8 @@ using System.Security.Claims;
 using System.Web;
 using Microsoft.Owin;
 using Owin;
+using api.NetConnect.data.Entity;
+using api.NetConnect.data.ViewModel.Auth;
 
 namespace api.NetConnect.Controllers
 {
@@ -20,7 +21,7 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Auth()
         {
-            AuthViewModel viewmodel = new AuthViewModel();
+            LoginViewModel viewmodel = new LoginViewModel();
 
             Int32 id = 1;
 
@@ -36,9 +37,35 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Auth(AuthViewModel request)
+        public IHttpActionResult Auth(LoginRequest request)
         {
-            AuthViewModel viewmodel = new AuthViewModel();
+            LoginViewModel viewmodel = new LoginViewModel();
+
+            try
+            {
+                User u;
+
+                if(UserDataController.ValidateUser(request.Email, request.Password, out u))
+                {
+                    ClaimsIdentity identity = InitializeIdentity(u.ID, u.FirstName + u.LastName, "Admin");
+
+                    var authentication = HttpContext.Current.GetOwinContext().Authentication;
+                    authentication.SignIn(new Microsoft.Owin.Security.AuthenticationProperties()
+                    {
+                        IsPersistent = true
+                    }, identity);
+
+                    viewmodel.Data.FromModel(u);
+                    viewmodel.AddSuccessAlert("Die Anmeldung war erfolgreich!");
+                }
+            }
+            catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.Data = null;
+                viewmodel.AddDangerAlert("Anmeldung fehlgeschlagen.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
@@ -82,9 +109,5 @@ namespace api.NetConnect.Controllers
                 res.SetCookie(reqCookie[c]);
             });
         }
-    }
-
-    public class AuthViewModel
-    {
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using api.NetConnect.data.ViewModel.Partner;
 using api.NetConnect.data.ViewModel.Partner.Backend;
+using api.NetConnect.DataControllers;
 
 namespace api.NetConnect.Converters
 {
@@ -59,8 +60,6 @@ namespace api.NetConnect.Converters
         #region Backend
         public static void FromModel(this BackendPartnerViewModelItem viewModel, Partner model)
         {
-            DataContext db = InitDB();
-
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
@@ -75,7 +74,7 @@ namespace api.NetConnect.Converters
                 Name = model.PartnerPack.Name
             };
             
-            foreach (var display in db.PartnerDisplay)
+            foreach (var display in PartnerDisplayDataController.GetItems())
             {
                 if(model.PartnerDisplayRelation.FirstOrDefault(x => x.PartnerID == model.ID && x.PartnerDisplayID == display.ID) != null)
                     viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
@@ -94,11 +93,12 @@ namespace api.NetConnect.Converters
             }
         }
 
-        public static void FromViewModel(this Partner model, BackendPartnerViewModelItem viewModel)
+        public static Partner ToModel(this BackendPartnerViewModelItem viewModel)
         {
-            DataContext db = InitDB();
-
-            model.ID = viewModel.ID;
+            Partner model = new Partner();
+            if (viewModel.ID != 0) 
+                model = PartnerDataController.GetItem(viewModel.ID);
+            
             model.Name = viewModel.Name;
             model.Content = viewModel.Description;
             model.Link = viewModel.Link;
@@ -108,12 +108,28 @@ namespace api.NetConnect.Converters
 
             model.PartnerPackID = viewModel.PartnerTypeSelected.ID;
 
-            foreach (var display in viewModel.Display)
+            foreach (var display in viewModel.Display.Where(x => x.Value))
                 model.PartnerDisplayRelation.Add(new PartnerDisplayRelation()
                 {
                     PartnerID = viewModel.ID,
-                    PartnerDisplayID = display.ID
+                    Partner = PartnerDataController.GetItem(viewModel.ID),
+                    PartnerDisplayID = display.ID,
+                    PartnerDisplay = PartnerDisplayDataController.GetItem(display.ID)
                 });
+
+            return model;
+        }
+
+        public static Partner ToModel(this BackendPartnerPositionViewModelItem viewModel)
+        {
+            Partner model = new Partner();
+            if (viewModel.ID != 0)
+                model = PartnerDataController.GetItem(viewModel.ID);
+            
+            model.Name = viewModel.Name;
+            model.Position = viewModel.Position;
+
+            return model;
         }
         #endregion
     }

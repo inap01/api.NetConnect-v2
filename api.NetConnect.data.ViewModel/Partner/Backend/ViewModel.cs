@@ -44,11 +44,11 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
         {
             Data = new List<BackendPartnerPositionViewModelItem>();
         }
+    }
 
-        public class BackendPartnerPositionViewModelItem : BaseViewModelItem
-        {
-            public String Name { get; set; }
-            public Int32 Position { get; set; }
-        }
+    public class BackendPartnerPositionViewModelItem : BaseViewModelItem
+    {
+        public String Name { get; set; }
+        public Int32 Position { get; set; }
     }
 }
