@@ -12,6 +12,15 @@ namespace api.NetConnect.data.ViewModel.Navigation.Backend
         public BackendNavigationViewModel()
         {
             Data = new BackendNavigationViewModelItem();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            return result;
         }
     }
 

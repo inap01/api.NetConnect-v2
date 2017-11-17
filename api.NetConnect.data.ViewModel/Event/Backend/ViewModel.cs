@@ -12,6 +12,15 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
         public BackendEventViewModel()
         {
             Data = new BackendEventViewModelItem();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            return result;
         }
     }
 

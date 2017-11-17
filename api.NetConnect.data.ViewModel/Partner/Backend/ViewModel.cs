@@ -14,28 +14,67 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
         {
             Data = new BackendPartnerViewModelItem();
             PartnerTypeOptions = new List<PartnerType>();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            return BackendPartnerViewModelItem.GetForm();
         }
     }
 
-    public class BackendPartnerViewModelItem : BaseViewModelItem
+    public class BackendPartnerViewModelItem : BackendBaseViewModelItem
     {
         public String Name { get; set; }
         public String Description { get; set; }
         public String Image { get; set; }
         public String Link { get; set; }
         public String RefLink { get; set; }
-        public PartnerType PartnerTypeSelected { get; set; }
+        public BackendPartnerType PartnerTypeSelected { get; set; }
         public List<PartnerDisplay> Display { get; set; }
         public Boolean IsActive { get; set; }
 
         public BackendPartnerViewModelItem()
         {
-            PartnerTypeSelected = new PartnerType();
+            PartnerTypeSelected = new BackendPartnerType();
             Display = new List<PartnerDisplay>();
+        }
+
+        public static Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Required = true, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Required = true, });
+            result.Add("Description", new InputInformation() { Type = InputInformationType.text });
+            result.Add("Image", new InputInformation() { Type = InputInformationType.image, Required = true });
+            result.Add("Link", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("RefLink", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("IsActive", new InputInformation() { Type = InputInformationType.boolean });
+
+            result.Add("PartnerType", new InputInformation() { Type = InputInformationType.reference, Required = true, Reference = "PartnerType", ReferenceForm = BackendPartnerType.GetForm() });
+
+            return result;
         }
     }
 
-    public class BackendPartnerPositionViewModel : BaseViewModel
+    public class BackendPartnerType : BackendBaseViewModelItem
+    {
+        public String Name { get; set; }
+
+        public static Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Required = true, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Required = true, Readonly = true });
+
+            return result;
+        }
+    }
+
+    public class BackendPartnerPositionViewModel : BackendBaseViewModel
     {
         public List<BackendPartnerPositionViewModelItem> Data { get; set; }
         public List<String> PartnerTypeOptions { get; set; }
@@ -43,6 +82,11 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
         public BackendPartnerPositionViewModel()
         {
             Data = new List<BackendPartnerPositionViewModelItem>();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            throw new NotImplementedException();
         }
     }
 

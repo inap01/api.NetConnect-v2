@@ -6,6 +6,7 @@ using System.Web;
 using api.NetConnect.data.ViewModel.Partner;
 using api.NetConnect.data.ViewModel.Partner.Backend;
 using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Converters
 {
@@ -68,7 +69,7 @@ namespace api.NetConnect.Converters
             viewModel.Image = "";
             viewModel.IsActive = model.IsActive;
 
-            viewModel.PartnerTypeSelected = new PartnerType()
+            viewModel.PartnerTypeSelected = new BackendPartnerType()
             {
                 ID = model.PartnerPack.ID,
                 Name = model.PartnerPack.Name
@@ -133,5 +134,43 @@ namespace api.NetConnect.Converters
             return model;
         }
         #endregion
+    }
+
+    public class PartnerConverter
+    {
+        public static List<BackendPartnerViewModelItem> FilterList(ListArgsRequest<BackendPartnerFilter> args, out Int32 TotalCount)
+        {
+            List<BackendPartnerViewModelItem> result = new List<BackendPartnerViewModelItem>();
+
+            var items = PartnerDataController.GetItems();
+
+            if (args.Filter.StatusSelected != data.ViewModel.StatusFilterEnum.Alle)
+            {
+                if (args.Filter.StatusSelected == data.ViewModel.StatusFilterEnum.Aktiv)
+                    items = items.Where(x => x.IsActive).ToList();
+                else
+                    items = items.Where(x => !x.IsActive).ToList();
+            }
+
+            if (args.Filter.PartnerTypeSelected != "Alle")
+                items = items.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected).ToList();
+
+            items = items.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
+
+            TotalCount = items.Count;
+
+            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected)
+                 .ToList();
+
+            foreach (var model in items)
+            {
+                BackendPartnerViewModelItem item = new BackendPartnerViewModelItem();
+                item.FromModel(model);
+                result.Add(item);
+            }
+
+            return result;
+        }
     }
 }

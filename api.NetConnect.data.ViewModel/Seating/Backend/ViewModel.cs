@@ -12,6 +12,15 @@ namespace api.NetConnect.data.ViewModel.Seating.Backend
         public BackendSeatingViewModel()
         {
             Data = new BackendSeatingViewModelItem();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            return result;
         }
     }
 

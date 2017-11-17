@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel
 {
-    public class BackendBaseViewModel : BaseViewModel
+    public abstract class BackendBaseViewModel : BaseViewModel
     {
         public Dictionary<String, InputInformation> Form { get; set; }
 
@@ -15,19 +15,28 @@ namespace api.NetConnect.data.ViewModel
             Form = new Dictionary<String, InputInformation>();
         }
 
-        public class InputInformation
-        {
-            public String Type { get; set; }
-            public Boolean Readonly { get; set; }
-            public Boolean Required { get; set; }
-            public String Reference { get; set; }
-            public Dictionary<String, InputInformation> ReferenceForm { get; set; }
+        public abstract Dictionary<String, InputInformation> GetForm();
+    }
 
-            public InputInformation()
-            {
-                Readonly = false;
-                Required = false;
-            }
+    public abstract class BackendBaseViewModelItem : BaseViewModelItem
+    {
+
+    }
+
+    public class InputInformation
+    {
+        public InputInformationType Type { get; set; }
+        public Boolean Readonly { get; set; }
+        public Boolean Required { get; set; }
+        public String Reference { get; set; }
+        public Dictionary<String, InputInformation> ReferenceForm { get; set; }
+
+        public InputInformation()
+        {
+            Readonly = false;
+            Required = false;
         }
     }
+
+    public enum InputInformationType { @string, text, boolean, @integer, reference, image, datetime }
 }
