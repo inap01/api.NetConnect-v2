@@ -9,10 +9,6 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        private static DataContext InitDB()
-        {
-            return new DataContext(ConfigurationManager.ConnectionStrings["Entities"].ConnectionString);
-        }
         private static DateTime ByteArrayToDateTime(Byte[] input)
         {
             long longVar = BitConverter.ToInt64(input, 0);

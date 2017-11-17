@@ -108,6 +108,7 @@ namespace api.NetConnect.Converters
 
             model.PartnerPackID = viewModel.PartnerTypeSelected.ID;
 
+            /*
             foreach (var display in viewModel.Display.Where(x => x.Value))
                 model.PartnerDisplayRelation.Add(new PartnerDisplayRelation()
                 {
@@ -116,6 +117,7 @@ namespace api.NetConnect.Converters
                     PartnerDisplayID = display.ID,
                     PartnerDisplay = PartnerDisplayDataController.GetItem(display.ID)
                 });
+            */
 
             return model;
         }
@@ -125,8 +127,7 @@ namespace api.NetConnect.Converters
             Partner model = new Partner();
             if (viewModel.ID != 0)
                 model = PartnerDataController.GetItem(viewModel.ID);
-            
-            model.Name = viewModel.Name;
+
             model.Position = viewModel.Position;
 
             return model;

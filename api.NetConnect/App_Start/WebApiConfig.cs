@@ -285,6 +285,16 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
+               name: "PUT_Partner_Backend_Position_Update",
+               routeTemplate: "backend/partner/position",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Partner",
+                   action = "Backend_Position_Update"
+               }
+            );
+            config.Routes.MapHttpRoute(
                name: "GET_Partner_Backend_Get",
                routeTemplate: "backend/partner",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
@@ -345,32 +355,6 @@ namespace api.NetConnect
                }
             );
             #endregion
-            #endregion
-
-            #region PROFILE
-
-            config.Routes.MapHttpRoute(
-               name: "GET_Profile_GetItem",
-               routeTemplate: "profile/{id}",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new
-               {
-                   controller = "Profile",
-                   action = "GetItem"
-               }
-            );
-
-            config.Routes.MapHttpRoute(
-               name: "GET_Profile_Update",
-               routeTemplate: "profile/{id}",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
-               defaults: new
-               {
-                   controller = "Profile",
-                   action = "Update"
-               }
-            );
-
             #endregion
 
             #region TOURNAMENT

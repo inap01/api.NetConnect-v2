@@ -204,10 +204,21 @@ namespace api.NetConnect.Controllers
         {
             BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
 
-            request.Partner.ForEach(x =>
+            try
             {
-                PartnerDataController.Update(x.ToModel());
-            });
+                request.Partner.ForEach(x =>
+                {
+                    PartnerDataController.Update(x.ToModel());
+                });
+
+                viewmodel.AddSuccessAlert("Sortierung wurde aktualisiert.");
+            }
+            catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
