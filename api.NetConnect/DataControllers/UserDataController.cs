@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.data.Entity;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,19 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
 
             return dbItem;
+        }
+
+        public static Boolean ValidateUser(String email, String password, out User User)
+        {
+            var user = UserDataController.GetItem(email, "Email");
+            if(PasswordHelper.HashPassword(password) == user.Password)
+            {
+                User = user;
+                return true;
+            }
+
+            User = null;
+            return false;
         }
     }
 }

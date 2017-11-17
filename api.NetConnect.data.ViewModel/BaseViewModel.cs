@@ -20,7 +20,7 @@ namespace api.NetConnect.data.ViewModel
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertState.info,
+                Type = AlertState.info,
                 Message = message
             });
         }
@@ -29,7 +29,7 @@ namespace api.NetConnect.data.ViewModel
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertState.success,
+                Type = AlertState.success,
                 Message = message
             });
         }
@@ -38,7 +38,7 @@ namespace api.NetConnect.data.ViewModel
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertState.warning,
+                Type = AlertState.warning,
                 Message = message
             });
         }
@@ -47,7 +47,7 @@ namespace api.NetConnect.data.ViewModel
         {
             AlertMessages.Add(new AlertMessage()
             {
-                State = AlertState.danger,
+                Type = AlertState.danger,
                 Message = message
             });
         }
@@ -62,7 +62,7 @@ namespace api.NetConnect.data.ViewModel
 
     public class AlertMessage
     {
-        public AlertState State { get; set; }
+        public AlertState Type { get; set; }
         public String Message { get; set; }
     }
 }

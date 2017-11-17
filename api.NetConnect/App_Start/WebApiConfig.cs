@@ -95,6 +95,19 @@ namespace api.NetConnect
 
             #endregion
 
+            #region AUTH
+            config.Routes.MapHttpRoute(
+               name: "POST_Auth_Auth",
+               routeTemplate: "auth/login",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "Auth"
+               }
+            );
+            #endregion
+
             #region USER
             #region Frontend
             config.Routes.MapHttpRoute(
@@ -267,16 +280,6 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
-               name: "POST_Partner_Backend_Insert",
-               routeTemplate: "backend/partner",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
-               defaults: new
-               {
-                   controller = "Partner",
-                   action = "Backend_Detail_Insert"
-               }
-            );
-            config.Routes.MapHttpRoute(
                name: "GET_Partner_Backend_New",
                routeTemplate: "backend/partner/new",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
@@ -284,6 +287,16 @@ namespace api.NetConnect
                {
                    controller = "Partner",
                    action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Partner_Backend_Insert",
+               routeTemplate: "backend/partner/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Partner",
+                   action = "Backend_Detail_Insert"
                }
             );
             config.Routes.MapHttpRoute(

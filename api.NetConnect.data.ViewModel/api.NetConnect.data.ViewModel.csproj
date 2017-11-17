@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\LoginRequest.cs" />
+    <Compile Include="Auth\ViewModel.cs" />
     <Compile Include="BackendBaseViewModel.cs" />
     <Compile Include="ChangeSet\ViewModel.cs" />
     <Compile Include="Event\Backend\ViewModel.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Partner\Backend\DeleteRequest.cs" />
     <Compile Include="Partner\Backend\Filter.cs" />
     <Compile Include="Partner\Backend\PositionPartnerTypeRequest.cs" />
+    <Compile Include="Partner\Backend\PositionPartnerUpdateRequest.cs" />
     <Compile Include="Partner\Backend\ViewModel.cs" />
     <Compile Include="Partner\ViewModel.cs" />
     <Compile Include="Profile\Backend\DeleteRequest.cs" />

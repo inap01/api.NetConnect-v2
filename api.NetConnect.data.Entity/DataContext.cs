@@ -23,5 +23,4 @@ namespace api.NetConnect.data.Entity
 
         }        
     }
-    
 }
