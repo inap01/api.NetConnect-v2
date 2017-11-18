@@ -275,9 +275,9 @@ namespace api.NetConnect
             #endregion
             #region Backend
             config.Routes.MapHttpRoute(
-               name: "PUT_Partner_Backend_Position",
+               name: "POST_Partner_Backend_Position",
                routeTemplate: "backend/partner/position",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
                defaults: new
                {
                    controller = "Partner",
@@ -399,6 +399,16 @@ namespace api.NetConnect
                {
                    controller = "Tournament",
                    action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Tournament_Backend_FilterList",
+               routeTemplate: "backend/tournament",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "Backend_FilterList"
                }
             );
             config.Routes.MapHttpRoute(

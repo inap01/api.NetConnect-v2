@@ -14,6 +14,7 @@ using api.NetConnect.Helper;
 namespace api.NetConnect.Controllers
 {
     using TournamentListViewModel = ListViewModel<TournamentViewModelItem>;
+    using BackendTournamentListArgs = ListArgsRequest<BackendTournamentFilter>;
     using BackendTournamentListViewModel = ListArgsViewModel<BackendTournamentViewModelItem, BackendTournamentFilter>;
 
     public class TournamentController : ApiController
@@ -60,19 +61,71 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Get()
         {
             BackendTournamentListViewModel viewmodel = new BackendTournamentListViewModel();
+            BackendTournamentListArgs args = new BackendTournamentListArgs();
 
             try
             {
-                foreach (var model in TournamentDataController.GetItems())
-                {
-                    BackendTournamentViewModelItem item = new BackendTournamentViewModelItem();
-                    item.FromModel(model);
-                    viewmodel.Data.Add(item);
-                }
+                viewmodel.Filter.GameOptions = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
+                    return new BackendTournamentFilter.TournamentFilterGame()
+                    {
+                        ID = x.ID,
+                        Name = x.Name
+                    };
+                });
+                viewmodel.Filter.EventOptions = EventDataController.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
+                    return new BackendTournamentFilter.TournamentFilterEvent()
+                    {
+                        ID = x.ID,
+                        Name = x.EventType.Name + " Vol. " + x.Volume.ToString()
+                    };
+                });
 
-                viewmodel.Pagination.TotalItemsCount = viewmodel.Data.Count;
+                Int32 TotalItemsCount = 0;
+                viewmodel.Data = TournamentConverter.FilterList(args, out TotalItemsCount);
+
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Backend_FilterList(BackendTournamentListArgs args)
+        {
+            BackendTournamentListViewModel viewmodel = new BackendTournamentListViewModel();
+
+            try
+            {
+                viewmodel.Filter.GameSelected = args.Filter.GameSelected;
+                viewmodel.Filter.EventSelected = args.Filter.EventSelected;
+                viewmodel.Filter.GameOptions = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
+                    return new BackendTournamentFilter.TournamentFilterGame()
+                    {
+                        ID = x.ID,
+                        Name = x.Name
+                    };
+                });
+                viewmodel.Filter.EventOptions = EventDataController.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
+                    return new BackendTournamentFilter.TournamentFilterEvent()
+                    {
+                        ID = x.ID,
+                        Name = x.EventType.Name + " Vol. " + x.Volume.ToString()
+                    };
+                });
+                viewmodel.Pagination = args.Pagination;
+
+                Int32 TotalItemsCount = 0;
+                viewmodel.Data = TournamentConverter.FilterList(args, out TotalItemsCount);
+
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
+            }
+            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
@@ -89,6 +142,10 @@ namespace api.NetConnect.Controllers
 
             try
             {
+                viewmodel.GameOptions = TournamentGameDataController.GetItems().ConvertAll(x =>
+                {
+                    return new BackendTournamentGameViewModelItem().FromModel(x);
+                }).OrderBy(x => x.Name).ToList();
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }
             catch(Exception ex)

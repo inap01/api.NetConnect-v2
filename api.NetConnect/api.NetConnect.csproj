@@ -173,6 +173,7 @@
     <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="DataControllers\ChangeSetDataController.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
+    <Compile Include="DataControllers\EventDataController.cs" />
     <Compile Include="DataControllers\GalleryImageDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />

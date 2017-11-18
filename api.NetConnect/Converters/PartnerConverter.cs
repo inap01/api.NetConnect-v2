@@ -13,7 +13,7 @@ namespace api.NetConnect.Converters
     public static partial class ConverterExtensions
     {
         #region Frontend
-        public static void FromModel(this PartnerViewModelItem viewModel, Partner model)
+        public static PartnerViewModelItem FromModel(this PartnerViewModelItem viewModel, Partner model)
         {
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
@@ -30,6 +30,8 @@ namespace api.NetConnect.Converters
             string[] displays = { "Header", "Footer" };
             foreach (var display in displays)
                 viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay() { ID = 1, Name = display, Value = true });
+
+            return viewModel;
         }
 
         public static void FromViewModel(this Partner model, PartnerViewModelItem viewModel)
@@ -59,7 +61,7 @@ namespace api.NetConnect.Converters
         }
         #endregion
         #region Backend
-        public static void FromModel(this BackendPartnerViewModelItem viewModel, Partner model)
+        public static BackendPartnerViewModelItem FromModel(this BackendPartnerViewModelItem viewModel, Partner model)
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
@@ -92,6 +94,8 @@ namespace api.NetConnect.Converters
                         Value = false
                     });
             }
+
+            return viewModel;
         }
 
         public static Partner ToModel(this BackendPartnerViewModelItem viewModel)

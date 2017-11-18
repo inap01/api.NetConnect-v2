@@ -112,7 +112,7 @@ namespace api.NetConnect.Controllers
                 viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
                 viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x => 
                 {
-                    return new PartnerType() { ID = x.ID, Name = x.Name };
+                    return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x =>
                 {
-                    return new PartnerType() { ID = x.ID, Name = x.Name };
+                    return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
             }
             catch (Exception ex)
@@ -199,7 +199,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
-        [HttpPut]
+        [HttpPost]
         public IHttpActionResult Backend_Position(PositionPartnerTypeRequest args)
         {
             BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using api.NetConnect.data.ViewModel.Event.Backend;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +9,12 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
     public class BackendTournamentViewModel : BackendBaseViewModel
     {
         public BackendTournamentViewModelItem Data { get; set; }
+        public List<BackendTournamentGameViewModelItem> GameOptions { get; set; }
 
         public BackendTournamentViewModel()
         {
             Data = new BackendTournamentViewModelItem();
+            GameOptions = new List<BackendTournamentGameViewModelItem>();
 
             Form = GetForm();
         }
@@ -30,14 +33,16 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public DateTime? End { get; set; }
         public Int32 ParticipantCount { get; set; }
         public Int32 TeamSize { get; set; }
-        public BackendTournamentGameViewModelItem Game { get; set; }
+        public BackendEventViewModelItem Event { get; set; }
+        public BackendTournamentGameViewModelItem GameSelected { get; set; }
         public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
         public List<BackendTournamentTeamViewModelItem> Teams { get; set; }
         public BackendTournamentPartner Partner { get; set; }
 
         public BackendTournamentViewModelItem()
         {
-            Game = new BackendTournamentGameViewModelItem();
+            Event = new BackendEventViewModelItem();
+            GameSelected = new BackendTournamentGameViewModelItem();
             Player = new List<BackendTournamentParticipantViewModelItem>();
             Teams = new List<BackendTournamentTeamViewModelItem>();
         }
@@ -58,6 +63,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
             result.Add("Start", new InputInformation() { Type = InputInformationType.datetime });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime });
 
+            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = BackendEventViewModelItem.GetForm() });
             result.Add("Game", new InputInformation() { Type = InputInformationType.reference, Reference = "Game", ReferenceForm = BackendTournamentGameViewModelItem.GetForm() });
             result.Add("Player", new InputInformation() { Type = InputInformationType.reference, Reference = "Player", ReferenceForm = BackendTournamentParticipantViewModelItem.GetForm() });
             result.Add("Teams", new InputInformation() { Type = InputInformationType.reference, Reference = "Team", ReferenceForm = BackendTournamentTeamViewModelItem.GetForm() });
