@@ -8,12 +8,12 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
     public class BackendPartnerViewModel : BackendBaseViewModel
     {
         public BackendPartnerViewModelItem Data { get; set; }
-        public List<PartnerType> PartnerTypeOptions { get; set; }
+        public List<BackendPartnerType> PartnerTypeOptions { get; set; }
 
         public BackendPartnerViewModel()
         {
             Data = new BackendPartnerViewModelItem();
-            PartnerTypeOptions = new List<PartnerType>();
+            PartnerTypeOptions = new List<BackendPartnerType>();
 
             Form = GetForm();
         }
