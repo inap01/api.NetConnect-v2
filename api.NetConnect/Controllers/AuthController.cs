@@ -58,6 +58,12 @@ namespace api.NetConnect.Controllers
                     viewmodel.Data.FromModel(u);
                     viewmodel.AddSuccessAlert("Die Anmeldung war erfolgreich!");
                 }
+                else
+                {
+                    viewmodel.Success = false;
+                    viewmodel.Data = null;
+                    viewmodel.AddWarningAlert("Anmeldung fehlerhaft.");
+                }
             }
             catch(Exception ex)
             {

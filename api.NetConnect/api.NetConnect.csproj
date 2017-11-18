@@ -150,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CateringController.cs" />
     <Compile Include="Controllers\ChangeSetController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
+    <Compile Include="Converters\CateringConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
     <Compile Include="Converters\EventConverter.cs" />
     <Compile Include="Converters\GalleryImageConverter.cs" />

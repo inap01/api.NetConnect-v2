@@ -53,6 +53,7 @@
     <Compile Include="Auth\LoginRequest.cs" />
     <Compile Include="Auth\ViewModel.cs" />
     <Compile Include="BackendBaseViewModel.cs" />
+    <Compile Include="Catering\CateringViewModel.cs" />
     <Compile Include="ChangeSet\ViewModel.cs" />
     <Compile Include="Event\Backend\ViewModel.cs" />
     <Compile Include="Event\ViewModel.cs" />

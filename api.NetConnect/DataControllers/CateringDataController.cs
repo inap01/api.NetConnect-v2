@@ -6,7 +6,7 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class CateringProductDataController : GenericDataController<CateringProduct>
+    public class CateringDataController : GenericDataController<CateringProduct>
     {
         public static CateringProduct Update(CateringProduct item)
         {

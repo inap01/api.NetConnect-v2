@@ -13,13 +13,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/22/2013 08:43:40</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.Entity.dll">
-      <publishTime>10/26/2017 22:10:30</publishTime>
+      <publishTime>11/17/2017 18:42:20</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.ViewModel.dll">
-      <publishTime>10/26/2017 22:10:59</publishTime>
+      <publishTime>11/18/2017 01:49:50</publishTime>
     </File>
     <File Include="bin/api.NetConnect.dll">
-      <publishTime>10/26/2017 22:17:35</publishTime>
+      <publishTime>11/18/2017 01:50:27</publishTime>
     </File>
     <File Include="bin/de/System.Net.Http.Formatting.resources.dll">
       <publishTime>01/28/2015 04:02:46</publishTime>
@@ -181,7 +181,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/26/2017 19:32:16</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/26/2017 22:48:07</publishTime>
+      <publishTime>11/17/2017 19:03:15</publishTime>
     </File>
   </ItemGroup>
 </Project>
