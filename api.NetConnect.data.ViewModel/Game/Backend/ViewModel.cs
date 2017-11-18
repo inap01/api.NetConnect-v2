@@ -36,11 +36,11 @@ namespace api.NetConnect.data.ViewModel.Game.Backend
             Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
 
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
-            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("ImagePath", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("RulesPath", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("RequireBattleTag", new InputInformation() { Type = InputInformationType.boolean, Readonly = true });
-            result.Add("RequireSteamID", new InputInformation() { Type = InputInformationType.boolean, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("ImagePath", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("RulesPath", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("RequireBattleTag", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("RequireSteamID", new InputInformation() { Type = InputInformationType.boolean });
 
             return result;
         }

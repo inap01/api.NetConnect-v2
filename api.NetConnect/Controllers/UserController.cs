@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.data.ViewModel.Profile;
+using api.NetConnect.data.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +9,13 @@ using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
 using static api.NetConnect.Helper.PasswordHelper;
-using api.NetConnect.data.ViewModel.Profile.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendProfileListViewModel = ListViewModel<BackendProfileViewModelItem>;
+    using BackendProfileListArgs = ListArgsRequest<BackendProfileFilter>;
+    using BackendProfileListViewModel = ListArgsViewModel<BackendUserViewModelItem, BackendProfileFilter>;
     public class UserController : ApiController
     {
         #region Frontend
@@ -76,11 +77,51 @@ namespace api.NetConnect.Controllers
 
         #region Backend
         [HttpGet]
-        public IHttpActionResult Backend_Get([FromUri] BackendProfileFilter filter)
+        public IHttpActionResult Backend_Get()
+        {
+            BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
+            BackendProfileListArgs args = new BackendProfileListArgs();
+
+            try
+            {
+                Int32 TotalItemsCount;
+                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
+
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Backend_FilterList(BackendProfileListArgs args)
         {
             BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
 
-            // TODO
+            try
+            {
+                viewmodel.Filter.FirstName = args.Filter.FirstName;
+                viewmodel.Filter.LastName = args.Filter.LastName;
+                viewmodel.Filter.Nickname = args.Filter.Nickname;
+                viewmodel.Pagination = args.Pagination;
+
+                Int32 TotalItemsCount;
+                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
+
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
@@ -88,19 +129,18 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+            BackendUserViewModel viewmodel = new BackendUserViewModel();
 
-            // TODO
-
-            return Ok(viewmodel);
-        }
-
-        [HttpPost]
-        public IHttpActionResult BackendDetail_Insert(ProfileViewModelItem request)
-        {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
-
-            // TODO
+            try
+            {
+                viewmodel.Data.FromModel(UserDataController.GetItem(id));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
@@ -108,17 +148,18 @@ namespace api.NetConnect.Controllers
         [HttpPut]
         public IHttpActionResult BackendDetail_Update(Int32 id, ProfileViewModelItem request)
         {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+            BackendUserViewModel viewmodel = new BackendUserViewModel();
 
-            // TODO
-
-            return Ok(viewmodel);
-        }
-
-        [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendProfileDeleteRequest request)
-        {
-            BaseViewModel viewmodel = new BaseViewModel();
+            try
+            {
+                // TODO
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }

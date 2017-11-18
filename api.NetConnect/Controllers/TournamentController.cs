@@ -147,11 +147,12 @@ namespace api.NetConnect.Controllers
                 viewmodel.EventOptions = EventDataController.GetItems().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
-                }).OrderBy(x => x.Name).ToList();
+                }).OrderBy(x => x.EventType.Name).ToList();
                 viewmodel.GameOptions = TournamentGameDataController.GetItems().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
+
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }
             catch(Exception ex)

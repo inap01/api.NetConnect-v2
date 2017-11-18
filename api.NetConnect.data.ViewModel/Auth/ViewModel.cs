@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.data.Entity;
-using api.NetConnect.data.ViewModel.Profile;
+using api.NetConnect.data.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

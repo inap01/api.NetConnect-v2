@@ -8,6 +8,7 @@ using api.NetConnect.DataControllers;
 using api.NetConnect.data.ViewModel.Tournament.Backend;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Game.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 
 namespace api.NetConnect.Converters
 {
@@ -58,7 +59,7 @@ namespace api.NetConnect.Converters
             viewModel.GameSelected.FromModel(model.TournamentGame);
 
             viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
-                var vm = new BackendTournamentParticipantViewModelItem();
+                var vm = new BackendUserViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
@@ -88,25 +89,7 @@ namespace api.NetConnect.Converters
 
             return viewModel;
         }
-        public static BackendTournamentParticipantViewModelItem FromModel(this BackendTournamentParticipantViewModelItem viewModel, TournamentParticipant model)
-        {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
-
-            return viewModel;
-        }
         public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewModel, TournamentTeamParticipant model)
-        {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
-
-            return viewModel;
-        }
-        public static BackendTournamentParticipantViewModelItem FromModel(this BackendTournamentParticipantViewModelItem viewModel, TournamentTeamParticipant model)
         {
             viewModel.ID = model.ID;
             viewModel.FirstName = model.User.FirstName;
@@ -136,7 +119,7 @@ namespace api.NetConnect.Converters
             viewModel.Name = model.Name;
             viewModel.HasPassword = !String.IsNullOrEmpty(model.Password);
             viewModel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
-                var vm = new BackendTournamentParticipantViewModelItem();
+                var vm = new BackendUserViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });

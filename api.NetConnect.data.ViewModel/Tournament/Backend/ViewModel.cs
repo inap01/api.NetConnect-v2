@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.data.ViewModel.Event.Backend;
 using api.NetConnect.data.ViewModel.Game.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public Int32 TeamSize { get; set; }
         public BackendEventViewModelItem Event { get; set; }
         public BackendGameViewModelItem GameSelected { get; set; }
-        public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
+        public List<BackendUserViewModelItem> Player { get; set; }
         public List<BackendTournamentTeamViewModelItem> Teams { get; set; }
         public BackendTournamentPartner Partner { get; set; }
 
@@ -46,7 +47,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         {
             Event = new BackendEventViewModelItem();
             GameSelected = new BackendGameViewModelItem();
-            Player = new List<BackendTournamentParticipantViewModelItem>();
+            Player = new List<BackendUserViewModelItem>();
             Teams = new List<BackendTournamentTeamViewModelItem>();
         }
 
@@ -62,15 +63,15 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
 
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
             result.Add("ChallongeLink", new InputInformation() { Type = InputInformationType.@string });
-            result.Add("Mode", new InputInformation() { Type = InputInformationType.@string });
-            result.Add("TeamSize", new InputInformation() { Type = InputInformationType.integer });
-            result.Add("Start", new InputInformation() { Type = InputInformationType.datetime });
+            result.Add("Mode", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("TeamSize", new InputInformation() { Type = InputInformationType.integer, Required = true });
+            result.Add("Start", new InputInformation() { Type = InputInformationType.datetime, Required = true });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime });
 
-            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = BackendEventViewModelItem.GetForm() });
-            result.Add("Game", new InputInformation() { Type = InputInformationType.reference, Reference = "Game", ReferenceForm = BackendGameViewModelItem.GetForm() });
-            result.Add("Player", new InputInformation() { Type = InputInformationType.reference, Reference = "Player", ReferenceForm = BackendTournamentParticipantViewModelItem.GetForm() });
-            result.Add("Teams", new InputInformation() { Type = InputInformationType.reference, Reference = "Team", ReferenceForm = BackendTournamentTeamViewModelItem.GetForm() });
+            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Required = true });
+            result.Add("Game", new InputInformation() { Type = InputInformationType.reference, Reference = "Game", ReferenceForm = Form.GetReferenceForm(BackendGameViewModelItem.GetForm()), Required = true });
+            result.Add("Player", new InputInformation() { Type = InputInformationType.referenceButton, Reference = "User", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()) });
+            result.Add("Teams", new InputInformation() { Type = InputInformationType.referenceButton, Reference = "Team", ReferenceForm = Form.GetReferenceForm(BackendTournamentTeamViewModelItem.GetForm()) });
 
             return result;
         }
@@ -80,11 +81,11 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
     {
         public String Name { get; set; }
         public Boolean HasPassword { get; set; }
-        public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
+        public List<BackendUserViewModelItem> Player { get; set; }
 
         public BackendTournamentTeamViewModelItem()
         {
-            Player = new List<BackendTournamentParticipantViewModelItem>();
+            Player = new List<BackendUserViewModelItem>();
         }
 
         public static Dictionary<string, InputInformation> GetForm()
@@ -95,26 +96,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
             result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
             result.Add("HasPassword", new InputInformation() { Type = InputInformationType.boolean, Readonly = true });
 
-            result.Add("Player", new InputInformation() { Type = InputInformationType.reference, Reference = "Player", ReferenceForm = BackendTournamentParticipantViewModelItem.GetForm() });
-
-            return result;
-        }
-    }
-
-    public class BackendTournamentParticipantViewModelItem : BackendBaseViewModelItem
-    {
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public String Nickname { get; set; }
-
-        public static Dictionary<string, InputInformation> GetForm()
-        {
-            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
-
-            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
-            result.Add("FirstName", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("LastName", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("Nickname", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
+            result.Add("Player", new InputInformation() { Type = InputInformationType.referenceButton, Reference = "User", ReferenceForm = BackendUserViewModelItem.GetForm() });
 
             return result;
         }

@@ -7,34 +7,31 @@ using api.NetConnect.data.ViewModel.Event;
 using api.NetConnect.data.ViewModel.Event.Backend;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel.EventType.Backend;
 
 namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static BackendEventViewModelItem FromModel(this BackendEventViewModelItem viewModel, Event model)
+
+        public static BackendEventTypeViewModelItem FromModel(this BackendEventTypeViewModelItem viewModel, EventType model)
         {
             viewModel.ID = model.ID;
-            viewModel.Volume = model.Volume;
-            viewModel.Image = "";
-            viewModel.Start = model.Start;
-            viewModel.End = model.End;
-
-            viewModel.EventType.FromModel(model.EventType);
+            viewModel.Name = model.Name;
 
             return viewModel;
         }
     }
 
-    public class EventConverter
+    public class EventTypeConverter
     {
-        public static List<BackendEventViewModelItem> FilterList(ListArgsRequest<BackendEventFilter> args, out Int32 TotalCount)
+        public static List<BackendEventTypeViewModelItem> FilterList(ListArgsRequest<BackendEventTypeFilter> args, out Int32 TotalCount)
         {
-            List<BackendEventViewModelItem> result = new List<BackendEventViewModelItem>();
+            List<BackendEventTypeViewModelItem> result = new List<BackendEventTypeViewModelItem>();
 
-            var items = EventDataController.GetItems();
+            var items = EventTypeDataController.GetItems();
 
-            items = items.Where(x => (x.EventType.Name + " Vol." + x.Volume).ToLower().Contains(args.Filter.Name.ToLower())).ToList();
+            items = items.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
 
             TotalCount = items.Count;
 
@@ -44,7 +41,7 @@ namespace api.NetConnect.Converters
 
             foreach (var model in items)
             {
-                BackendEventViewModelItem item = new BackendEventViewModelItem();
+                BackendEventTypeViewModelItem item = new BackendEventTypeViewModelItem();
                 item.FromModel(model);
                 result.Add(item);
             }

@@ -121,6 +121,48 @@ namespace api.NetConnect
                }
             );
             #endregion
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_User_Backend_Get",
+               routeTemplate: "backend/user",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "User",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_User_Backend_FilterList",
+               routeTemplate: "backend/user",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "User",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_User_Backend_Detail",
+               routeTemplate: "backend/user/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "User",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_User_Backend_Update",
+               routeTemplate: "backend/user/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "User",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            #endregion
             #endregion
 
             #region NEWS
@@ -214,6 +256,153 @@ namespace api.NetConnect
                {
                    controller = "Event",
                    action = "Detail"
+               }
+            );
+            #endregion
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_Event_Backend_Get",
+               routeTemplate: "backend/event",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Event_Backend_FilterList",
+               routeTemplate: "backend/event",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Event_Backend_New",
+               routeTemplate: "backend/event/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Event_Backend_Insert",
+               routeTemplate: "backend/event/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Event_Backend_Detail",
+               routeTemplate: "backend/event/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Event_Backend_Update",
+               routeTemplate: "backend/event/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "DELETE_Event_Backend_Delete",
+               routeTemplate: "backend/event",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
+               defaults: new
+               {
+                   controller = "Event",
+                   action = "Backend_Delete"
+               }
+            );
+            #endregion
+            #endregion
+
+            #region EVENTTYPE
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_EventType_Backend_Get",
+               routeTemplate: "backend/eventtype",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_EventType_Backend_FilterList",
+               routeTemplate: "backend/eventtype",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_EventType_Backend_New",
+               routeTemplate: "backend/eventtype/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_EventType_Backend_Insert",
+               routeTemplate: "backend/eventtype/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_EventType_Backend_Detail",
+               routeTemplate: "backend/eventtype/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_EventType_Backend_Update",
+               routeTemplate: "backend/eventtype/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "DELETE_EventType_Backend_Delete",
+               routeTemplate: "backend/eventtype",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
+               defaults: new
+               {
+                   controller = "EventType",
+                   action = "Backend_Delete"
                }
             );
             #endregion

@@ -55,9 +55,15 @@
     <Compile Include="BackendBaseViewModel.cs" />
     <Compile Include="Catering\CateringViewModel.cs" />
     <Compile Include="ChangeSet\ViewModel.cs" />
+    <Compile Include="EventType\Backend\EventTypeDeleteRequest.cs" />
+    <Compile Include="EventType\Backend\Filter.cs" />
+    <Compile Include="EventType\Backend\ViewModel.cs" />
+    <Compile Include="Event\Backend\EventDeleteRequest.cs" />
+    <Compile Include="Event\Backend\Filter.cs" />
     <Compile Include="Event\Backend\ViewModel.cs" />
     <Compile Include="Event\ViewModel.cs" />
     <Compile Include="FilterEnums.cs" />
+    <Compile Include="Form.cs" />
     <Compile Include="Gallery\ViewModel.cs" />
     <Compile Include="Game\Backend\Filter.cs" />
     <Compile Include="Game\Backend\ViewModel.cs" />
