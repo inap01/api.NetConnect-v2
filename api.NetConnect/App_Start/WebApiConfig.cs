@@ -170,6 +170,30 @@ namespace api.NetConnect
             #endregion
             #endregion
 
+            #region
+
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_GetProducts",
+               routeTemplate: "catering/product",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "GetProducts"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_GetProduct",
+               routeTemplate: "catering/product/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "GetProduct"
+               }
+            );
+            #endregion
+
             #region EVENT
             #region Frontend
             config.Routes.MapHttpRoute(
