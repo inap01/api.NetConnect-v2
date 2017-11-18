@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.data.ViewModel.Event.Backend;
+using api.NetConnect.data.ViewModel.Game.Backend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,14 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
     public class BackendTournamentViewModel : BackendBaseViewModel
     {
         public BackendTournamentViewModelItem Data { get; set; }
-        public List<BackendTournamentGameViewModelItem> GameOptions { get; set; }
+        public List<BackendEventViewModelItem> EventOptions { get; set; }
+        public List<BackendGameViewModelItem> GameOptions { get; set; }
 
         public BackendTournamentViewModel()
         {
             Data = new BackendTournamentViewModelItem();
-            GameOptions = new List<BackendTournamentGameViewModelItem>();
+            EventOptions = new List<BackendEventViewModelItem>();
+            GameOptions = new List<BackendGameViewModelItem>();
 
             Form = GetForm();
         }
@@ -34,7 +37,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public Int32 ParticipantCount { get; set; }
         public Int32 TeamSize { get; set; }
         public BackendEventViewModelItem Event { get; set; }
-        public BackendTournamentGameViewModelItem GameSelected { get; set; }
+        public BackendGameViewModelItem GameSelected { get; set; }
         public List<BackendTournamentParticipantViewModelItem> Player { get; set; }
         public List<BackendTournamentTeamViewModelItem> Teams { get; set; }
         public BackendTournamentPartner Partner { get; set; }
@@ -42,7 +45,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public BackendTournamentViewModelItem()
         {
             Event = new BackendEventViewModelItem();
-            GameSelected = new BackendTournamentGameViewModelItem();
+            GameSelected = new BackendGameViewModelItem();
             Player = new List<BackendTournamentParticipantViewModelItem>();
             Teams = new List<BackendTournamentTeamViewModelItem>();
         }
@@ -60,36 +63,14 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
             result.Add("ChallongeLink", new InputInformation() { Type = InputInformationType.@string });
             result.Add("Mode", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("TeamSize", new InputInformation() { Type = InputInformationType.integer });
             result.Add("Start", new InputInformation() { Type = InputInformationType.datetime });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime });
 
             result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = BackendEventViewModelItem.GetForm() });
-            result.Add("Game", new InputInformation() { Type = InputInformationType.reference, Reference = "Game", ReferenceForm = BackendTournamentGameViewModelItem.GetForm() });
+            result.Add("Game", new InputInformation() { Type = InputInformationType.reference, Reference = "Game", ReferenceForm = BackendGameViewModelItem.GetForm() });
             result.Add("Player", new InputInformation() { Type = InputInformationType.reference, Reference = "Player", ReferenceForm = BackendTournamentParticipantViewModelItem.GetForm() });
             result.Add("Teams", new InputInformation() { Type = InputInformationType.reference, Reference = "Team", ReferenceForm = BackendTournamentTeamViewModelItem.GetForm() });
-
-            return result;
-        }
-    }
-
-    public class BackendTournamentGameViewModelItem : BackendBaseViewModelItem
-    {
-        public String Name { get; set; }
-        public String ImagePath { get; set; }
-        public String RulesPath { get; set; }
-        public Boolean RequireBattleTag { get; set; }
-        public Boolean RequireSteamID { get; set; }
-
-        public static Dictionary<string, InputInformation> GetForm()
-        {
-            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
-
-            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
-            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("ImagePath", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("RulesPath", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
-            result.Add("RequireBattleTag", new InputInformation() { Type = InputInformationType.boolean, Readonly = true });
-            result.Add("RequireSteamID", new InputInformation() { Type = InputInformationType.boolean, Readonly = true });
 
             return result;
         }

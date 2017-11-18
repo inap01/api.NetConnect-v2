@@ -7,6 +7,7 @@ using api.NetConnect.data.ViewModel.Tournament;
 using api.NetConnect.DataControllers;
 using api.NetConnect.data.ViewModel.Tournament.Backend;
 using api.NetConnect.data.ViewModel;
+using api.NetConnect.data.ViewModel.Game.Backend;
 
 namespace api.NetConnect.Converters
 {
@@ -30,7 +31,7 @@ namespace api.NetConnect.Converters
                 return vm;
             });
 
-            viewModel.Teams = model.TournamentTeam.ToList().ConvertAll(x => {
+            viewModel.Teams = model.TournamentTeam.ToList().Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
                 var vm = new TournamentTeamViewModelItem();
                 vm.FromModel(x);
                 return vm;
@@ -62,7 +63,7 @@ namespace api.NetConnect.Converters
                 return vm;
             });
 
-            viewModel.Teams = model.TournamentTeam.ToList().ConvertAll(x => {
+            viewModel.Teams = model.TournamentTeam.Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
                 var vm = new BackendTournamentTeamViewModelItem();
                 vm.FromModel(x);
                 return vm;
@@ -160,7 +161,7 @@ namespace api.NetConnect.Converters
         }
 
         // Tournament Game
-        public static BackendTournamentGameViewModelItem FromModel(this BackendTournamentGameViewModelItem viewModel, TournamentGame model)
+        public static BackendGameViewModelItem FromModel(this BackendGameViewModelItem viewModel, TournamentGame model)
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
@@ -237,6 +238,33 @@ namespace api.NetConnect.Converters
             foreach (var model in items)
             {
                 BackendTournamentViewModelItem item = new BackendTournamentViewModelItem();
+                item.FromModel(model);
+                result.Add(item);
+            }
+
+            return result;
+        }
+    }
+
+    public class GameConverter
+    {
+        public static List<BackendGameViewModelItem> FilterList(ListArgsRequest<BackendGameFilter> args, out Int32 TotalCount)
+        {
+            List<BackendGameViewModelItem> result = new List<BackendGameViewModelItem>();
+
+            var items = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList();
+            
+            items = items.Where(x => x.Name.ToLower().IndexOf(args.Filter.Name.ToLower()) != -1).ToList();
+
+            TotalCount = items.Count;
+
+            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected)
+                 .ToList();
+
+            foreach (var model in items)
+            {
+                BackendGameViewModelItem item = new BackendGameViewModelItem();
                 item.FromModel(model);
                 result.Add(item);
             }

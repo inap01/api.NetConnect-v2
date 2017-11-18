@@ -10,6 +10,8 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
+using api.NetConnect.data.ViewModel.Event.Backend;
+using api.NetConnect.data.ViewModel.Game.Backend;
 
 namespace api.NetConnect.Controllers
 {
@@ -142,9 +144,13 @@ namespace api.NetConnect.Controllers
 
             try
             {
+                viewmodel.EventOptions = EventDataController.GetItems().ConvertAll(x =>
+                {
+                    return new BackendEventViewModelItem().FromModel(x);
+                }).OrderBy(x => x.Name).ToList();
                 viewmodel.GameOptions = TournamentGameDataController.GetItems().ConvertAll(x =>
                 {
-                    return new BackendTournamentGameViewModelItem().FromModel(x);
+                    return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }

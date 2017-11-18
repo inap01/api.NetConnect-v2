@@ -26,7 +26,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
 
     public class BackendEventViewModelItem : BaseViewModelItem
     {
-        public String Title { get; set; }
+        public String Name { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public String Image { get; set; }

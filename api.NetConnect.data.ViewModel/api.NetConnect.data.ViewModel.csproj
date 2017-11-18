@@ -58,6 +58,8 @@
     <Compile Include="Event\ViewModel.cs" />
     <Compile Include="FilterEnums.cs" />
     <Compile Include="Gallery\ViewModel.cs" />
+    <Compile Include="Game\Backend\Filter.cs" />
+    <Compile Include="Game\Backend\ViewModel.cs" />
     <Compile Include="ListArgsQuery.cs" />
     <Compile Include="Navigation\Backend\ViewModel.cs" />
     <Compile Include="Navigation\ViewModel.cs" />

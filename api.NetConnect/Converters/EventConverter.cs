@@ -13,7 +13,7 @@ namespace api.NetConnect.Converters
         public static BackendEventViewModelItem FromModel(this BackendEventViewModelItem viewModel, Event model)
         {
             viewModel.ID = model.ID;
-            viewModel.Title = model.EventType.Name + " Vol. " + model.Volume;
+            viewModel.Name = model.EventType.Name + " Vol. " + model.Volume;
             viewModel.Image = "";
             viewModel.Start = model.Start;
             viewModel.End = model.End;

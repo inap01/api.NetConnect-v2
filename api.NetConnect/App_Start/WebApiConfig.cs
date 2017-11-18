@@ -464,6 +464,81 @@ namespace api.NetConnect
             #endregion
             #endregion
 
+            #region TOURNAMENT
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_Game_Backend_Get",
+               routeTemplate: "backend/game",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Game_Backend_FilterList",
+               routeTemplate: "backend/game",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Game_Backend_Insert",
+               routeTemplate: "backend/game",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Game_Backend_New",
+               routeTemplate: "backend/game/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Game_Backend_Detail",
+               routeTemplate: "backend/game/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Game_Backend_Update",
+               routeTemplate: "backend/game/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "DELETE_Game_Backend_Delete",
+               routeTemplate: "backend/tournament",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
+               defaults: new
+               {
+                   controller = "Game",
+                   action = "Backend_Delete"
+               }
+            );
+            #endregion
+            #endregion
+
             #region CHANGESET
 
             config.Routes.MapHttpRoute(

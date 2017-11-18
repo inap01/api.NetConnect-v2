@@ -165,8 +165,8 @@ namespace api.NetConnect.Controllers
                     },
                     new NavItem() {
                         Text = "Spiele",
-                        State = "admin.tournament.all",
-                        StateCompare = "admin.tournament.all"
+                        State = "admin.game.all",
+                        StateCompare = "admin.game.all"
                     }
                 }
             });
