@@ -15,6 +15,7 @@ namespace api.NetConnect.Converters
         #region Frontend
         public static PartnerViewModelItem FromModel(this PartnerViewModelItem viewModel, Partner model)
         {
+            viewModel.ID = model.ID;
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
             viewModel.Image = model.ImageContainer.OriginalPath;
@@ -23,6 +24,7 @@ namespace api.NetConnect.Converters
 
             viewModel.PartnerType = new PartnerType()
             {
+                ID = model.PartnerPack.ID,
                 Name = model.PartnerPack.Name
             };
 

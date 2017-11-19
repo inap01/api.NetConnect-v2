@@ -222,31 +222,27 @@ namespace api.NetConnect
             #region GALLERY
             #region Frontend
             config.Routes.MapHttpRoute(
-               name: "GET_Gallery_Get",
-               routeTemplate: "gallery",
+               name: "GET_Gallery_GetImages",
+               routeTemplate: "gallery/{id}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {
                    controller = "Gallery",
-                   action = "Get"
+                   action = "GetImages"
                }
             );
+            config.Routes.MapHttpRoute(
+              name: "GET_Gallery_GetGallery",
+              routeTemplate: "gallery",
+              constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+              defaults: new
+              {
+                  controller = "Gallery",
+                  action = "GetGallery"
+              }
+           );
             #endregion
 
-            #region GALLERYIMAGE
-            #region Frontend
-            config.Routes.MapHttpRoute(
-               name: "GET_GalleryImage_Get",
-               routeTemplate: "galleryimage/{id}",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new
-               {
-                   controller = "GalleryImage",
-                   action = "Get"
-               }
-            );
-            #endregion
-            #endregion
             #endregion
 
             #region SEATING

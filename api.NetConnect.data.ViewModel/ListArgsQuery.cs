@@ -14,7 +14,7 @@ namespace api.NetConnect.data.ViewModel
         {
             Data = new List<T>();
         }
-        public T this[int key]
+        public virtual T this[int key]
         {
             get
             {

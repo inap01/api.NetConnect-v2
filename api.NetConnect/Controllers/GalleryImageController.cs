@@ -16,7 +16,7 @@ namespace api.NetConnect.Controllers
     public class GalleryImageController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult GetItems(int id)
         {
             GalleryImageListViewModel viewmodel = new GalleryImageListViewModel();
 

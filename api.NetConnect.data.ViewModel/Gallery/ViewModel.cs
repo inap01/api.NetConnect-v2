@@ -14,26 +14,41 @@ namespace api.NetConnect.data.ViewModel.Gallery
             Data = new GalleryViewModelItem();
         }
     }
-
+    
     public class GalleryViewModelItem : BaseViewModelItem
     {
-        public String Title { get; set; }
-        public Int32 ImageCount { get; set; }
-        public String Thumbnail { get; set; }
-        public Int32 EventID { get; set; }
+        public virtual String Title { get; set; }
+        public virtual Int32 ImageCount { get; set; }
+        public virtual String Thumbnail { get; set; }
+        public virtual Int32 EventID { get; set; }
 
         public GalleryViewModelItem()
         {
 
         }
     }
-    public class GalleryViewModelImage : BaseViewModel
-    {
-        public GalleryViewModelImageItem Data { get; set; }
 
-        public GalleryViewModelImage()
+    public class GalleryImagesViewModel : BaseViewModel
+    {
+        public GalleryImageViewModelItem Data { get; set; }
+
+        public GalleryImagesViewModel()
         {
-            Data = new GalleryViewModelImageItem();
+            Data = new GalleryImageViewModelItem();
+        }
+    }
+    public class GalleryImageViewModelItem : BaseViewModelItem
+    {
+        public String Title { get; set; }
+        public Int32 ImageCount { get; set; }
+        public String Thumbnail { get; set; }
+        public Int32 EventID { get; set; }
+        public String BaseURL { get; set; }
+        
+        public List<GalleryViewModelImageItem> Images { get; set; }
+        public GalleryImageViewModelItem()
+        {
+            Images = new List<GalleryViewModelImageItem>();
         }
     }
     public class GalleryViewModelImageItem : BaseViewModelItem

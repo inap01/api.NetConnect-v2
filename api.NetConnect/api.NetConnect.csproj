@@ -169,6 +169,7 @@
     <Compile Include="Converters\CateringConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
     <Compile Include="Converters\EventConverter.cs" />
+    <Compile Include="Converters\GalleryConverter.cs" />
     <Compile Include="Converters\GalleryImageConverter.cs" />
     <Compile Include="Converters\PartnerConverter.cs" />
     <Compile Include="Converters\SeatingConverter.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="DataControllers\ChangeSetDataController.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
     <Compile Include="DataControllers\EventDataController.cs" />
+    <Compile Include="DataControllers\GalleryDataController.cs" />
     <Compile Include="DataControllers\GalleryImageDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />
