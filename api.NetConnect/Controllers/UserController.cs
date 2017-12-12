@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.data.ViewModel.Profile;
+using api.NetConnect.data.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,20 +8,20 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
-using static api.NetConnect.Helper.PasswordHelper;
-using api.NetConnect.data.ViewModel.Profile.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendProfileListViewModel = ListViewModel<BackendProfileViewModelItem>;
+    using BackendProfileListArgs = ListArgsRequest<BackendProfileFilter>;
+    using BackendProfileListViewModel = ListArgsViewModel<BackendUserViewModelItem, BackendProfileFilter>;
     public class UserController : ApiController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Detail(Int32 id)
         {
-            ProfileViewModel viewmodel = new ProfileViewModel();
+            UserViewModel viewmodel = new UserViewModel();
 
             try
             {
@@ -36,51 +36,55 @@ namespace api.NetConnect.Controllers
 
             return Ok(viewmodel);
         }
+        #endregion
 
-        [HttpPut]
-        public IHttpActionResult Detail_Update(Int32 id, ProfileViewModelItem request)
+        #region Backend
+        [HttpGet]
+        public IHttpActionResult Backend_Get()
         {
-            ProfileViewModel viewmodel = new ProfileViewModel();
+            BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
+            BackendProfileListArgs args = new BackendProfileListArgs();
 
             try
             {
-                var updateModel = UserDataController.GetItem(id);
-                updateModel.FromViewModel(request);
+                Int32 TotalItemsCount;
+                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
 
-                if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
-                    updateModel.Password = PasswordHelper.ChangePassword(id, request.OldPassword, request.NewPassword1, request.NewPassword2);
-
-                updateModel = UserDataController.Update(updateModel);
-                viewmodel.Data.FromModel(updateModel);
-            }
-            catch (WrongPasswordException ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
-            }
-            catch (PasswordsNotEqualException ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
                 viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
                 viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);
         }
-        #endregion
 
-        #region Backend
-        [HttpGet]
-        public IHttpActionResult Backend_Get([FromUri] BackendProfileFilter filter)
+        [HttpPut]
+        public IHttpActionResult Backend_FilterList(BackendProfileListArgs args)
         {
             BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
 
-            // TODO
+            try
+            {
+                viewmodel.Filter.FirstName = args.Filter.FirstName;
+                viewmodel.Filter.LastName = args.Filter.LastName;
+                viewmodel.Filter.Nickname = args.Filter.Nickname;
+                viewmodel.Pagination = args.Pagination;
+
+                Int32 TotalItemsCount;
+                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
+
+                viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
@@ -88,37 +92,37 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+            BackendUserViewModel viewmodel = new BackendUserViewModel();
 
-            // TODO
-
-            return Ok(viewmodel);
-        }
-
-        [HttpPost]
-        public IHttpActionResult BackendDetail_Insert(ProfileViewModelItem request)
-        {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
-
-            // TODO
+            try
+            {
+                viewmodel.Data.FromModel(UserDataController.GetItem(id));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }
 
         [HttpPut]
-        public IHttpActionResult BackendDetail_Update(Int32 id, ProfileViewModelItem request)
+        public IHttpActionResult BackendDetail_Update(Int32 id, UserViewModelItem request)
         {
-            BackendProfileViewModel viewmodel = new BackendProfileViewModel();
+            BackendUserViewModel viewmodel = new BackendUserViewModel();
 
-            // TODO
-
-            return Ok(viewmodel);
-        }
-
-        [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendProfileDeleteRequest request)
-        {
-            BaseViewModel viewmodel = new BaseViewModel();
+            try
+            {
+                // TODO
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }

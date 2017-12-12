@@ -13,29 +13,12 @@ using Microsoft.Owin;
 using Owin;
 using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel.Auth;
+using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
     public class AuthController : ApiController
     {
-        [HttpGet]
-        public IHttpActionResult Auth()
-        {
-            LoginViewModel viewmodel = new LoginViewModel();
-
-            Int32 id = 1;
-
-            ClaimsIdentity identity = InitializeIdentity(id, "Marius Hartmann", "Admin");
-
-            var authentication = HttpContext.Current.GetOwinContext().Authentication;
-            authentication.SignIn(new Microsoft.Owin.Security.AuthenticationProperties()
-            {
-                IsPersistent = true
-            }, identity);
-
-            return Ok(viewmodel);
-        }
-
         [HttpPost]
         public IHttpActionResult Auth(LoginRequest request)
         {
@@ -47,7 +30,7 @@ namespace api.NetConnect.Controllers
 
                 if(UserDataController.ValidateUser(request.Email, request.Password, out u))
                 {
-                    ClaimsIdentity identity = InitializeIdentity(u.ID, u.FirstName + u.LastName, "Admin");
+                    ClaimsIdentity identity = InitializeIdentity(u);
 
                     var authentication = HttpContext.Current.GetOwinContext().Authentication;
                     authentication.SignIn(new Microsoft.Owin.Security.AuthenticationProperties()
@@ -57,6 +40,8 @@ namespace api.NetConnect.Controllers
 
                     viewmodel.Data.FromModel(u);
                     viewmodel.AddSuccessAlert("Die Anmeldung war erfolgreich!");
+
+                    HttpContext.Current.Response.AddHeader("X-Redirect", Properties.Settings.Default.BaseAbosulteUrl + "/user/" + u.ID);
                 }
                 else
                 {
@@ -76,15 +61,16 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
-        private static ClaimsIdentity InitializeIdentity(Int32 id, String name, String role)
+        private static ClaimsIdentity InitializeIdentity(User u)
         {
             ClaimsIdentity identity = new ClaimsIdentity("Application");
 
             var userDetails = new Claim[]
             {
-                new Claim(ClaimTypes.Name, id.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, name),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.NameIdentifier, u.ID.ToString()),
+                new Claim(ClaimTypes.Name, u.FirstName + " " + u.LastName),
+                new Claim(ClaimTypes.Role, "User"),
+                new Claim(ClaimTypes.Email, u.Email)
             };
 
             identity.AddClaims(userDetails);
@@ -95,25 +81,41 @@ namespace api.NetConnect.Controllers
         [HttpPost]
         public IHttpActionResult Logout()
         {
-            ClearAuthentication();
+            BaseViewModel viewmodel = new BaseViewModel();
 
-            return Ok();
+            var authentication = HttpContext.Current.GetOwinContext().Authentication;
+            authentication.SignOut();
+
+            HttpContext.Current.Response.AddHeader("X-Redirect", Properties.Settings.Default.BaseAbosulteUrl);
+
+            return Ok(viewmodel);
         }
 
-        private static void ClearAuthentication()
+        [HttpGet]
+        public IHttpActionResult CheckLogin()
         {
-            HttpRequest req = HttpContext.Current.Request;
-            HttpResponse res = HttpContext.Current.Response;
-            HttpCookieCollection reqCookie = req.Cookies;
+            LoginViewModel viewmodel = new LoginViewModel();
 
-            req.Cookies.AllKeys.Where(c => c.EndsWith("Authentication")).ToList().ForEach(c =>
+            viewmodel.Success = HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated;
+
+            if (viewmodel.Success)
             {
-                if (String.Equals(reqCookie[c].Name, Properties.Settings.Default.AuthCookieName, StringComparison.InvariantCultureIgnoreCase))
-                    reqCookie[c].Domain = Properties.Settings.Default.AuthCookieName;
+                var nameIdentifier = HttpContext.Current.GetOwinContext().Authentication.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+                if (nameIdentifier != null)
+                {
+                    viewmodel.Data.FromModel(UserDataController.GetItem(Convert.ToInt32(nameIdentifier.Value)));
+                    viewmodel.AddSuccessAlert("Angemeldet als: " + HttpContext.Current.User.Identity.Name);
+                }
+                else
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
+                }
+            }
+            else
+                viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
 
-                reqCookie[c].Expires = DateTime.ParseExact("1970-01-01", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).ToLocalTime();
-                res.SetCookie(reqCookie[c]);
-            });
+            return Ok(viewmodel);
         }
     }
 }

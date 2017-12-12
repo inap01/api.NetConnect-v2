@@ -50,14 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\ViewModel.cs" />
     <Compile Include="Auth\LoginRequest.cs" />
     <Compile Include="Auth\ViewModel.cs" />
     <Compile Include="BackendBaseViewModel.cs" />
     <Compile Include="Catering\CateringViewModel.cs" />
     <Compile Include="ChangeSet\ViewModel.cs" />
+    <Compile Include="EventType\Backend\EventTypeDeleteRequest.cs" />
+    <Compile Include="EventType\Backend\Filter.cs" />
+    <Compile Include="EventType\Backend\ViewModel.cs" />
+    <Compile Include="Event\Backend\EventDeleteRequest.cs" />
+    <Compile Include="Event\Backend\Filter.cs" />
     <Compile Include="Event\Backend\ViewModel.cs" />
     <Compile Include="Event\ViewModel.cs" />
     <Compile Include="FilterEnums.cs" />
+    <Compile Include="Form.cs" />
     <Compile Include="Gallery\ViewModel.cs" />
     <Compile Include="Game\Backend\Filter.cs" />
     <Compile Include="Game\Backend\ViewModel.cs" />
@@ -73,12 +80,12 @@
     <Compile Include="Partner\Backend\PositionPartnerUpdateRequest.cs" />
     <Compile Include="Partner\Backend\ViewModel.cs" />
     <Compile Include="Partner\ViewModel.cs" />
-    <Compile Include="Profile\Backend\DeleteRequest.cs" />
-    <Compile Include="Profile\Backend\Filter.cs" />
-    <Compile Include="Profile\Backend\ViewModel.cs" />
+    <Compile Include="User\Backend\DeleteRequest.cs" />
+    <Compile Include="User\Backend\Filter.cs" />
+    <Compile Include="User\Backend\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseViewModel.cs" />
-    <Compile Include="Profile\ViewModel.cs" />
+    <Compile Include="User\ViewModel.cs" />
     <Compile Include="Seating\Backend\DeleteRequest.cs" />
     <Compile Include="Seating\Backend\ViewModel.cs" />
     <Compile Include="Seating\Backend\Filter.cs" />

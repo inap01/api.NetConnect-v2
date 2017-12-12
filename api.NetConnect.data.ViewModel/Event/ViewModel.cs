@@ -30,6 +30,7 @@ namespace api.NetConnect.data.ViewModel.Event
         public String RouteLink { get; set; }
         public Double Price { get; set; }
         public SeatingReservation Seating { get; set; }
+        public Boolean HasTournaments { get; set; }
 
         public EventViewModelItem()
         {

@@ -1,5 +1,4 @@
 ﻿using api.NetConnect.DataControllers;
-using api.NetConnect.data.ViewModel.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,72 +8,26 @@ using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
 using api.NetConnect.data.ViewModel;
-using api.NetConnect.data.ViewModel.Event.Backend;
 using api.NetConnect.data.ViewModel.EventType.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    using EventListViewModel = ListViewModel<EventViewModelItem>;
-    using BackendEventListArgs = ListArgsRequest<BackendEventFilter>;
-    using BackendEventListViewModel = ListArgsViewModel<BackendEventViewModelItem, BackendEventFilter>;
+    using BackendEventTypeListArgs = ListArgsRequest<BackendEventTypeFilter>;
+    using BackendEventTypeListViewModel = ListArgsViewModel<BackendEventTypeViewModelItem, BackendEventTypeFilter>;
 
-    public class EventController : ApiController
+    public class EventTypeController : ApiController
     {
-        #region Frontend
-        [HttpGet]
-        public IHttpActionResult Get()
-        {
-            EventListViewModel viewmodel = new EventListViewModel();
-
-            try
-            {
-                var events = EventDataController.GetItems().Where(x => x.End >= DateTime.Now).OrderBy(y => y.Start);
-                foreach(var e in events)
-                {
-                    viewmodel.Data.Add(new EventViewModelItem().FromModel(e));
-                }
-            }
-            catch (Exception ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
-            }
-
-            return Ok(viewmodel);
-        }
-
-        [HttpGet]
-        public IHttpActionResult Detail(Int32 id)
-        {
-            EventViewModel viewmodel = new EventViewModel();
-
-            try
-            {
-                viewmodel.Data = new EventViewModelItem().FromModel(EventDataController.GetItem(id));
-            }
-            catch (Exception ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
-            }
-
-            return Ok(viewmodel);
-        }
-        #endregion
-
         #region Backend
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
-            BackendEventListViewModel viewmodel = new BackendEventListViewModel();
-            BackendEventListArgs args = new BackendEventListArgs();
+            BackendEventTypeListViewModel viewmodel = new BackendEventTypeListViewModel();
+            BackendEventTypeListArgs args = new BackendEventTypeListArgs();
 
             try
             {
                 Int32 TotalItemsCount;
-                viewmodel.Data = EventConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data = EventTypeConverter.FilterList(args, out TotalItemsCount);
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
@@ -89,9 +42,9 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Backend_FilterList(BackendEventListArgs args)
+        public IHttpActionResult Backend_FilterList(BackendEventTypeListArgs args)
         {
-            BackendEventListViewModel viewmodel = new BackendEventListViewModel();
+            BackendEventTypeListViewModel viewmodel = new BackendEventTypeListViewModel();
 
             try
             {
@@ -99,7 +52,7 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount;
-                viewmodel.Data = EventConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data = EventTypeConverter.FilterList(args, out TotalItemsCount);
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
@@ -116,16 +69,11 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
-            BackendEventViewModel viewmodel = new BackendEventViewModel();
+            BackendEventTypeViewModel viewmodel = new BackendEventTypeViewModel();
 
             try
             {
-                viewmodel.EventTypeOptions = EventTypeDataController.GetItems().ToList().ConvertAll(x =>
-                {
-                    return new BackendEventTypeViewModelItem() { ID = x.ID, Name = x.Name };
-                }).OrderBy(x => x.Name).ToList();
-
-                viewmodel.Data.FromModel(EventDataController.GetItem(id));
+                viewmodel.Data.FromModel(EventTypeDataController.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -140,7 +88,7 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Backend_Detail_New()
         {
-            BackendEventViewModel viewmodel = new BackendEventViewModel();
+            BackendEventTypeViewModel viewmodel = new BackendEventTypeViewModel();
 
             try
             {
@@ -157,9 +105,9 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Backend_Detail_Insert(BackendEventViewModelItem request)
+        public IHttpActionResult Backend_Detail_Insert(BackendEventTypeViewModelItem request)
         {
-            BackendEventViewModel viewmodel = new BackendEventViewModel();
+            BackendEventTypeViewModel viewmodel = new BackendEventTypeViewModel();
 
             try
             {
@@ -176,9 +124,9 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendEventViewModelItem request)
+        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendEventTypeViewModelItem request)
         {
-            BackendEventViewModel viewmodel = new BackendEventViewModel();
+            BackendEventTypeViewModel viewmodel = new BackendEventTypeViewModel();
 
             try
             {
@@ -195,7 +143,7 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendEventDeleteRequest request)
+        public IHttpActionResult Backend_Delete(BackendEventTypeDeleteRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
 

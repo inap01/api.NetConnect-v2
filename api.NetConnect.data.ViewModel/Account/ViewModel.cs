@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace api.NetConnect.data.ViewModel.Profile.Backend
+namespace api.NetConnect.data.ViewModel.Account
 {
-    public class BackendProfileViewModel : BaseViewModel
+    public class AccountViewModel : BaseViewModel
     {
-        public BackendProfileViewModelItem Data { get; set; }
+        public AccountViewModelItem Data { get; set; }
 
-        public BackendProfileViewModel()
+        public AccountViewModel()
         {
-            Data = new BackendProfileViewModelItem();
+            Data = new AccountViewModelItem();
         }
     }
 
-    public class BackendProfileViewModelItem : BaseViewModelItem
+    public class AccountViewModelItem : BaseViewModelItem
     {
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Nickname { get; set; }
         public String Email { get; set; }
+        public String Image { get; set; }
         public String SteamID { get; set; }
         public String BattleTag { get; set; }
         public Boolean Newsletter { get; set; }
@@ -28,7 +29,7 @@ namespace api.NetConnect.data.ViewModel.Profile.Backend
         public String NewPassword1 { get; set; }
         public String NewPassword2 { get; set; }
 
-        public BackendProfileViewModelItem()
+        public AccountViewModelItem()
         {
         }
     }

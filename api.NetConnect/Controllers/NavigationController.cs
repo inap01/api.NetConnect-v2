@@ -1,10 +1,12 @@
 ﻿using api.NetConnect.data.ViewModel.Navigation;
 using api.NetConnect.data.ViewModel.Navigation.Backend;
+using api.NetConnect.DataControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace api.NetConnect.Controllers
@@ -20,7 +22,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "News",
-                State = "news",
+                State = "news.all",
                 StateCompare = "news"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
@@ -55,18 +57,36 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region NavigationUser
-            viewmodel.Data.NavigationUser.Add(new NavItem()
+            if(HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                Text = "Registrieren",
-                State = "register",
-                StateCompare = "register"
-            });
-            viewmodel.Data.NavigationUser.Add(new NavItem()
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "Profil",
+                    State = "profile.edit",
+                    StateCompare = "profile.edit"
+                });
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "Ausloggen",
+                    State = "logout",
+                    StateCompare = "logout"
+                });
+            }
+            else
             {
-                Text = "Einloggen",
-                State = "login",
-                StateCompare = "login"
-            });
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "Registrieren",
+                    State = "register",
+                    StateCompare = "register"
+                });
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "Einloggen",
+                    State = "login",
+                    StateCompare = "login"
+                });
+            }
             #endregion
             #region NavigationAside
             viewmodel.Data.NavigationAside.Add(new NavItem()
@@ -150,6 +170,33 @@ namespace api.NetConnect.Controllers
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
+                Text = "Events",
+                StateCompare = "admin.event",
+                SubMenu = new List<NavItem>() {
+                    new NavItem() {
+                        Text = "Alle Events",
+                        State = "admin.event.all",
+                        StateCompare = "admin.event.all"
+                    },
+                    new NavItem() {
+                        Text = "Neues Event",
+                        State = "admin.event.new",
+                        StateCompare = "admin.event.new"
+                    },
+                    new NavItem() {
+                        Text = "Alle Event Typen",
+                        State = "admin.eventtype.all",
+                        StateCompare = "admin.eventtype.all"
+                    },
+                    new NavItem() {
+                        Text = "Neuer Event Typ",
+                        State = "admin.eventtype.new",
+                        StateCompare = "admin.eventtype.new"
+                    }
+                }
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
                 Text = "Turniere",
                 StateCompare = "admin.tournament",
                 SubMenu = new List<NavItem>() {
@@ -196,6 +243,12 @@ namespace api.NetConnect.Controllers
                         StateCompare = "admin.partner.all"
                     }
                 }
+            });
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Benutzer",
+                State = "admin.user.all",
+                StateCompare = "admin.user"
             });
 
             return Ok(viewmodel);

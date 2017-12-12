@@ -26,7 +26,7 @@ namespace api.NetConnect.Controllers
         {
             PartnerListViewModel viewmodel = new PartnerListViewModel();
 
-            foreach(var model in PartnerDataController.GetItems())
+            foreach(var model in PartnerDataController.GetItems().Where(x => x.IsActive).OrderBy(x => x.PartnerPackID).ThenBy(x => x.Position))
             {
                 PartnerViewModelItem item = new PartnerViewModelItem();
                 
@@ -110,7 +110,7 @@ namespace api.NetConnect.Controllers
             try
             {
                 viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
-                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x => 
+                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x => 
                 {
                     return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
@@ -132,10 +132,17 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ConvertAll(x =>
+                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
+                foreach (var display in PartnerDisplayDataController.GetItems())
+                        viewmodel.Data.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
+                        {
+                            ID = display.ID,
+                            Name = display.Name,
+                            Value = false
+                        });
             }
             catch (Exception ex)
             {
@@ -221,8 +228,7 @@ namespace api.NetConnect.Controllers
                 };
             }).ToList();
 
-            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems()
-                .ConvertAll(x =>
+            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x =>
             {
                 return x.Name;
             });

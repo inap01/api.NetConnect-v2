@@ -150,8 +150,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CateringController.cs" />
     <Compile Include="Controllers\ChangeSetController.cs" />
+    <Compile Include="Controllers\EventTypeController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\GalleryController.cs" />
@@ -168,15 +170,18 @@
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\CateringConverter.cs" />
     <Compile Include="Converters\ChangeSetConverter.cs" />
+    <Compile Include="Converters\EventTypeConverter.cs" />
     <Compile Include="Converters\EventConverter.cs" />
     <Compile Include="Converters\GalleryConverter.cs" />
     <Compile Include="Converters\GalleryImageConverter.cs" />
     <Compile Include="Converters\PartnerConverter.cs" />
     <Compile Include="Converters\SeatingConverter.cs" />
     <Compile Include="Converters\TournamentConverter.cs" />
+    <Compile Include="Converters\AccountConverter.cs" />
     <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="DataControllers\ChangeSetDataController.cs" />
     <Compile Include="DataControllers\CateringDataController.cs" />
+    <Compile Include="DataControllers\EventTypeDataController.cs" />
     <Compile Include="DataControllers\EventDataController.cs" />
     <Compile Include="DataControllers\GalleryDataController.cs" />
     <Compile Include="DataControllers\GalleryImageDataController.cs" />

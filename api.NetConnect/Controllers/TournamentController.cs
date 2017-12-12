@@ -40,13 +40,13 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult Detail(Int32 id)
+        public IHttpActionResult Detail(Int32 eventID, Int32 tournamentID)
         {
             TournamentViewModel viewmodel = new TournamentViewModel();
 
             try
             {
-                viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
+                viewmodel.Data.FromModel(TournamentDataController.GetItem(tournamentID));
             }
             catch(Exception ex)
             {
@@ -144,14 +144,15 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ConvertAll(x =>
+                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
-                }).OrderBy(x => x.Name).ToList();
-                viewmodel.GameOptions = TournamentGameDataController.GetItems().ConvertAll(x =>
+                }).OrderBy(x => x.EventType.Name).ToList();
+                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
+
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }
             catch(Exception ex)

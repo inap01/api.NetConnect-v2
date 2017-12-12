@@ -1,5 +1,5 @@
 ﻿using api.NetConnect.data.Entity;
-using api.NetConnect.data.ViewModel.Profile;
+using api.NetConnect.data.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +10,11 @@ namespace api.NetConnect.data.ViewModel.Auth
 {
     public class LoginViewModel : BaseViewModel
     {
-        public ProfileViewModelItem Data { get; set; }
+        public UserViewModelItem Data { get; set; }
 
         public LoginViewModel()
         {
-            Data = new ProfileViewModelItem();
+            Data = new UserViewModelItem();
         }
     }
 }

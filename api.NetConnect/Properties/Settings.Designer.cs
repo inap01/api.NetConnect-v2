@@ -115,7 +115,7 @@ namespace api.NetConnect.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(".Application")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Authentication")]
         public string AuthCookieName {
             get {
                 return ((string)(this["AuthCookieName"]));
@@ -124,7 +124,7 @@ namespace api.NetConnect.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10080")]
         public int AuthCookieExpireTimeSpanMinutes {
             get {
                 return ((int)(this["AuthCookieExpireTimeSpanMinutes"]));
@@ -133,10 +133,37 @@ namespace api.NetConnect.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost:8080/#/login")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/login")]
         public string LoginAbosulteUrl {
             get {
                 return ((string)(this["LoginAbosulteUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/api/Images/")]
+        public string imageAbsolutePath {
+            get {
+                return ((string)(this["imageAbsolutePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string AuthCookieDomain {
+            get {
+                return ((string)(this["AuthCookieDomain"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080")]
+        public string BaseAbosulteUrl {
+            get {
+                return ((string)(this["BaseAbosulteUrl"]));
             }
         }
     }

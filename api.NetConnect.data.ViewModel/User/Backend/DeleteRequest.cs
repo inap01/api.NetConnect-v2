@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace api.NetConnect.data.ViewModel.Profile.Backend
+namespace api.NetConnect.data.ViewModel.User.Backend
 {
     public class BackendProfileDeleteRequest
     {
