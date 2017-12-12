@@ -12,7 +12,7 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static ProfileViewModelItem FromModel(this ProfileViewModelItem viewModel, User model)
+        public static UserViewModelItem FromModel(this UserViewModelItem viewModel, User model)
         {
             viewModel.ID = model.ID;
             viewModel.FirstName = model.FirstName;
@@ -22,10 +22,6 @@ namespace api.NetConnect.Converters
             viewModel.Email = model.Email;
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
-            viewModel.Newsletter = model.Newsletter;
-            viewModel.OldPassword = null;
-            viewModel.NewPassword1 = null;
-            viewModel.NewPassword2 = null;
 
             return viewModel;
         }
@@ -72,7 +68,7 @@ namespace api.NetConnect.Converters
             return viewModel;
         }
 
-        public static void FromViewModel(this User model, ProfileViewModelItem viewModel)
+        public static void FromViewModel(this User model, UserViewModelItem viewModel)
         {
             model.FirstName = viewModel.FirstName;
             model.LastName = viewModel.LastName;
@@ -80,7 +76,6 @@ namespace api.NetConnect.Converters
             model.Email = viewModel.Email;
             model.SteamID = viewModel.SteamID;
             model.BattleTag = viewModel.BattleTag;
-            model.Newsletter = viewModel.Newsletter;
         }
     }
 
@@ -90,15 +85,15 @@ namespace api.NetConnect.Converters
         {
             List<BackendUserViewModelItem> result = new List<BackendUserViewModelItem>();
 
-            var items = UserDataController.GetItems();
+            var users = UserDataController.GetItems();
 
-            items = items.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower())).ToList();
-            items = items.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower())).ToList();
-            items = items.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower())).ToList();
+            users = users.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower())).ToList();
+            users = users.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower())).ToList();
+            users = users.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower())).ToList();
 
-            TotalCount = items.Count;
+            TotalCount = users.Count();
 
-            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+            var items = users.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
                  .Take(args.Pagination.ItemsPerPageSelected)
                  .ToList();
 

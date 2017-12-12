@@ -28,7 +28,8 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
     {
         public String Name { get; set; }
         public String Description { get; set; }
-        public String Image { get; set; }
+        public String OriginalImage { get; set; }
+        public String PassiveImage { get; set; }
         public String Link { get; set; }
         public String RefLink { get; set; }
         public BackendPartnerType PartnerTypeSelected { get; set; }
@@ -48,7 +49,8 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Required = true, Readonly = true });
             result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Required = true, });
             result.Add("Description", new InputInformation() { Type = InputInformationType.text });
-            result.Add("Image", new InputInformation() { Type = InputInformationType.image, Required = true });
+            result.Add("OriginalImage", new InputInformation() { Type = InputInformationType.image, Required = true });
+            result.Add("PassiveImage", new InputInformation() { Type = InputInformationType.image, Required = true });
             result.Add("Link", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("RefLink", new InputInformation() { Type = InputInformationType.@string });
             result.Add("IsActive", new InputInformation() { Type = InputInformationType.boolean });

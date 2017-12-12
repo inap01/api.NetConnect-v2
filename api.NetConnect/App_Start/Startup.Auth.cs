@@ -15,6 +15,7 @@ namespace api.NetConnect
         {
             app.SetDefaultSignInAsAuthenticationType("Application");
 
+            var i = TimeSpan.FromMinutes(Properties.Settings.Default.AuthCookieExpireTimeSpanMinutes);
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {
                 AuthenticationType = "Application",
@@ -22,7 +23,7 @@ namespace api.NetConnect
                 LoginPath = new PathString("/login"),
 				LogoutPath = new PathString("/logout"),
 				CookieName = Properties.Settings.Default.AuthCookieName,
-				CookieDomain = Properties.Settings.Default.AuthCookieName,
+				CookieDomain = Properties.Settings.Default.AuthCookieDomain,
 				SlidingExpiration = true,
 				ExpireTimeSpan = TimeSpan.FromMinutes(Properties.Settings.Default.AuthCookieExpireTimeSpanMinutes),
 

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace api.NetConnect.data.ViewModel.User
+namespace api.NetConnect.data.ViewModel.Account
 {
-    public class ProfileViewModel : BaseViewModel
+    public class AccountViewModel : BaseViewModel
     {
-        public ProfileViewModelItem Data { get; set; }
+        public AccountViewModelItem Data { get; set; }
 
-        public ProfileViewModel()
+        public AccountViewModel()
         {
-            Data = new ProfileViewModelItem();
+            Data = new AccountViewModelItem();
         }
     }
 
-    public class ProfileViewModelItem : BaseViewModelItem
+    public class AccountViewModelItem : BaseViewModelItem
     {
         public String FirstName { get; set; }
         public String LastName { get; set; }
@@ -29,7 +29,7 @@ namespace api.NetConnect.data.ViewModel.User
         public String NewPassword1 { get; set; }
         public String NewPassword2 { get; set; }
 
-        public ProfileViewModelItem()
+        public AccountViewModelItem()
         {
         }
     }

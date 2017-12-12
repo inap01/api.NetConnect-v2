@@ -1,4 +1,5 @@
-﻿using System;
+﻿using api.NetConnect.data.ViewModel.Event;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,7 +24,7 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public String Mode { get; set; }
         public DateTime Start { get; set; }
         public DateTime? End { get; set; }
-        public String GameTitel { get; set; }
+        public String GameTitle { get; set; }
         public String Image { get; set; }
         public String Rules { get; set; }
         public Boolean RequireBattleTag { get; set; }
@@ -32,9 +33,13 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public List<TournamentParticipantViewModelItem> Player { get; set; }
         public List<TournamentTeamViewModelItem> Teams { get; set; }
         public TournamentPartner Partner { get; set; }
+        public EventViewModelItem Event { get; set; }
 
         public TournamentViewModelItem()
         {
+            Player = new List<TournamentParticipantViewModelItem>();
+            Teams = new List<TournamentTeamViewModelItem>();
+            Event = new EventViewModelItem();
         }
 
         public class TournamentPartner : BaseViewModelItem
@@ -49,6 +54,11 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public String Name { get; set; }
         public Boolean HasPassword { get; set; }
         public List<TournamentParticipantViewModelItem> Player { get; set; }
+
+        public TournamentTeamViewModelItem()
+        {
+            Player = new List<TournamentParticipantViewModelItem>();
+        }
     }
 
     public class TournamentParticipantViewModelItem : BaseViewModelItem

@@ -17,14 +17,11 @@ namespace api.NetConnect.Converters
         {
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
-            viewModel.Image = model.ImageContainer.OriginalPath;
+            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageContainer.OriginalPath + "/image.png";
             viewModel.Link = model.Link;
             viewModel.RefLink = model.Link;
 
-            viewModel.PartnerType = new PartnerType()
-            {
-                Name = model.PartnerPack.Name
-            };
+            viewModel.PartnerType.FromModel(model.PartnerPack);
 
             // TODO Nachfolgendes
             string[] displays = { "Header", "Footer" };
@@ -34,30 +31,12 @@ namespace api.NetConnect.Converters
             return viewModel;
         }
 
-        public static void FromViewModel(this Partner model, PartnerViewModelItem viewModel)
+        public static PartnerType FromModel(this PartnerType viewModel, PartnerPack model)
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
-            viewModel.Description = model.Content;
-            viewModel.Link = model.Link;
-            viewModel.RefLink = model.RefLink;
-            viewModel.Image = "";
 
-            viewModel.PartnerType = new PartnerType()
-            {
-                ID = model.PartnerPack.ID,
-                Name = model.PartnerPack.Name
-            };
-
-            foreach (var displayRelation in model.PartnerDisplayRelation)
-            {
-                viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
-                {
-                    ID = displayRelation.PartnerDisplay.ID,
-                    Name = displayRelation.PartnerDisplay.Name,
-                    Value = true
-                });
-            }
+            return viewModel;
         }
         #endregion
         #region Backend
@@ -68,7 +47,8 @@ namespace api.NetConnect.Converters
             viewModel.Description = model.Content;
             viewModel.Link = model.Link;
             viewModel.RefLink = model.RefLink;
-            viewModel.Image = "";
+            viewModel.OriginalImage = "http://lan-netconnect.de/_api/images/partner/lioncast/image.png";
+            viewModel.PassiveImage = "http://lan-netconnect.de/_api/images/partner/lioncast/image.png";
             viewModel.IsActive = model.IsActive;
 
             viewModel.PartnerTypeSelected = new BackendPartnerType()
@@ -111,7 +91,7 @@ namespace api.NetConnect.Converters
             //model.Image = viewModel.Image;
             model.IsActive = viewModel.IsActive;
 
-            model.PartnerPackID = viewModel.PartnerTypeSelected.ID;
+            model.PartnerPack = PartnerPackDataController.GetItem(viewModel.PartnerTypeSelected.ID);
 
             /*
             foreach (var display in viewModel.Display.Where(x => x.Value))
@@ -146,20 +126,21 @@ namespace api.NetConnect.Converters
         {
             List<BackendPartnerViewModelItem> result = new List<BackendPartnerViewModelItem>();
 
-            var items = PartnerDataController.GetItems();
+            var partner = PartnerDataController.GetItems();
+            List<Partner> items;
 
             if (args.Filter.StatusSelected != data.ViewModel.StatusFilterEnum.Alle)
             {
                 if (args.Filter.StatusSelected == data.ViewModel.StatusFilterEnum.Aktiv)
-                    items = items.Where(x => x.IsActive).ToList();
+                    partner = partner.Where(x => x.IsActive).ToList();
                 else
-                    items = items.Where(x => !x.IsActive).ToList();
+                    partner = partner.Where(x => !x.IsActive).ToList();
             }
 
             if (args.Filter.PartnerTypeSelected != "Alle")
-                items = items.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected).ToList();
+                partner = partner.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected).ToList();
 
-            items = items.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
+            items = partner.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
 
             TotalCount = items.Count;
 

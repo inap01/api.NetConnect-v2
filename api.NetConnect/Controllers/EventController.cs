@@ -28,51 +28,11 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                viewmodel.Data.Add(new EventViewModelItem()
+                var events = EventDataController.GetItems().Where(x => x.End >= DateTime.Now).OrderBy(y => y.Start);
+                foreach(var e in events)
                 {
-                    ID = 9,
-                    Title = "NetConnect & Friends Vol. 1",
-                    Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
-                    Start = new DateTime(2017, 9, 8, 17, 0, 0),
-                    End = new DateTime(2017, 9, 10, 12, 0, 0),
-                    Description = "",
-                    District = "Körrenzig",
-                    Street = "Hauptstraße",
-                    Housenumber = "91",
-                    Postcode = "52441",
-                    City = "Linnich",
-                    RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15,
-                    Seating = new EventViewModelItem.SeatingReservation()
-                    {
-                        SeatsCount = 40,
-                        Free = 15,
-                        Flagged = 5,
-                        Reserved = 20
-                    }
-                });
-                viewmodel.Data.Add(new EventViewModelItem()
-                {
-                    ID = 10,
-                    Title = "Playground Vol. 9",
-                    Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
-                    Start = new DateTime(2018, 3, 9, 17, 0, 0),
-                    End = new DateTime(2018, 3, 11, 12, 0, 0),
-                    Description = "",
-                    District = "Körrenzig",
-                    Street = "Hauptstraße",
-                    Housenumber = "91",
-                    Postcode = "52441",
-                    City = "Linnich",
-                    RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15,
-                    Seating = new EventViewModelItem.SeatingReservation()
-                    {
-                        SeatsCount = 70,
-                        Free = 30,
-                        Reserved = 40
-                    }
-                });
+                    viewmodel.Data.Add(new EventViewModelItem().FromModel(e));
+                }
             }
             catch (Exception ex)
             {
@@ -91,30 +51,7 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                viewmodel.Data = new EventViewModelItem()
-                {
-                    ID = id,
-                    Title = "Playground Vol. 8",
-                    Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg",
-                    Start = new DateTime(2017, 9, 8, 17, 0, 0),
-                    End = new DateTime(2017, 9, 10, 12, 0, 0),
-                    Description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
-                    "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. " +
-                    "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-                    District = "Körrenzig",
-                    Street = "Hauptstraße",
-                    Housenumber = "91",
-                    Postcode = "52441",
-                    City = "Linnich",
-                    RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland",
-                    Price = 15,
-                    Seating = new EventViewModelItem.SeatingReservation()
-                    {
-                        SeatsCount = 70,
-                        Free = 30,
-                        Reserved = 40
-                    }
-                };
+                viewmodel.Data = new EventViewModelItem().FromModel(EventDataController.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -183,7 +120,7 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                viewmodel.EventTypeOptions = EventTypeDataController.GetItems().ConvertAll(x =>
+                viewmodel.EventTypeOptions = EventTypeDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventTypeViewModelItem() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();

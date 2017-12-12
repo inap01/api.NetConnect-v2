@@ -29,9 +29,9 @@ namespace api.NetConnect.Converters
         {
             List<BackendEventTypeViewModelItem> result = new List<BackendEventTypeViewModelItem>();
 
-            var items = EventTypeDataController.GetItems();
+            var events = EventTypeDataController.GetItems();
 
-            items = items.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
+            var items = events.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
 
             TotalCount = items.Count;
 

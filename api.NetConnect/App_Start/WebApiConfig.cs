@@ -106,6 +106,52 @@ namespace api.NetConnect
                    action = "Auth"
                }
             );
+            config.Routes.MapHttpRoute(
+               name: "POST_Auth_Logout",
+               routeTemplate: "auth/logout",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "Logout"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Auth_CheckLogin",
+               routeTemplate: "auth/check",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "CheckLogin"
+               }
+            );
+            #endregion
+
+
+            #region ACCOUNT
+            #region Frontend
+            config.Routes.MapHttpRoute(
+               name: "GET_Account_Profile",
+               routeTemplate: "account/profile",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "Profile"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Account_Profile",
+               routeTemplate: "account/profile",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "Profile"
+               }
+            );
+            #endregion
             #endregion
 
             #region USER
@@ -212,7 +258,7 @@ namespace api.NetConnect
             #endregion
             #endregion
 
-            #region
+            #region CATERING
 
             config.Routes.MapHttpRoute(
                name: "GET_Catering_GetProducts",
@@ -594,7 +640,7 @@ namespace api.NetConnect
             );
             config.Routes.MapHttpRoute(
                name: "GET_Tournament_GetItem",
-               routeTemplate: "tournament/{eventID}/{id}",
+               routeTemplate: "tournament/{eventID}/{tournamentID}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {
@@ -677,7 +723,7 @@ namespace api.NetConnect
             #endregion
             #endregion
 
-            #region TOURNAMENT
+            #region GAME
             #region Backend
             config.Routes.MapHttpRoute(
                name: "GET_Game_Backend_Get",

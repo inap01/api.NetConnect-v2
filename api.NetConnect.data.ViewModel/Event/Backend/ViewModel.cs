@@ -27,6 +27,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
 
     public class BackendEventViewModelItem : BaseViewModelItem
     {
+        public String Name { get; set; }
         public Int32 Volume { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
@@ -43,6 +44,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
             Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
 
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Readonly = true });
             result.Add("Volume", new InputInformation() { Type = InputInformationType.integer, Required = true });
             result.Add("Start", new InputInformation() { Type = InputInformationType.datetime, Required = true });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime, Required = true });

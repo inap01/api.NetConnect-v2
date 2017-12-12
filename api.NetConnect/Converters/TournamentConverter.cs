@@ -16,15 +16,18 @@ namespace api.NetConnect.Converters
     {
         public static TournamentViewModelItem FromModel(this TournamentViewModelItem viewModel, Tournament model)
         {
+            viewModel.ID = model.ID;
             viewModel.GameID = model.TournamentGameID;
             viewModel.TeamSize = model.TeamSize;
             viewModel.ChallongeLink = model.ChallongeLink;
             viewModel.Mode = model.Mode;
             viewModel.Start = model.Start;
             viewModel.End = model.End;
-            viewModel.GameTitel = model.TournamentGame.Name;
+            viewModel.GameTitle = model.TournamentGame.Name;
             viewModel.Rules = model.TournamentGame.Rules;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/" + model.TournamentGame.ImageContainer.ThumbnailPath;
+            //viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.TournamentGame.ImageContainer.ThumbnailPath;
+            viewModel.Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg";
+            viewModel.Event.FromModel(model.Event);
 
             viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();

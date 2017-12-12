@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
-using static api.NetConnect.Helper.PasswordHelper;
 using api.NetConnect.data.ViewModel.User.Backend;
 using api.NetConnect.data.ViewModel;
 
@@ -22,49 +21,13 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Detail(Int32 id)
         {
-            ProfileViewModel viewmodel = new ProfileViewModel();
+            UserViewModel viewmodel = new UserViewModel();
 
             try
             {
                 viewmodel.Data.FromModel(UserDataController.GetItem(id));
             }
             catch(Exception ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
-            }
-
-            return Ok(viewmodel);
-        }
-
-        [HttpPut]
-        public IHttpActionResult Detail_Update(Int32 id, ProfileViewModelItem request)
-        {
-            ProfileViewModel viewmodel = new ProfileViewModel();
-
-            try
-            {
-                var updateModel = UserDataController.GetItem(id);
-                updateModel.FromViewModel(request);
-
-                if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
-                    updateModel.Password = PasswordHelper.ChangePassword(id, request.OldPassword, request.NewPassword1, request.NewPassword2);
-
-                updateModel = UserDataController.Update(updateModel);
-                viewmodel.Data.FromModel(updateModel);
-            }
-            catch (WrongPasswordException ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
-            }
-            catch (PasswordsNotEqualException ex)
-            {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
-            }
-            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
@@ -146,7 +109,7 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult BackendDetail_Update(Int32 id, ProfileViewModelItem request)
+        public IHttpActionResult BackendDetail_Update(Int32 id, UserViewModelItem request)
         {
             BackendUserViewModel viewmodel = new BackendUserViewModel();
 
