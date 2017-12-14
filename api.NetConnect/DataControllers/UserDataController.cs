@@ -16,12 +16,9 @@ namespace api.NetConnect.DataControllers
             dbItem.Newsletter = item.Newsletter;
             dbItem.BattleTag = item.BattleTag;
             dbItem.SteamID = item.SteamID;
-            dbItem.Image = item.Image;
+            //dbItem.Image = item.Image;
             dbItem.IsAdmin = item.IsAdmin;
             dbItem.IsTeam = item.IsTeam;
-            dbItem.Registered = item.Registered;
-            dbItem.PasswordReset = item.PasswordReset;
-            dbItem.Password = item.Password;
             dbItem.Email = item.Email;
             dbItem.Nickname = item.Nickname;
             dbItem.LastName = item.LastName;

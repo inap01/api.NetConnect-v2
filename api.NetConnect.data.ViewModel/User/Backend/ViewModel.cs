@@ -32,6 +32,8 @@ namespace api.NetConnect.data.ViewModel.User.Backend
         public String SteamID { get; set; }
         public String BattleTag { get; set; }
         public Boolean Newsletter { get; set; }
+        public Boolean IsAdmin { get; set; }
+        public Boolean IsTeam { get; set; }
 
         public static Dictionary<string, InputInformation> GetForm()
         {
@@ -46,6 +48,8 @@ namespace api.NetConnect.data.ViewModel.User.Backend
             result.Add("SteamID", new InputInformation() { Type = InputInformationType.@string });
             result.Add("BattleTag", new InputInformation() { Type = InputInformationType.@string });
             result.Add("Newsletter", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("IsAdmin", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("IsTeam", new InputInformation() { Type = InputInformationType.boolean });
 
             return result;
         }

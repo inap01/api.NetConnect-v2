@@ -109,13 +109,15 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult BackendDetail_Update(Int32 id, UserViewModelItem request)
+        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendUserViewModelItem request)
         {
             BackendUserViewModel viewmodel = new BackendUserViewModel();
 
             try
             {
-                // TODO
+                viewmodel.Data.FromModel(UserDataController.Update(request.ToModel()));
+
+                viewmodel.AddSuccessAlert("Benutzer wurde erfolgreich aktualisiert.");
             }
             catch (Exception ex)
             {

@@ -156,6 +156,21 @@ namespace api.NetConnect.Controllers
         {
             BackendNavigationViewModel viewmodel = new BackendNavigationViewModel();
 
+            #region NavigationTop
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Mein Profil",
+                State = "profile.edit",
+                StateCompare = "account.edit"
+            });
+            viewmodel.Data.NavigationTop.Add(new NavItem()
+            {
+                Text = "Backend verlassen",
+                State = "home",
+                StateCompare = "home"
+            });
+            #endregion
+            #region NavigationAside
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Dashboard",
@@ -250,6 +265,7 @@ namespace api.NetConnect.Controllers
                 State = "admin.user.all",
                 StateCompare = "admin.user"
             });
+            #endregion
 
             return Ok(viewmodel);
         }

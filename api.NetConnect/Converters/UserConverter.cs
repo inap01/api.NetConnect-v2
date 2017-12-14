@@ -36,6 +36,8 @@ namespace api.NetConnect.Converters
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
             viewModel.Newsletter = model.Newsletter;
+            viewModel.IsAdmin = model.IsAdmin;
+            viewModel.IsTeam = model.IsTeam;
 
             return viewModel;
         }
@@ -50,6 +52,8 @@ namespace api.NetConnect.Converters
             viewModel.SteamID = model.User.SteamID;
             viewModel.BattleTag = model.User.BattleTag;
             viewModel.Newsletter = model.User.Newsletter;
+            viewModel.IsAdmin = model.User.IsAdmin;
+            viewModel.IsTeam = model.User.IsTeam;
 
             return viewModel;
         }
@@ -64,18 +68,43 @@ namespace api.NetConnect.Converters
             viewModel.SteamID = model.User.SteamID;
             viewModel.BattleTag = model.User.BattleTag;
             viewModel.Newsletter = model.User.Newsletter;
+            viewModel.IsAdmin = model.User.IsAdmin;
+            viewModel.IsTeam = model.User.IsTeam;
 
             return viewModel;
         }
 
-        public static void FromViewModel(this User model, UserViewModelItem viewModel)
+        public static User ToModel(this UserViewModelItem viewModel)
         {
+            User model = new User();
+
+            model.ID = viewModel.ID;
             model.FirstName = viewModel.FirstName;
             model.LastName = viewModel.LastName;
             model.Nickname = viewModel.Nickname;
             model.Email = viewModel.Email;
             model.SteamID = viewModel.SteamID;
             model.BattleTag = viewModel.BattleTag;
+
+            return model;
+        }
+
+        public static User ToModel(this BackendUserViewModelItem viewModel)
+        {
+            User model = new User();
+
+            model.ID = viewModel.ID;
+            model.FirstName = viewModel.FirstName;
+            model.LastName = viewModel.LastName;
+            model.Nickname = viewModel.Nickname;
+            model.Email = viewModel.Email;
+            model.SteamID = viewModel.SteamID;
+            model.BattleTag = viewModel.BattleTag;
+            model.Newsletter = viewModel.Newsletter;
+            model.IsAdmin = viewModel.IsAdmin;
+            model.IsTeam = viewModel.IsTeam;
+
+            return model;
         }
     }
 
