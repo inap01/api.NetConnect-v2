@@ -1,6 +1,7 @@
 ﻿using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.News;
 using api.NetConnect.data.ViewModel.News.Backend;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get()
         {
             NewsListViewModel viewmodel = new NewsListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
             FbBaseComment bc = new FbBaseComment()
             {
                 Name = "Marius Hartmann",
@@ -60,6 +62,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             NewsViewModel viewmodel = new NewsViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
             FbBaseComment bc = new FbBaseComment()
             {
                 Name = "Marius Hartmann",

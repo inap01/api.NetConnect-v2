@@ -7,6 +7,7 @@ namespace api.NetConnect.data.ViewModel
 {
     public partial class BaseViewModel
     {
+        public Boolean Authenticated { get; set; }
         public Boolean Success { get; set; }
         public List<AlertMessage> AlertMessages { get; set; }
 

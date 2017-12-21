@@ -26,15 +26,22 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get(Int32 eventID)
         {
             TournamentListViewModel viewmodel = new TournamentListViewModel();
-            //var tournaments = TournamentDataController.GetByEvent(eventID);
-            var tournaments = TournamentDataController.GetByEvent(8);
+            viewmodel.Authenticated = UserHelper.Authenticated;
+            var e = EventDataController.GetItem(eventID);
+            var tournaments = TournamentDataController.GetByEvent(eventID);
 
-            foreach (var tournament in tournaments)
-            {
-                TournamentViewModelItem item = new TournamentViewModelItem();
-                item.FromModel(tournament);
-                viewmodel.Data.Add(item);
-            }
+            if (e.End > DateTime.Now)
+                if(tournaments.Count > 0)
+                    foreach (var tournament in tournaments)
+                    {
+                        TournamentViewModelItem item = new TournamentViewModelItem();
+                        item.FromModel(tournament);
+                        viewmodel.Data.Add(item);
+                    }
+                else
+                    viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
+            else
+                viewmodel.AddWarningAlert("Das Event ist vorbei.");
 
             return Ok(viewmodel);
         }
@@ -43,6 +50,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 eventID, Int32 tournamentID)
         {
             TournamentViewModel viewmodel = new TournamentViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {

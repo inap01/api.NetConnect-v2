@@ -25,8 +25,9 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get()
         {
             PartnerListViewModel viewmodel = new PartnerListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            foreach(var model in PartnerDataController.GetItems().Where(x => x.IsActive).OrderBy(x => x.PartnerPackID).ThenBy(x => x.Position))
+            foreach (var model in PartnerDataController.GetItems().Where(x => x.IsActive).OrderBy(x => x.PartnerPackID).ThenBy(x => x.Position))
             {
                 PartnerViewModelItem item = new PartnerViewModelItem();
                 
@@ -41,6 +42,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             PartnerViewModel viewmodel = new PartnerViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
 

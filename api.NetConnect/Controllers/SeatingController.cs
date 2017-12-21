@@ -24,6 +24,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get(Int32 eventID)
         {
             SeatingListViewModel viewmodel = new SeatingListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
             var seats = SeatDataController.GetByEvent(eventID);
 
             for (int i = 1; i <= 70; i++)
@@ -47,6 +48,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 eventID, Int32 seatNumber)
         {
             SeatingViewModel viewmodel = new SeatingViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {

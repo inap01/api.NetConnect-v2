@@ -22,6 +22,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             UserViewModel viewmodel = new UserViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {

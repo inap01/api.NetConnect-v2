@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -186,6 +187,7 @@
     <Compile Include="DataControllers\GalleryDataController.cs" />
     <Compile Include="DataControllers\GalleryImageDataController.cs" />
     <Compile Include="DataControllers\GenericDataController.cs" />
+    <Compile Include="DataControllers\SeatTransferLogDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />
     <Compile Include="DataControllers\SeatDataController.cs" />
     <Compile Include="DataControllers\PartnerDataController.cs" />
@@ -196,6 +198,7 @@
     </Compile>
     <Compile Include="Helper\ExceptionHelper.cs" />
     <Compile Include="Helper\PasswordHelper.cs" />
+    <Compile Include="Helper\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

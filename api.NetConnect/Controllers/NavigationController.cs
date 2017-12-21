@@ -1,6 +1,7 @@
 ﻿using api.NetConnect.data.ViewModel.Navigation;
 using api.NetConnect.data.ViewModel.Navigation.Backend;
 using api.NetConnect.DataControllers;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "Turniere",
-                State = "event.tournaments({id: 10})",
+                State = "event.tournaments.all({id: 10})",
                 StateCompare = "event.tournaments"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
@@ -57,13 +58,13 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region NavigationUser
-            if(HttpContext.Current.User.Identity.IsAuthenticated)
+            if(UserHelper.Authenticated)
             {
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
                     Text = "Profil",
-                    State = "profile.edit",
-                    StateCompare = "profile.edit"
+                    State = "profile.overview",
+                    StateCompare = "profile"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {

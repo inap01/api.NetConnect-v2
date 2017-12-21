@@ -25,6 +25,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get()
         {
             EventListViewModel viewmodel = new EventListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {
@@ -48,6 +49,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             EventViewModel viewmodel = new EventViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {

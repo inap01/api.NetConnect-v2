@@ -18,7 +18,7 @@ namespace api.NetConnect.Converters
             viewModel.FirstName = model.FirstName;
             viewModel.LastName = model.LastName;
             viewModel.Nickname = model.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             viewModel.Email = model.Email;
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
@@ -31,7 +31,7 @@ namespace api.NetConnect.Converters
             viewModel.FirstName = model.FirstName;
             viewModel.LastName = model.LastName;
             viewModel.Nickname = model.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             viewModel.Email = model.Email;
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
@@ -47,7 +47,7 @@ namespace api.NetConnect.Converters
             viewModel.FirstName = model.User.FirstName;
             viewModel.LastName = model.User.LastName;
             viewModel.Nickname = model.User.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             viewModel.Email = model.User.Email;
             viewModel.SteamID = model.User.SteamID;
             viewModel.BattleTag = model.User.BattleTag;
@@ -63,7 +63,7 @@ namespace api.NetConnect.Converters
             viewModel.FirstName = model.User.FirstName;
             viewModel.LastName = model.User.LastName;
             viewModel.Nickname = model.User.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             viewModel.Email = model.User.Email;
             viewModel.SteamID = model.User.SteamID;
             viewModel.BattleTag = model.User.BattleTag;

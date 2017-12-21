@@ -132,23 +132,43 @@ namespace api.NetConnect
             #region ACCOUNT
             #region Frontend
             config.Routes.MapHttpRoute(
-               name: "GET_Account_Profile",
-               routeTemplate: "account/profile",
+               name: "GET_Account_Reservation",
+               routeTemplate: "account/reservation",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {
                    controller = "Account",
-                   action = "Profile"
+                   action = "Reservations"
                }
             );
             config.Routes.MapHttpRoute(
-               name: "PUT_Account_Profile",
-               routeTemplate: "account/profile",
+               name: "GET_Account_Tournament",
+               routeTemplate: "account/tournament",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "Tournaments"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Account_Edit",
+               routeTemplate: "account/edit",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "Edit"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Account_Edit",
+               routeTemplate: "account/edit",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
                defaults: new
                {
                    controller = "Account",
-                   action = "Profile"
+                   action = "Edit"
                }
             );
             #endregion

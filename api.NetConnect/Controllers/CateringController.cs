@@ -9,6 +9,7 @@ using api.NetConnect.DataControllers;
 
 namespace api.NetConnect.Controllers
 {
+    using api.NetConnect.Helper;
     using Converters;
 
     public class CateringController : ApiController
@@ -17,8 +18,9 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult GetProducts()
         {
             CateringViewModel viewmodel = new CateringViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            foreach(var model in CateringDataController.GetItems())
+            foreach (var model in CateringDataController.GetItems())
             {
                 ProductViewModelItem item = new ProductViewModelItem();
 

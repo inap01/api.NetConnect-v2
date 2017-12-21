@@ -19,28 +19,70 @@ namespace api.NetConnect.Controllers
     {
         #region Frontend
         [HttpGet]
-        public IHttpActionResult Profile()
+        public IHttpActionResult Reservations()
         {
-            AccountViewModel viewmodel = new AccountViewModel();
+            AccountReservationViewModel viewmodel = new AccountReservationViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            var nameIdentifier = HttpContext.Current.GetOwinContext().Authentication.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-
-            if(nameIdentifier != null)
+            try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(Convert.ToInt32(nameIdentifier.Value)));
+                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
             }
-            else
+            catch(Exception ex)
             {
                 viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Tournaments()
+        {
+            AccountTournamentViewModel viewmodel = new AccountTournamentViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            try
+            {
+                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Edit()
+        {
+            AccountEditViewModel viewmodel = new AccountEditViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            try
+            {
+                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);
         }
 
         [HttpPut]
-        public IHttpActionResult Profile(AccountViewModelItem request)
+        public IHttpActionResult Edit(AccountEditViewModelItem request)
         {
-            AccountViewModel viewmodel = new AccountViewModel();
+            AccountEditViewModel viewmodel = new AccountEditViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
             try
             {

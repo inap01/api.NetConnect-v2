@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using api.NetConnect.DataControllers;
 using api.NetConnect.Converters;
+using api.NetConnect.Helper;
 
 namespace api.NetConnect.Controllers
 {
@@ -19,7 +20,8 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult GetImages(int id)
         {
             GalleryImagesViewModel viewmodel = new GalleryImagesViewModel();
-            
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
             var items = GalleryImageDataController.GetItems(id);
             var ev = EventDataController.GetItem(id);
 
@@ -38,7 +40,8 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult GetGallery()
         {
             GalleryListModel viewmodel = new GalleryListModel();
-            
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
             var ev = EventDataController.GetItems();
 
 

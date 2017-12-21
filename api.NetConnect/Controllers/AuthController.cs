@@ -23,6 +23,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Auth(LoginRequest request)
         {
             LoginViewModel viewmodel = new LoginViewModel();
+            viewmodel.Authenticated = this.User.Identity.IsAuthenticated;
 
             try
             {
@@ -95,22 +96,12 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult CheckLogin()
         {
             LoginViewModel viewmodel = new LoginViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            viewmodel.Success = HttpContext.Current.User != null && HttpContext.Current.User.Identity.IsAuthenticated;
-
-            if (viewmodel.Success)
+            if (viewmodel.Authenticated)
             {
-                var nameIdentifier = HttpContext.Current.GetOwinContext().Authentication.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-                if (nameIdentifier != null)
-                {
-                    viewmodel.Data.FromModel(UserDataController.GetItem(Convert.ToInt32(nameIdentifier.Value)));
-                    viewmodel.AddSuccessAlert("Angemeldet als: " + HttpContext.Current.User.Identity.Name);
-                }
-                else
-                {
-                    viewmodel.Success = false;
-                    viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
-                }
+                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+                viewmodel.AddSuccessAlert("Angemeldet als: " + HttpContext.Current.User.Identity.Name);
             }
             else
                 viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
