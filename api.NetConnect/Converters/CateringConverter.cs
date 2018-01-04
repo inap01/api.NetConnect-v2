@@ -9,7 +9,7 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static void FromModel(this ProductViewModelItem viewModel, CateringProduct model)
+        public static ProductViewModelItem FromModel(this ProductViewModelItem viewModel, CateringProduct model)
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
@@ -23,7 +23,10 @@ namespace api.NetConnect.Converters
                 atts.Add(new ProductAttributeViewModelItem().FromModel(at.CateringProductAttribute));
 
             viewModel.ProductAttribute = atts;
+
+            return viewModel;
         }
+
         public static ProductAttributeViewModelItem FromModel(this ProductAttributeViewModelItem viewModel, CateringProductAttribute model)
         {
             viewModel.ID = model.ID;
@@ -31,6 +34,33 @@ namespace api.NetConnect.Converters
             viewModel.Name = model.Name;
 
             return viewModel;
+        }
+
+        public static CateringOrder ToModel(this OrderRequest viewModel)
+        {
+            CateringOrder model = new CateringOrder();
+
+            model.UserID = viewModel.UserID;
+            model.SeatID = viewModel.SeatID;
+            model.EventID = viewModel.EventID;
+
+            model.CateringOrderDetail = viewModel.Items.ConvertAll(x =>
+            {
+                return x.ToModel();
+            });
+
+            return model;
+        }
+
+        public static CateringOrderDetail ToModel(this OrderRequest.OrderRequestItem viewModel)
+        {
+            CateringOrderDetail model = new CateringOrderDetail();
+
+            model.CateringProductID = viewModel.ID;
+            model.Attributes = viewModel.Attributes;
+            model.Amount = viewModel.Amount;
+
+            return model;
         }
     }
 }

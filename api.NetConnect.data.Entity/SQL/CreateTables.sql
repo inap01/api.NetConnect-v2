@@ -56,6 +56,7 @@ CREATE TABLE [dbo].[CateringOrderDetail] (
 	[CateringOrderID] int NOT NULL,
 	[CateringProductID] int NOT NULL,
 	[Attributes] text,
+	[Amount] int NOT NULL DEFAULT 1,
 	[RowVersion] timestamp NOT NULL
 );
   

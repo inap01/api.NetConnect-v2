@@ -25,6 +25,7 @@
           <Property Name="CateringProductID" Type="int" Nullable="false" />
           <Property Name="Attributes" Type="text" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Amount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CateringProduct">
           <Key>
@@ -1398,6 +1399,7 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrderDetail" ToRole="CateringOrder" />
           <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringProductID" FromRole="CateringOrderDetail" ToRole="CateringProduct" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="CateringProduct">
           <Key>
@@ -2422,6 +2424,7 @@
           <EntitySetMapping Name="CateringOrderDetail">
             <EntityTypeMapping TypeName="NetConnectModel.CateringOrderDetail">
               <MappingFragment StoreEntitySet="CateringOrderDetail">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="Attributes" ColumnName="Attributes" />
                 <ScalarProperty Name="CateringProductID" ColumnName="CateringProductID" />

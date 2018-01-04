@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel.Catering
 {
-    public class CateringViewModel : ListViewModel<ProductViewModelItem>
+    public class CateringViewModel : BaseViewModel
     {
+        public ProductViewModelItem Data { get; set; }
+
         public CateringViewModel()
         {
-            Data = new List<ProductViewModelItem>();
+            Data = new ProductViewModelItem();
         }
     }
     public class ProductViewModelItem : BaseViewModelItem

@@ -116,6 +116,9 @@ namespace api.NetConnect.Controllers
                 State = "contact"
             });
             #endregion
+            #region EventsAside
+
+            #endregion
             #region NavigationBottom
             viewmodel.Data.NavigationBottom.Add(new LinkItem()
             {

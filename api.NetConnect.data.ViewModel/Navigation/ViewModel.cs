@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using static api.NetConnect.data.ViewModel.Event.EventViewModelItem;
 
 namespace api.NetConnect.data.ViewModel.Navigation
 {
@@ -20,6 +21,7 @@ namespace api.NetConnect.data.ViewModel.Navigation
         public List<NavItem> NavigationUser { get; set; }
         public List<NavItem> NavigationTop { get; set; }
         public List<NavItem> NavigationAside { get; set; }
+        public List<EventItem> EventsAside { get; set; }
         public List<LinkItem> NavigationBottom { get; set; }
 
         public NavigationViewModelItem()
@@ -27,6 +29,7 @@ namespace api.NetConnect.data.ViewModel.Navigation
             NavigationUser = new List<NavItem>();
             NavigationTop = new List<NavItem>();
             NavigationAside = new List<NavItem>();
+            EventsAside = new List<EventItem>();
             NavigationBottom = new List<LinkItem>();
         }
     }
@@ -43,5 +46,17 @@ namespace api.NetConnect.data.ViewModel.Navigation
     {
         public String Text { get; set; }
         public String Link { get; set; }
+    }
+
+    public class EventItem
+    {
+        public Int32 ID { get; set; }
+        public String Title { get; set; }
+        public SeatingReservation Seating { get; set; }
+
+        public EventItem()
+        {
+            Seating = new SeatingReservation();
+        }
     }
 }

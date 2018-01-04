@@ -22,27 +22,21 @@ namespace api.NetConnect.DataControllers
 
     public class CateringOrderDataController : GenericDataController<CateringOrder>
     {
+        public static CateringOrder Insert(CateringOrder item)
+        {
+            InitDB();
+
+            var result = db.CateringOrder.Add(item);
+            db.SaveChanges();
+
+            return result;
+        }
+
         public static CateringOrder Update(CateringOrder item)
         {
             CateringOrder dbItem = GetItem(item.ID);
 
 
-
-            db.SaveChanges();
-
-            return dbItem;
-        }
-    }
-
-    public class CateringOrderDetailDataController : GenericDataController<CateringOrderDetail>
-    {
-        public static CateringOrderDetail Update(CateringOrderDetail item)
-        {
-            CateringOrderDetail dbItem = GetItem(item.ID);
-
-            dbItem.CateringOrderID = item.CateringOrderID;
-            dbItem.CateringProductID = item.CateringProductID;
-            dbItem.Attributes = item.Attributes;
 
             db.SaveChanges();
 

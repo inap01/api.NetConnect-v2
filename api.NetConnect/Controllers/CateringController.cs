@@ -11,21 +11,71 @@ namespace api.NetConnect.Controllers
 {
     using api.NetConnect.Helper;
     using Converters;
+    using CateringListViewModel = ListViewModel<ProductViewModelItem>;
 
     public class CateringController : ApiController
     {
         [HttpGet]
-        public IHttpActionResult GetProducts()
+        public IHttpActionResult Get()
+        {
+            CateringListViewModel viewmodel = new CateringListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+            
+            try
+            {
+                foreach (var model in CateringDataController.GetItems())
+                {
+                    ProductViewModelItem item = new ProductViewModelItem();
+
+                    item.FromModel(model);
+                    viewmodel.Data.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Detail(Int32 ID)
         {
             CateringViewModel viewmodel = new CateringViewModel();
             viewmodel.Authenticated = UserHelper.Authenticated;
-
-            foreach (var model in CateringDataController.GetItems())
+            
+            try
             {
-                ProductViewModelItem item = new ProductViewModelItem();
+                viewmodel.Data.FromModel(CateringDataController.GetItem(ID));
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
-                item.FromModel(model);
-                viewmodel.Data.Add(item);
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Insert(OrderRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                CateringOrderDataController.Insert(request.ToModel());
+                viewmodel.AddSuccessAlert("Bestellung ist eingegangen.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
             }
 
             return Ok(viewmodel);

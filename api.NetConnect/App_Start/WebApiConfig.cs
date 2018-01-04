@@ -287,7 +287,7 @@ namespace api.NetConnect
                defaults: new
                {
                    controller = "Catering",
-                   action = "GetProducts"
+                   action = "Get"
                }
             );
             config.Routes.MapHttpRoute(
@@ -297,7 +297,17 @@ namespace api.NetConnect
                defaults: new
                {
                    controller = "Catering",
-                   action = "GetProduct"
+                   action = "Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Catering_Insert",
+               routeTemplate: "order",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Insert"
                }
             );
             #endregion
