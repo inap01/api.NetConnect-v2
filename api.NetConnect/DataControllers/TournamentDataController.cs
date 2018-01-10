@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.data.Entity;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,17 +50,24 @@ namespace api.NetConnect.DataControllers
 
     public class TournamentParticipantDataController : GenericDataController<TournamentParticipant>
     {
-        public static TournamentParticipant Update(TournamentParticipant item)
+        public static TournamentParticipant GetByTournament(Int32 TournamentID)
         {
-            TournamentParticipant dbItem = GetItem(item.ID);
+            Int32 UserID = UserHelper.CurrentUserID;
 
-            dbItem.UserID = item.UserID;
-            dbItem.TournamentID = item.TournamentID;
-            dbItem.Registered = item.Registered;
+            InitDB();
 
+            var result = db.TournamentParticipant.FirstOrDefault(x => x.TournamentID == TournamentID && x.UserID == UserID);
+
+            return result;
+        }
+        public static TournamentParticipant Insert(TournamentParticipant item)
+        {
+            InitDB();
+
+            var result = db.TournamentParticipant.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
         }
     }
 
@@ -76,6 +84,29 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
 
             return dbItem;
+        }
+    }
+
+    public class TournamentTeamParticipantDataController : GenericDataController<TournamentTeamParticipant>
+    {
+        public static TournamentTeamParticipant GetByTournament(Int32 TournamentID)
+        {
+            Int32 UserID = UserHelper.CurrentUserID;
+
+            InitDB();
+
+            var result = db.TournamentTeamParticipant.FirstOrDefault(x => x.TournamentTeam.TournamentID == TournamentID && x.UserID == UserID);
+
+            return result;
+        }
+        public static TournamentTeamParticipant Insert(TournamentTeamParticipant item)
+        {
+            InitDB();
+
+            var result = db.TournamentTeamParticipant.Add(item);
+            db.SaveChanges();
+
+            return result;
         }
     }
 }

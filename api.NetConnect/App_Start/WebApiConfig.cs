@@ -32,7 +32,6 @@ namespace api.NetConnect
             config.MapHttpAttributeRoutes();
 
             #region STATUS
-
             config.Routes.MapHttpRoute(
                name: "GET_Status_Get_Default",
                routeTemplate: "",
@@ -43,7 +42,6 @@ namespace api.NetConnect
                    action = "Get"
                }
             );
-
             config.Routes.MapHttpRoute(
                name: "GET_Status_Get",
                routeTemplate: "status",
@@ -54,7 +52,6 @@ namespace api.NetConnect
                    action = "Get"
                }
             );
-
             #endregion
 
             #region NAVIGATION
@@ -674,6 +671,26 @@ namespace api.NetConnect
                    action = "Detail"
                }
             );
+            config.Routes.MapHttpRoute(
+               name: "POST_Tournament_Join",
+               routeTemplate: "tournament/{eventID}/{tournamentID}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "Join"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Tournament_Join",
+               routeTemplate: "tournament/{eventID}/{tournamentID}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "Leave"
+               }
+            );
             #endregion
             #region Backend
             config.Routes.MapHttpRoute(
@@ -697,16 +714,6 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
-               name: "POST_Tournament_Backend_Insert",
-               routeTemplate: "backend/tournament",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
-               defaults: new
-               {
-                   controller = "Tournament",
-                   action = "Backend_Detail_Insert"
-               }
-            );
-            config.Routes.MapHttpRoute(
                name: "GET_Tournament_Backend_New",
                routeTemplate: "backend/tournament/new",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
@@ -714,6 +721,16 @@ namespace api.NetConnect
                {
                    controller = "Tournament",
                    action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Tournament_Backend_Insert",
+               routeTemplate: "backend/tournament/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "Backend_Detail_Insert"
                }
             );
             config.Routes.MapHttpRoute(

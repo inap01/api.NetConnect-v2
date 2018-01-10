@@ -66,6 +66,8 @@ namespace api.NetConnect.DataControllers
             InitDB();
             var list = GetPropertyMatchingTypeT(typeof(T));
             list.Remove(item);
+
+            db.SaveChanges();
         }
     }
 

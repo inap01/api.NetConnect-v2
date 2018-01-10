@@ -30,6 +30,7 @@ namespace api.NetConnect.data.ViewModel.Tournament
         public Boolean RequireBattleTag { get; set; }
         public Boolean RequireSteam { get; set; }
         public Int32 ParticipantCount { get; set; }
+        public Boolean IsParticipant { get; set; }
         public List<TournamentParticipantViewModelItem> Player { get; set; }
         public List<TournamentTeamViewModelItem> Teams { get; set; }
         public TournamentPartner Partner { get; set; }
@@ -63,6 +64,7 @@ namespace api.NetConnect.data.ViewModel.Tournament
 
     public class TournamentParticipantViewModelItem : BaseViewModelItem
     {
+        public Int32 UserID { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Nickname { get; set; }

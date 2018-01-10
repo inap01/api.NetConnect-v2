@@ -81,6 +81,7 @@
     <Compile Include="Partner\Backend\PositionPartnerUpdateRequest.cs" />
     <Compile Include="Partner\Backend\ViewModel.cs" />
     <Compile Include="Partner\ViewModel.cs" />
+    <Compile Include="Tournament\JoinTournamentRequest.cs" />
     <Compile Include="User\Backend\DeleteRequest.cs" />
     <Compile Include="User\Backend\Filter.cs" />
     <Compile Include="User\Backend\ViewModel.cs" />

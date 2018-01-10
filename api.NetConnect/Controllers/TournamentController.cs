@@ -30,6 +30,7 @@ namespace api.NetConnect.Controllers
             var e = EventDataController.GetItem(eventID);
             var tournaments = TournamentDataController.GetByEvent(eventID);
 
+            /*
             if (e.End > DateTime.Now)
                 if(tournaments.Count > 0)
                     foreach (var tournament in tournaments)
@@ -42,6 +43,17 @@ namespace api.NetConnect.Controllers
                     viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
             else
                 viewmodel.AddWarningAlert("Das Event ist vorbei.");
+            */
+
+            if (tournaments.Count > 0)
+                foreach (var tournament in tournaments)
+                {
+                    TournamentViewModelItem item = new TournamentViewModelItem();
+                    item.FromModel(tournament);
+                    viewmodel.Data.Add(item);
+                }
+            else
+                viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
 
             return Ok(viewmodel);
         }
@@ -57,6 +69,70 @@ namespace api.NetConnect.Controllers
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(tournamentID));
             }
             catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Join(Int32 eventID, Int32 tournamentID, JoinTournamentRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                if(request.TeamID == null)
+                {
+                    TournamentParticipantDataController.Insert(request.ToModel(tournamentID));
+                }
+                else
+                {
+                    TournamentTeamParticipantDataController.Insert(request.ToTeamModel());
+                }
+
+                viewmodel.AddSuccessAlert("Anmeldung erfolgreich.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Leave(Int32 eventID, Int32 tournamentID)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                var participant = TournamentParticipantDataController.GetByTournament(tournamentID);
+                if(participant != null)
+                {
+                    TournamentParticipantDataController.Delete(TournamentParticipantDataController.GetByTournament(tournamentID));
+                    viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
+                }
+                else
+                {
+                    var teamParticipant = TournamentTeamParticipantDataController.GetByTournament(tournamentID);
+                    if (teamParticipant != null)
+                    {
+                        TournamentTeamParticipantDataController.Delete(TournamentTeamParticipantDataController.GetByTournament(tournamentID));
+                        viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
+                    }
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Du bist nicht angemeldet.");
+                }
+
+            }
+            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
@@ -155,7 +231,7 @@ namespace api.NetConnect.Controllers
                 viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
-                }).OrderBy(x => x.EventType.Name).ToList();
+                }).OrderByDescending(x => x.ID).ToList();
                 viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
@@ -163,7 +239,36 @@ namespace api.NetConnect.Controllers
 
                 viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Backend_Detail_New()
+        {
+            BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
+
+            try
+            {
+                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendEventViewModelItem().FromModel(x);
+                }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendGameViewModelItem().FromModel(x);
+                }).OrderBy(x => x.Name).ToList();
+
+            viewmodel.Data.Start = DateTime.Now;
+                viewmodel.Data.End = DateTime.Now;
+            }
+            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
@@ -174,9 +279,9 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Backend_Detail_Insert(TournamentViewModelItem request)
+        public IHttpActionResult Backend_Detail_Insert(BackendTournamentViewModelItem request)
         {
-            TournamentViewModel viewmodel = new TournamentViewModel();
+            BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
 
             try
             {

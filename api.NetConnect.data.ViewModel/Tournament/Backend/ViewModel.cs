@@ -38,7 +38,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public Int32 ParticipantCount { get; set; }
         public Int32 TeamSize { get; set; }
         public BackendEventViewModelItem Event { get; set; }
-        public BackendGameViewModelItem GameSelected { get; set; }
+        public BackendGameViewModelItem Game { get; set; }
         public List<BackendUserViewModelItem> Player { get; set; }
         public List<BackendTournamentTeamViewModelItem> Teams { get; set; }
         public BackendTournamentPartner Partner { get; set; }
@@ -46,7 +46,7 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         public BackendTournamentViewModelItem()
         {
             Event = new BackendEventViewModelItem();
-            GameSelected = new BackendGameViewModelItem();
+            Game = new BackendGameViewModelItem();
             Player = new List<BackendUserViewModelItem>();
             Teams = new List<BackendTournamentTeamViewModelItem>();
         }
