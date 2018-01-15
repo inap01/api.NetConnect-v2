@@ -21,7 +21,7 @@ namespace api.NetConnect.data.ViewModel.Catering
         public class OrderRequestItem
         {
             public Int32 ID { get; set; }
-            public String Attributes { get; set; }
+            public List<String> Attributes { get; set; }
             public Int32 Amount { get; set; }
         }
     }

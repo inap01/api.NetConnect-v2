@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel.Catering;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace api.NetConnect.Converters
         {
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
-            viewModel.IsActive = model.IsActive;
             viewModel.Price = model.Price;
             viewModel.SingleChoice = model.SingleChoice;
+            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageContainer.OriginalPath;
 
             var vm = new ProductAttributeViewModelItem();
             List<ProductAttributeViewModelItem> atts = new List<ProductAttributeViewModelItem>();
@@ -30,7 +31,6 @@ namespace api.NetConnect.Converters
         public static ProductAttributeViewModelItem FromModel(this ProductAttributeViewModelItem viewModel, CateringProductAttribute model)
         {
             viewModel.ID = model.ID;
-            viewModel.IsActive = model.IsActive;
             viewModel.Name = model.Name;
 
             return viewModel;
@@ -57,7 +57,7 @@ namespace api.NetConnect.Converters
             CateringOrderDetail model = new CateringOrderDetail();
 
             model.CateringProductID = viewModel.ID;
-            model.Attributes = viewModel.Attributes;
+            model.Attributes = JsonConvert.SerializeObject(viewModel.Attributes);
             model.Amount = viewModel.Amount;
 
             return model;
