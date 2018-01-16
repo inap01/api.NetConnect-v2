@@ -165,7 +165,6 @@
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\SeatingController.cs" />
     <Compile Include="Controllers\GameController.cs" />
-    <Compile Include="Controllers\StaticContentController.cs" />
     <Compile Include="Controllers\TournamentController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
@@ -206,16 +205,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Resources\English.Designer.cs">
-      <DependentUpon>English.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Resources\German.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>German.resx</DependentUpon>
-    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,16 +233,6 @@
       <Project>{789f4f2b-f3d9-4571-a908-d2d0bae69d98}</Project>
       <Name>api.NetConnect.data.ViewModel</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\English.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>English.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\German.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>German.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

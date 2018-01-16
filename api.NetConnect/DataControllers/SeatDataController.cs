@@ -2,6 +2,7 @@
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Seating;
 using api.NetConnect.data.ViewModel.Seating.Backend;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,12 @@ namespace api.NetConnect.DataControllers
             db = InitDB();
 
             return db.Seat.Where(x => x.EventID == eventID).ToList();
+        }
+        public static List<Seat> GetCurrentUserSeats(Int32 eventID)
+        {
+            Int32 userID = UserHelper.CurrentUserID;
+
+            return GetByEvent(eventID).Where(x => x.UserID == userID).OrderBy(x => x.SeatNumber).ToList();
         }
 
         public static Seat GetItem(Int32 seatNumber, Int32 eventID)

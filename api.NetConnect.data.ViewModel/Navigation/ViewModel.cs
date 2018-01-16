@@ -39,6 +39,7 @@ namespace api.NetConnect.data.ViewModel.Navigation
         public String Text { get; set; }
         public String State { get; set; }
         public String StateCompare { get; set; }
+        public String Tooltip { get; set; }
         public List<NavItem> SubMenu { get; set; }
     }
 

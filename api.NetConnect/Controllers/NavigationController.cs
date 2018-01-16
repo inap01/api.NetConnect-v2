@@ -62,30 +62,48 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "Profil",
-                    State = "profile.overview",
-                    StateCompare = "profile"
+                    Text = "<i class='fas fa-utensils'></>",
+                    State = "catering",
+                    StateCompare = "catering",
+                    Tooltip = "Catering"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "Ausloggen",
+                    Text = "<i class='fas fa-comments'></>",
+                    State = "profile.overview",
+                    StateCompare = "profile",
+                    Tooltip = "Chat"
+                });
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "<i class='fas fa-user-circle'></>",
+                    State = "profile.overview",
+                    StateCompare = "profile",
+                    Tooltip = UserHelper.CurrentUserName
+                });
+                viewmodel.Data.NavigationUser.Add(new NavItem()
+                {
+                    Text = "<i class='fas fa-sign-out'></>",
                     State = "logout",
-                    StateCompare = "logout"
+                    StateCompare = "logout",
+                    Tooltip = "Ausloggen"
                 });
             }
             else
             {
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "Registrieren",
+                    Text = "<i class='fas fa-user-plus'></>",
                     State = "register",
-                    StateCompare = "register"
+                    StateCompare = "register",
+                    Tooltip = "Registrieren"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "Einloggen",
+                    Text = "<i class='fas fa-sign-in'></>",
                     State = "login",
-                    StateCompare = "login"
+                    StateCompare = "login",
+                    Tooltip = "Einloggen"
                 });
             }
             #endregion
