@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel.Catering;
+using api.NetConnect.Helper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace api.NetConnect.Converters
             foreach (var at in model.CateringProductAttributeRelation)
                 atts.Add(new ProductAttributeViewModelItem().FromModel(at.CateringProductAttribute));
 
-            viewModel.ProductAttribute = atts;
+            viewModel.ProductAttributes = atts;
 
             return viewModel;
         }
@@ -36,13 +37,21 @@ namespace api.NetConnect.Converters
             return viewModel;
         }
 
-        public static CateringOrder ToModel(this OrderRequest viewModel)
+        public static CateringSeat FromModel(this CateringSeat viewmodel, Seat model)
+        {
+            viewmodel.ID = model.ID;
+            viewmodel.SeatNumber = model.SeatNumber;
+
+            return viewmodel;
+        }
+
+        public static CateringOrder ToModel(this OrderRequest viewModel, Int32 EventID)
         {
             CateringOrder model = new CateringOrder();
-
-            model.UserID = viewModel.UserID;
+            
+            model.UserID = UserHelper.CurrentUserID;
             model.SeatID = viewModel.SeatID;
-            model.EventID = viewModel.EventID;
+            model.EventID = EventID;
 
             model.CateringOrderDetail = viewModel.Items.ConvertAll(x =>
             {

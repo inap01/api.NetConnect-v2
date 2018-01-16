@@ -11,7 +11,6 @@ namespace api.NetConnect.Controllers
 {
     using api.NetConnect.Helper;
     using Converters;
-    using CateringListViewModel = ListViewModel<ProductViewModelItem>;
 
     public class CateringController : ApiController
     {
@@ -29,6 +28,17 @@ namespace api.NetConnect.Controllers
 
                     item.FromModel(model);
                     viewmodel.Data.Add(item);
+                }
+
+                // TODO: 
+                //Int32 eventID = EventDataController.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now).ID;
+                Int32 eventID = 10;
+                foreach (var model in SeatDataController.GetCurrentUserSeats(eventID))
+                {
+                    CateringSeat item = new CateringSeat();
+
+                    item.FromModel(model);
+                    viewmodel.Seats.Add(item);
                 }
             }
             catch (Exception ex)
@@ -68,7 +78,11 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                CateringOrderDataController.Insert(request.ToModel());
+                // TODO: 
+                //Int32 eventID = EventDataController.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now).ID;
+                Int32 eventID = 10;
+
+                CateringOrderDataController.Insert(request.ToModel(eventID));
                 viewmodel.AddSuccessAlert("Bestellung ist eingegangen.");
             }
             catch (Exception ex)
