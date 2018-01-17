@@ -191,6 +191,24 @@ namespace api.NetConnect.Converters
 
             return model;
         }
+
+        public static Tournament ToModel(this BackendTournamentViewModelItem viewmodel)
+        {
+            Tournament model = new Tournament();
+
+            model.ID = viewmodel.ID;
+            model.EventID = viewmodel.Event.ID;
+            model.TournamentGameID = viewmodel.Game.ID;
+            model.Mode = viewmodel.Mode;
+            model.TeamSize = viewmodel.TeamSize;
+            model.Start = viewmodel.Start;
+            model.End = viewmodel.End;
+            model.ChallongeLink = viewmodel.ChallongeLink;
+            if(viewmodel.Partner != null)
+                model.PartnerID = viewmodel.Partner.ID;
+
+            return model;
+        }
     }
 
     public class TournamentConverter
@@ -199,19 +217,7 @@ namespace api.NetConnect.Converters
         {
             List<BackendTournamentViewModelItem> result = new List<BackendTournamentViewModelItem>();
 
-            var items = TournamentDataController.GetItems().OrderByDescending(x => x.EventID).ToList();
-
-            if (args.Filter.GameSelected.ID != -1)
-                items = items.Where(x => x.TournamentGameID == args.Filter.GameSelected.ID).ToList();
-
-            if (args.Filter.EventSelected.ID != -1)
-                items = items.Where(x => x.EventID == args.Filter.EventSelected.ID).ToList();
-
-            TotalCount = items.Count;
-
-            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected)
-                 .ToList();
+            var items = TournamentDataController.FilterList(args, out TotalCount).OrderByDescending(x => x.EventID).ToList();
 
             foreach (var model in items)
             {

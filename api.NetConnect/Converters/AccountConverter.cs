@@ -100,7 +100,7 @@ namespace api.NetConnect.Converters
             viewModel.Name = $"{model.FirstName} {model.LastName}";
             viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
 
-            viewModel.TournamentParticipation.AddRange(TournamentParticipantDataController.GetItems().Where(x => x.User.ID == model.ID/* && x.Tournament.End > DateTime.Now*/).ToList().ConvertAll(x =>
+            viewModel.TournamentParticipation.AddRange(TournamentParticipantDataController.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.End > DateTime.Now).ToList().ConvertAll(x =>
             {
                 return new AccountTournamentParticipantViewModelItem().FromModel(x.Tournament);
             }));

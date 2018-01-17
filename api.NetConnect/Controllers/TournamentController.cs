@@ -285,7 +285,19 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                // TODO
+                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendEventViewModelItem().FromModel(x);
+                }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendGameViewModelItem().FromModel(x);
+                }).OrderBy(x => x.Name).ToList();
+
+                var data = TournamentDataController.Insert(request.ToModel());
+                viewmodel.Data.FromModel(data);
+
+                viewmodel.AddSuccessAlert("Das Turnier wurder erstellt.");
             }
             catch (Exception ex)
             {
@@ -298,13 +310,25 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Backend_Detail_Update(Int32 id, TournamentViewModelItem request)
+        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendTournamentViewModelItem request)
         {
-            TournamentViewModel viewmodel = new TournamentViewModel();
+            BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
 
             try
             {
-                // TODO
+                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendEventViewModelItem().FromModel(x);
+                }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendGameViewModelItem().FromModel(x);
+                }).OrderBy(x => x.Name).ToList();
+
+                var data = TournamentDataController.Update(request.ToModel());
+                viewmodel.Data.FromModel(data);
+
+                viewmodel.AddSuccessAlert("Speichern erfolgreich.");
             }
             catch (Exception ex)
             {
