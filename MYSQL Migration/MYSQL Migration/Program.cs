@@ -299,6 +299,10 @@ namespace MYSQL_Migration
 
                     }
                 }
+                var seatnumber = Convert.ToInt32(entry["ID"].ToString());
+                seatnumber += 10;
+                if (seatnumber > 70)
+                    seatnumber -= 70;
                 var s = new Seat()
                 {
                     UserID = db.User.SingleOrDefault(x => x.Email == cond1 && x.Nickname == cond2).ID,
@@ -307,7 +311,7 @@ namespace MYSQL_Migration
                     ReservationDate = GetFromMySqlDate(new MySqlDateTime(entry["date"].ToString())).Value,
                     Payed = Convert.ToInt32(entry["payed"]) > 0,
                     EventID = 10,
-                    SeatNumber = Convert.ToInt32(entry["ID"].ToString()),
+                    SeatNumber = seatnumber,
                     IsActive = true,
                 };
                 db.Seat.Add(s);
@@ -351,6 +355,7 @@ namespace MYSQL_Migration
                     {
                         CateringOrder = order,
                         CateringProductID = det.ID.Value,
+                        Amount = 1,
                         Attributes = JsonConvert.SerializeObject(det.attributes),                        
                         
                     };

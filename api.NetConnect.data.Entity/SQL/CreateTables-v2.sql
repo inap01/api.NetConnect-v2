@@ -37,6 +37,7 @@ CREATE TABLE [dbo].[CateringOrderDetail] (
 	[CateringOrderID] int NOT NULL,
 	[CateringProductID] int NOT NULL,
 	[Attributes] text,
+	[Amount] int NOT NULL DEFAULT 1,
 	[RowVersion] timestamp NOT NULL
 );
   
@@ -191,7 +192,7 @@ CREATE TABLE [dbo].[Tournament] (
 	[TournamentGameID] INT NOT NULL,
 	[PartnerID] INT DEFAULT 0,
 	[TeamSize] INT NOT NULL DEFAULT 1,
-	[ChallongeLink] varchar(MAX) NOT NULL,
+	[ChallongeLink] varchar(MAX),
 	[Mode] VARCHAR(10) NOT NULL,
 	[Start] datetime NOT NULL,
 	[End] datetime,

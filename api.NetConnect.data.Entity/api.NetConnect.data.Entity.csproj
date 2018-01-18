@@ -189,7 +189,7 @@
       <DependentUpon>NetConnect.edmx</DependentUpon>
       <LastGenOutput>NetConnect.cs</LastGenOutput>
     </Content>
-    <Content Include="SQL\CreateTables.sql" />
+    <Content Include="SQL\CreateTables-v2.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
