@@ -60,23 +60,33 @@ namespace api.NetConnect.Controllers
             #region NavigationUser
             if(UserHelper.Authenticated)
             {
+                if(UserHelper.CurrentUserRole == UserRole.Admin || UserHelper.CurrentUserRole == UserRole.Team)
+                {
+                    viewmodel.Data.NavigationUser.Add(new NavItem()
+                    {
+                        Text = "<i class='fas fa-user-secret'></i>",
+                        State = "admin.dashboard",
+                        StateCompare = "admin.dashboard",
+                        Tooltip = "Adminbereich"
+                    });
+                }
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "<i class='fas fa-utensils'></>",
+                    Text = "<i class='fas fa-utensils'></i>",
                     State = "catering",
                     StateCompare = "catering",
                     Tooltip = "Catering"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "<i class='fas fa-comments'></>",
+                    Text = "<i class='fas fa-comments'></i>",
                     State = "profile.overview",
                     StateCompare = "profile",
                     Tooltip = "Chat"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "<i class='fas fa-user-circle'></>",
+                    Text = "<i class='fas fa-user-circle'></i>",
                     State = "profile.overview",
                     StateCompare = "profile",
                     Tooltip = UserHelper.CurrentUserName
@@ -93,14 +103,14 @@ namespace api.NetConnect.Controllers
             {
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "<i class='fas fa-user-plus'></>",
+                    Text = "<i class='fas fa-user-plus'></i>",
                     State = "register",
                     StateCompare = "register",
                     Tooltip = "Registrieren"
                 });
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
-                    Text = "<i class='fas fa-sign-in'></>",
+                    Text = "<i class='fas fa-sign-in'></i>",
                     State = "login",
                     StateCompare = "login",
                     Tooltip = "Einloggen"

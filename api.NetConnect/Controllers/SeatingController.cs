@@ -52,7 +52,60 @@ namespace api.NetConnect.Controllers
 
             try
             {
+                viewmodel.BankAccount.FromProperties();
                 viewmodel.Data.FromModel(SeatDataController.GetItem(seatNumber, eventID));
+
+                if (viewmodel.Data.ReservationState < 0)
+                    viewmodel.AddInfoAlert("Dieser Platz ist gesperrt und kann nicht reserviert werden.");
+                else if(viewmodel.Data.ReservationState > 0)
+                    viewmodel.AddWarningAlert($"Dieser Platz wurde bereits von {viewmodel.Data.User.Nickname} reserviert.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult NewReservation(Int32 eventID, Int32 seatNumber)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            try
+            {
+                SeatingViewModelItem seat = new SeatingViewModelItem().FromModel(SeatDataController.GetItem(seatNumber, eventID));
+                if (seat.ReservationState == 0)
+                {
+                    Seat item = new Seat()
+                    {
+                        EventID = eventID,
+                        ReservationDate = DateTime.Now,
+                        UserID = UserHelper.CurrentUserID,
+                        SeatNumber = seatNumber,
+                        IsActive = true,
+                        Payed = false,
+                        State = 1,
+                        Description = ""
+                    };
+                    SeatDataController.Insert(item);
+
+                    viewmodel.AddSuccessAlert("Platz wurde reserviert.");
+                }
+                else if (seat.ReservationState < 0)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Dieser Platz ist gesperrt und kann nicht reserviert werden.");
+                }
+                else
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert($"Dieser Platz wurde bereits von {seat.User.Nickname} reserviert.");
+                }
             }
             catch (Exception ex)
             {

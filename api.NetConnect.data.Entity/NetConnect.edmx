@@ -24,8 +24,8 @@
           <Property Name="CateringOrderID" Type="int" Nullable="false" />
           <Property Name="CateringProductID" Type="int" Nullable="false" />
           <Property Name="Attributes" Type="text" />
-          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="CateringProduct">
           <Key>
@@ -248,7 +248,7 @@
           <Property Name="TournamentGameID" Type="int" Nullable="false" />
           <Property Name="PartnerID" Type="int" />
           <Property Name="TeamSize" Type="int" Nullable="false" />
-          <Property Name="ChallongeLink" Type="varchar(max)" Nullable="false" />
+          <Property Name="ChallongeLink" Type="varchar(max)" />
           <Property Name="Mode" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" />
@@ -333,6 +333,7 @@
           <Property Name="Nickname" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="PasswordSalt" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="PasswordReset" Type="varchar" MaxLength="64" />
           <Property Name="Registered" Type="datetime" Nullable="false" />
           <Property Name="ImageContainerID" Type="uniqueidentifier" />
@@ -340,7 +341,6 @@
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
           <Property Name="CEO" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="Image" Type="varchar" MaxLength="255" />
           <Property Name="SteamID" Type="varchar" MaxLength="25" />
           <Property Name="BattleTag" Type="varchar" MaxLength="25" />
           <Property Name="Newsletter" Type="bit" Nullable="false" />
@@ -1396,10 +1396,10 @@
           <Property Name="CateringOrderID" Type="Int32" Nullable="false" />
           <Property Name="CateringProductID" Type="Int32" Nullable="false" />
           <Property Name="Attributes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringOrderID" FromRole="CateringOrderDetail" ToRole="CateringOrder" />
           <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringProductID" FromRole="CateringOrderDetail" ToRole="CateringProduct" />
-          <Property Name="Amount" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="CateringProduct">
           <Key>
@@ -1660,7 +1660,7 @@
           <Property Name="TournamentGameID" Type="Int32" Nullable="false" />
           <Property Name="PartnerID" Type="Int32" />
           <Property Name="TeamSize" Type="Int32" Nullable="false" />
-          <Property Name="ChallongeLink" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ChallongeLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Mode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="End" Type="DateTime" Precision="3" />
@@ -1768,6 +1768,7 @@
           <Property Name="Nickname" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PasswordReset" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ImageContainerID" Type="Guid" />
@@ -1775,7 +1776,6 @@
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
           <Property Name="CEO" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="SteamID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="BattleTag" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="Newsletter" Type="Boolean" Nullable="false" />
@@ -2424,8 +2424,8 @@
           <EntitySetMapping Name="CateringOrderDetail">
             <EntityTypeMapping TypeName="NetConnectModel.CateringOrderDetail">
               <MappingFragment StoreEntitySet="CateringOrderDetail">
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Attributes" ColumnName="Attributes" />
                 <ScalarProperty Name="CateringProductID" ColumnName="CateringProductID" />
                 <ScalarProperty Name="CateringOrderID" ColumnName="CateringOrderID" />
@@ -2760,7 +2760,6 @@
                 <ScalarProperty Name="Newsletter" ColumnName="Newsletter" />
                 <ScalarProperty Name="BattleTag" ColumnName="BattleTag" />
                 <ScalarProperty Name="SteamID" ColumnName="SteamID" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="CEO" ColumnName="CEO" />
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
@@ -2768,6 +2767,7 @@
                 <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
                 <ScalarProperty Name="Registered" ColumnName="Registered" />
                 <ScalarProperty Name="PasswordReset" ColumnName="PasswordReset" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Nickname" ColumnName="Nickname" />

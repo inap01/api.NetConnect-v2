@@ -43,19 +43,22 @@ namespace api.NetConnect.DataControllers
             };
         }
 
-        public static Seat Update (Seat item)
+        public static Seat Insert(Seat item)
         {
-            Seat dbItem = GetItem(item.ID);
+            db = InitDB();
 
-            dbItem.UserID = item.UserID;
-            dbItem.State = item.State;
-            dbItem.Description = item.Description;
-            dbItem.ReservationDate = item.ReservationDate;
-            dbItem.Payed = item.Payed;
-
+            var result = db.Seat.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
+        }
+
+        public static void Delete(Int32 ID)
+        {
+            db = InitDB();
+
+            db.Seat.Remove(db.Seat.Single(x => x.ID == ID));
+            db.SaveChanges();
         }
     }
 }

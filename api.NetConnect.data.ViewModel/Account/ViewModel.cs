@@ -24,13 +24,13 @@ namespace api.NetConnect.data.ViewModel.Account
         public String Image { get; set; }
         public List<AccountReservationEventViewModelItem> Events { get; set; }
         public List<AccountReservationSeatTransferLogViewModelItem> TransferLog { get; set; }
-        public BackAccountData BankAccountData { get; set; }
+        public BankAccountData BankAccountData { get; set; }
 
         public AccountReservationViewModelItem()
         {
             Events = new List<AccountReservationEventViewModelItem>();
             TransferLog = new List<AccountReservationSeatTransferLogViewModelItem>();
-            BankAccountData = new BackAccountData();
+            BankAccountData = new BankAccountData();
         }
     }
 
@@ -57,7 +57,7 @@ namespace api.NetConnect.data.ViewModel.Account
         public String Text { get; set; }
     }
 
-    public class BackAccountData
+    public class BankAccountData
     {
         public String BankAccountOwner { get; set; }
         public String IBAN { get; set; }

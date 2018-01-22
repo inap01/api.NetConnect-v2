@@ -1,11 +1,11 @@
-USE master
-GO
-
-ALTER DATABASE [NetConnect] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-GO
-
-ALTER DATABASE [NetConnect] SET OFFLINE;
-GO
+--USE master
+--GO
+--
+--ALTER DATABASE [NetConnect] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+--GO
+--
+--ALTER DATABASE [NetConnect] SET OFFLINE;
+--GO
 
 USE master
 GO
@@ -262,7 +262,8 @@ CREATE TABLE [dbo].[User] (
 	[LastName] varchar(255) NOT NULL,
 	[Nickname] varchar(255) NOT NULL,
 	[Email] varchar(255) NOT NULL UNIQUE,
-	[Password] varchar(64) NOT NULL,
+	[Password] varchar(MAX) NOT NULL,
+	[PasswordSalt] varchar(64) NOT NULL,
 	[PasswordReset] varchar(64),
 	[Registered] datetime NOT NULL DEFAULT GETDATE(),
 	[ImageContainerID] uniqueidentifier,
@@ -270,7 +271,6 @@ CREATE TABLE [dbo].[User] (
 	[IsAdmin] bit NOT NULL DEFAULT 0,
 	[CEO] int CHECK (CEO in (1, 2, 3)),
 	[IsActive] bit NOT NULL DEFAULT 1,
-	[Image] varchar(255),
 	[SteamID] varchar(25),
 	[BattleTag] varchar(25),
 	[Newsletter] bit NOT NULL DEFAULT 1,

@@ -66,11 +66,17 @@ namespace api.NetConnect.Controllers
         {
             ClaimsIdentity identity = new ClaimsIdentity("Application");
 
+            Helper.UserRole Role = Helper.UserRole.User;
+            if (u.IsAdmin)
+                Role = Helper.UserRole.Admin;
+            else if (u.IsTeam)
+                Role = Helper.UserRole.Team;
+
             var userDetails = new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, u.ID.ToString()),
                 new Claim(ClaimTypes.Name, u.FirstName + " " + u.LastName),
-                new Claim(ClaimTypes.Role, "User"),
+                new Claim(ClaimTypes.Role, Role.ToString()),
                 new Claim(ClaimTypes.Email, u.Email)
             };
 
@@ -97,7 +103,7 @@ namespace api.NetConnect.Controllers
         {
             LoginViewModel viewmodel = new LoginViewModel();
             viewmodel.Authenticated = UserHelper.Authenticated;
-
+            
             if (viewmodel.Authenticated)
             {
                 viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
@@ -105,6 +111,52 @@ namespace api.NetConnect.Controllers
             }
             else
                 viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
+        public IHttpActionResult Register(RegisterRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            try
+            {
+                Boolean checkEmail = UserDataController.CheckExistingEmail(request.Email);
+                Boolean checkNickname = UserDataController.CheckExistingNickname(request.Nickname);
+                if (checkEmail)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Eingegebene Email wird bereits verwendet.");
+                }
+                else if (checkNickname)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Eingegebener Nickname wird bereits verwendet.");
+                }
+                else
+                {
+                    if(request.Password1 == request.Password2)
+                    {
+                        String Salt;
+                        String HashedPassword = PasswordHelper.CreatePassword(request.Password1, out Salt);
+                        UserDataController.Insert(request.ToModel(HashedPassword, Salt));
+                        viewmodel.AddSuccessAlert("Registrierung erfolgreich. Du kannst dich nun einloggen.");
+                    }
+                    else
+                    {
+                        viewmodel.Success = false;
+                        viewmodel.AddWarningAlert("Die eingegebenen Passwörter stimmen nicht überein.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }

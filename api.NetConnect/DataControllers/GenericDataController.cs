@@ -14,8 +14,8 @@ namespace api.NetConnect.DataControllers
 
         protected static DataContext InitDB()
         {
-            if (db != null)
-                return db;
+            //if (db != null)
+            //    return db;
             db = new DataContext(ConfigurationManager.ConnectionStrings["Entities"].ConnectionString);
             return db;
         }

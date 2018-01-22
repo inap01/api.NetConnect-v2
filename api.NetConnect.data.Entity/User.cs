@@ -35,6 +35,7 @@ namespace api.NetConnect.data.Entity
         public string Nickname { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string PasswordSalt { get; set; }
         public string PasswordReset { get; set; }
         public System.DateTime Registered { get; set; }
         public Nullable<System.Guid> ImageContainerID { get; set; }
@@ -42,7 +43,6 @@ namespace api.NetConnect.data.Entity
         public bool IsAdmin { get; set; }
         public Nullable<int> CEO { get; set; }
         public bool IsActive { get; set; }
-        public string Image { get; set; }
         public string SteamID { get; set; }
         public string BattleTag { get; set; }
         public bool Newsletter { get; set; }

@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.Converters;
+using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Account;
 using api.NetConnect.DataControllers;
 using api.NetConnect.Helper;
@@ -29,6 +30,27 @@ namespace api.NetConnect.Controllers
                 viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
             }
             catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpDelete]
+        public IHttpActionResult CancelReservation(Int32 ID)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                SeatDataController.Delete(ID);
+
+                viewmodel.AddSuccessAlert("Stornierung war erfolgreich.");
+            }
+            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
@@ -90,7 +112,7 @@ namespace api.NetConnect.Controllers
                 updateModel.ToModel(request);
 
                 if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
-                    updateModel.Password = PasswordHelper.ChangePassword(request.ID, request.OldPassword, request.NewPassword1, request.NewPassword2);
+                    updateModel.Password = PasswordHelper.ChangePassword(UserDataController.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
 
                 updateModel = UserDataController.Update(updateModel);
                 viewmodel.Data.FromModel(updateModel);

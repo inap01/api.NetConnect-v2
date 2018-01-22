@@ -1,4 +1,5 @@
-﻿using api.NetConnect.DataControllers;
+﻿using api.NetConnect.data.Entity;
+using api.NetConnect.DataControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,30 +11,37 @@ namespace api.NetConnect.Helper
 {
     public class PasswordHelper
     {
-        public static Boolean CheckPassword(Int32 userID, String password)
+        public static Boolean CheckPassword(User User, String password)
         {
-            var user = UserDataController.GetItem(userID);
+            var user = UserDataController.GetItem(User.ID);
 
-            return sha256_hash(password) == user.Password;
+            return HashPassword(password, User.PasswordSalt) == user.Password;
         }
 
-        public static String HashPassword(String password)
+        public static String CreatePassword(String Password, out String Salt)
         {
-            return sha256_hash(password);
+            Salt = RandomizeSalt();
+
+            return HashPassword(Password, Salt);
         }
 
-        public static String ChangePassword(Int32 userID, String OldPassword, String NewPassword1, String NewPassword2)
+        public static String HashPassword(String password, String salt)
+        {
+            return HashSHA256(salt + HashSHA256(password));
+        }
+
+        public static String ChangePassword(User User, String OldPassword, String NewPassword1, String NewPassword2)
         {
             if (NewPassword1 != NewPassword2)
                 throw new PasswordsNotEqualException();
 
-            if (!CheckPassword(userID, OldPassword))
+            if (!CheckPassword(User, OldPassword))
                 throw new WrongPasswordException();
 
-            return HashPassword(NewPassword1);
+            return HashPassword(NewPassword1, User.PasswordSalt);
         }
 
-        private static String sha256_hash(string value)
+        private static String HashSHA256(String value)
         {
             StringBuilder Sb = new StringBuilder();
 
@@ -44,6 +52,19 @@ namespace api.NetConnect.Helper
 
                 foreach (Byte b in result)
                     Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
+
+        private static String RandomizeSalt(Int32 SaltLength = 10)
+        {
+            StringBuilder Sb = new StringBuilder();
+
+            Random rand = new Random((int)DateTime.Now.Ticks);
+            for (int i = 0; i < SaltLength; i++)
+            {
+                Sb.Append(rand.Next(0, 9).ToString());
             }
 
             return Sb.ToString();

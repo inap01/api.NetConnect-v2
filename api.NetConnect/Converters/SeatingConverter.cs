@@ -15,7 +15,7 @@ namespace api.NetConnect.Converters
 
     public static partial class ConverterExtensions
     {
-        public static void FromModel(this SeatingViewModelItem viewModel, Seat model)
+        public static SeatingViewModelItem FromModel(this SeatingViewModelItem viewModel, Seat model)
         {
             viewModel.ID = model.ID;
             viewModel.SeatNumber = model.SeatNumber;
@@ -36,6 +36,8 @@ namespace api.NetConnect.Converters
                     Email = model.User.Email
                 };
             }
+
+            return viewModel;
         }
     }
 }

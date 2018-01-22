@@ -123,19 +123,39 @@ namespace api.NetConnect
                    action = "CheckLogin"
                }
             );
+            config.Routes.MapHttpRoute(
+               name: "POST_Auth_Register",
+               routeTemplate: "auth/register",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "Register"
+               }
+            );
             #endregion
 
 
             #region ACCOUNT
             #region Frontend
             config.Routes.MapHttpRoute(
-               name: "GET_Account_Reservation",
+               name: "GET_Account_Reservations",
                routeTemplate: "account/reservation",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
                defaults: new
                {
                    controller = "Account",
                    action = "Reservations"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "DELETE_Account_CancelReservation",
+               routeTemplate: "account/reservation/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "CancelReservation"
                }
             );
             config.Routes.MapHttpRoute(
@@ -527,6 +547,16 @@ namespace api.NetConnect
                {
                    controller = "Seating",
                    action = "Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Seating_NewReservation",
+               routeTemplate: "seating/{eventID}/{seatNumber}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "NewReservation"
                }
             );
             #endregion

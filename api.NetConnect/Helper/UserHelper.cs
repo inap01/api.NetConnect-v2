@@ -39,5 +39,13 @@ namespace api.NetConnect.Helper
                 return email.Value.ToString();
             }
         }
+        public static UserRole CurrentUserRole
+        {
+            get
+            {
+                var role = HttpContext.Current.GetOwinContext().Authentication.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+                return (UserRole)Enum.Parse(typeof(UserRole), role.Value.ToString());
+            }
+        }
     }
 }

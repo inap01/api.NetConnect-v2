@@ -1,4 +1,5 @@
-﻿using System;
+﻿using api.NetConnect.data.ViewModel.Account;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +9,12 @@ namespace api.NetConnect.data.ViewModel.Seating
     public class SeatingViewModel : BaseViewModel
     {
         public SeatingViewModelItem Data { get; set; }
+        public BankAccountData BankAccount { get; set; }
 
         public SeatingViewModel()
         {
             Data = new SeatingViewModelItem();
+            BankAccount = new BankAccountData();
         }
     }
 

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Account\ViewModel.cs" />
     <Compile Include="Auth\LoginRequest.cs" />
+    <Compile Include="Auth\RegisterRequest.cs" />
     <Compile Include="Auth\ViewModel.cs" />
     <Compile Include="BackendBaseViewModel.cs" />
     <Compile Include="Catering\OrderRequest.cs" />
