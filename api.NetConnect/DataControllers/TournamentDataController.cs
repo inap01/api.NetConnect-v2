@@ -49,6 +49,9 @@ namespace api.NetConnect.DataControllers
             var result = db.Tournament.Add(item);
             db.SaveChanges();
 
+            db.Entry(result).Reference(c => c.Event).Load();
+            db.Entry(result).Reference(c => c.TournamentGame).Load();
+
             return result;
         }
 

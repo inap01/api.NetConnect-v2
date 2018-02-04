@@ -15,4 +15,15 @@ namespace api.NetConnect.data.ViewModel
             return (IEnumerable<StatusFilterEnum>)(Enum.GetValues(typeof(StatusFilterEnum)));
         }
     }
+
+
+    public enum CateringStatusFilterEnum { Alle, Offen, Abgeschlossen }
+
+    public class CateringStatusFilter
+    {
+        public static IEnumerable<CateringStatusFilterEnum> getOptions()
+        {
+            return (IEnumerable<CateringStatusFilterEnum>)(Enum.GetValues(typeof(CateringStatusFilterEnum)));
+        }
+    }
 }

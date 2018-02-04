@@ -296,7 +296,7 @@ namespace api.NetConnect
             #endregion
 
             #region CATERING
-
+            #region Frontend
             config.Routes.MapHttpRoute(
                name: "GET_Catering_GetProducts",
                routeTemplate: "catering/product",
@@ -327,6 +327,69 @@ namespace api.NetConnect
                    action = "Insert"
                }
             );
+            #endregion
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_Get",
+               routeTemplate: "backend/catering",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Catering_Backend_FilterList",
+               routeTemplate: "backend/catering",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Catering_Backend_Insert",
+               routeTemplate: "backend/catering",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_New",
+               routeTemplate: "backend/catering/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_Detail",
+               routeTemplate: "backend/catering/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Catering_Backend_Update",
+               routeTemplate: "backend/catering/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            #endregion
             #endregion
 
             #region EVENT
@@ -504,25 +567,25 @@ namespace api.NetConnect
             #region GALLERY
             #region Frontend
             config.Routes.MapHttpRoute(
-               name: "GET_Gallery_GetImages",
-               routeTemplate: "gallery/{id}",
-               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-               defaults: new
-               {
-                   controller = "Gallery",
-                   action = "GetImages"
-               }
+                name: "GET_Gallery_GetGallery",
+                routeTemplate: "gallery",
+                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+                defaults: new
+                {
+                    controller = "Gallery",
+                    action = "GetGallery"
+                }
             );
             config.Routes.MapHttpRoute(
-              name: "GET_Gallery_GetGallery",
-              routeTemplate: "gallery",
-              constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
-              defaults: new
-              {
-                  controller = "Gallery",
-                  action = "GetGallery"
-              }
-           );
+                name: "GET_Gallery_GetImages",
+                routeTemplate: "gallery/{id}",
+                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+                defaults: new
+                {
+                    controller = "Gallery",
+                    action = "GetImages"
+                }
+            );
             #endregion
 
             #endregion

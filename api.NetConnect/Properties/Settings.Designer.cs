@@ -12,7 +12,7 @@ namespace api.NetConnect.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -142,7 +142,7 @@ namespace api.NetConnect.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/api/Images/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/api/images/")]
         public string imageAbsolutePath {
             get {
                 return ((string)(this["imageAbsolutePath"]));
@@ -164,6 +164,33 @@ namespace api.NetConnect.Properties {
         public string BaseAbosulteUrl {
             get {
                 return ((string)(this["BaseAbosulteUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("~/images/")]
+        public string imageRelativPath {
+            get {
+                return ((string)(this["imageRelativPath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int galleryThumbnailHeight {
+            get {
+                return ((int)(this["galleryThumbnailHeight"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int galleryThumbnailWidth {
+            get {
+                return ((int)(this["galleryThumbnailWidth"]));
             }
         }
     }

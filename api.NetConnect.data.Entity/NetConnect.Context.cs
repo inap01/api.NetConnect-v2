@@ -37,6 +37,8 @@ namespace api.NetConnect.data.Entity
         public virtual DbSet<FaqQuestion> FaqQuestion { get; set; }
         public virtual DbSet<ImageContainer> ImageContainer { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
+        public virtual DbSet<News> News { get; set; }
+        public virtual DbSet<NewsCategory> NewsCategory { get; set; }
         public virtual DbSet<Partner> Partner { get; set; }
         public virtual DbSet<PartnerDisplay> PartnerDisplay { get; set; }
         public virtual DbSet<PartnerDisplayRelation> PartnerDisplayRelation { get; set; }

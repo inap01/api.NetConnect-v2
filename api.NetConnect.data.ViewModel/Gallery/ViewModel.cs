@@ -5,6 +5,26 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Gallery
 {
+    public class GalleryListModel : ListViewModel<GalleryViewModelListItem>
+    {
+        public GalleryListModel() : base()
+        {
+
+        }
+    }
+    
+    public class GalleryViewModelListItem : BaseViewModelItem
+    {
+        public virtual String Title { get; set; }
+        public virtual Int32 ImageCount { get; set; }
+        public virtual String Thumbnail { get; set; }
+
+        public GalleryViewModelListItem()
+        {
+
+        }
+    }
+
     public class GalleryViewModel : BaseViewModel
     {
         public GalleryViewModelItem Data { get; set; }
@@ -14,48 +34,23 @@ namespace api.NetConnect.data.ViewModel.Gallery
             Data = new GalleryViewModelItem();
         }
     }
-    
     public class GalleryViewModelItem : BaseViewModelItem
-    {
-        public virtual String Title { get; set; }
-        public virtual Int32 ImageCount { get; set; }
-        public virtual String Thumbnail { get; set; }
-        public virtual Int32 EventID { get; set; }
-
-        public GalleryViewModelItem()
-        {
-
-        }
-    }
-
-    public class GalleryImagesViewModel : BaseViewModel
-    {
-        public GalleryImageViewModelItem Data { get; set; }
-
-        public GalleryImagesViewModel()
-        {
-            Data = new GalleryImageViewModelItem();
-        }
-    }
-    public class GalleryImageViewModelItem : BaseViewModelItem
     {
         public String Title { get; set; }
         public Int32 ImageCount { get; set; }
         public String Thumbnail { get; set; }
-        public Int32 EventID { get; set; }
         public String BaseURL { get; set; }
         
         public List<GalleryViewModelImageItem> Images { get; set; }
-        public GalleryImageViewModelItem()
+        public GalleryViewModelItem()
         {
             Images = new List<GalleryViewModelImageItem>();
         }
     }
-    public class GalleryViewModelImageItem : BaseViewModelItem
+    public class GalleryViewModelImageItem
     {
-        public String RelativeURL { get; set; }
-        public String RelativeURLThumbnail { get; set; }
-        public Int32 EventID { get; set; }
+        public String ImageUrl { get; set; }
+        public String ThumbnailUrl { get; set; }
     }
 
 }

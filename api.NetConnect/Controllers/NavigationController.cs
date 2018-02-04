@@ -203,18 +203,21 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region NavigationAside
+            // Dashboard
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Dashboard",
                 State = "admin.dashboard",
                 StateCompare = "admin.dashboard"
             });
+            // News
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "News",
                 State = "admin.news.all",
                 StateCompare = "admin.news"
             });
+            // Events
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Events",
@@ -242,6 +245,7 @@ namespace api.NetConnect.Controllers
                     }
                 }
             });
+            // Turniere
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Turniere",
@@ -264,6 +268,25 @@ namespace api.NetConnect.Controllers
                     }
                 }
             });
+            // Catering
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Catering",
+                StateCompare = "admin.catering",
+                SubMenu = new List<NavItem>() {
+                    new NavItem() {
+                        Text = "Alle Bestellungen",
+                        State = "admin.catering.all",
+                        StateCompare = "admin.catering.all"
+                    },
+                    new NavItem() {
+                        Text = "Bestellung aufnehmen",
+                        State = "admin.catering.new",
+                        StateCompare = "admin.catering.new"
+                    }
+                }
+            });
+            // Partner
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Partner",
@@ -291,6 +314,7 @@ namespace api.NetConnect.Controllers
                     }
                 }
             });
+            // Benutzer
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Benutzer",

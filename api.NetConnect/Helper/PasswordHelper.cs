@@ -27,7 +27,7 @@ namespace api.NetConnect.Helper
 
         public static String HashPassword(String password, String salt)
         {
-            return HashSHA256(salt + HashSHA256(password));
+            return HashSHA256(salt + password);
         }
 
         public static String ChangePassword(User User, String OldPassword, String NewPassword1, String NewPassword2)

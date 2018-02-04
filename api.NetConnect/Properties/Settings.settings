@@ -42,13 +42,22 @@
       <Value Profile="(Default)">http://localhost:8080/login</Value>
     </Setting>
     <Setting Name="imageAbsolutePath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://localhost:8080/api/Images/</Value>
+      <Value Profile="(Default)">http://localhost:8080/api/images/</Value>
     </Setting>
     <Setting Name="AuthCookieDomain" Type="System.String" Scope="Application">
       <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="BaseAbosulteUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://localhost:8080</Value>
+    </Setting>
+    <Setting Name="imageRelativPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">~/images/</Value>
+    </Setting>
+    <Setting Name="galleryThumbnailHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="galleryThumbnailWidth" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">200</Value>
     </Setting>
   </Settings>
 </SettingsFile>

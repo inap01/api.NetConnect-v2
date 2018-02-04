@@ -128,6 +128,25 @@ CREATE TABLE [dbo].[Logs] (
 	[RowVersion] timestamp NOT NULL
 );
 
+CREATE TABLE [dbo].[News] (
+	[ID] int IDENTITY(1,1) PRIMARY KEY,
+	[NewsCategoryID] int NOT NULL,
+	[Title] varchar(100) NOT NULL,
+	[ImageContainerID] uniqueidentifier,
+	[Date] datetime NOT NULL DEFAULT GETDATE(),
+	[Text] text NOT NULL,
+	[IsFeatured] bit NOT NULL DEFAULT 0,
+	[IsActive] bit NOT NULL DEFAULT 1,
+	[RowVersion] timestamp NOT NULL
+);
+
+CREATE TABLE [dbo].[NewsCategory] (
+	[ID] int IDENTITY(1,1) PRIMARY KEY,
+	[Name] varchar(100) NOT NULL,
+	[ImageContainerID] uniqueidentifier NOT NULL,
+	[RowVersion] timestamp NOT NULL
+);
+
 CREATE TABLE [dbo].[Partner] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(50) NOT NULL,
@@ -380,6 +399,13 @@ ALTER TABLE [dbo].[FaqQuestion] ADD CONSTRAINT [FK_FaqQuestion_FaqCategoryID] FO
 -- [dbo].[Logs]
 ALTER TABLE [dbo].[Logs] ADD CONSTRAINT [FK_Logs_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
 
+-- [dbo].[News]
+ALTER TABLE [dbo].[News] ADD CONSTRAINT [FK_News_NewsCategoryID] FOREIGN KEY (NewsCategoryID) REFERENCES [dbo].[NewsCategory](ID);
+ALTER TABLE [dbo].[News] ADD CONSTRAINT [FK_News_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
+
+-- [dbo].[NewsCategory]
+ALTER TABLE [dbo].[NewsCategory] ADD CONSTRAINT [FK_NewsCategory_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
+
 -- [dbo].[Partner]
 ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_PartnerPackID] FOREIGN KEY (PartnerPackID) REFERENCES [dbo].[PartnerPack](ID);
 ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImageOriginalID] FOREIGN KEY (ImageOriginalID) REFERENCES [dbo].[ImageContainer](SID);
@@ -467,6 +493,26 @@ VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', '
        (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
 	   (2, 1, '20171215', '20171217', 10, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
 	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich')
+GO
+
+DECLARE @imgSID uniqueidentifier;
+SET @imgSID = NEWID();
+INSERT INTO dbo.ImageContainer([SID], [ThumbnailPath], [OriginalPath])
+VALUES (@imgSID, 'newscategory/default.png', 'newscategory/default.png')
+
+INSERT INTO dbo.NewsCategory ([Name], [ImageContainerID])
+VALUES ('NetConnect', @imgSID),
+	   ('Playground', @imgSID),
+	   ('Sponsoren', @imgSID)
+GO
+
+INSERT INTO dbo.News ([NewsCategoryID], [Title], [Text])
+VALUES (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
+	   (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
+	   (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
+	   (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
+	   (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),
+	   (1, 'Beispiel News Titel', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.')
 GO
 
 INSERT INTO dbo.PartnerDisplay([Name])

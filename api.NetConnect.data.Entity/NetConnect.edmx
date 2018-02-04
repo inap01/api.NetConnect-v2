@@ -170,6 +170,29 @@
           <Property Name="ModelAfter" Type="text" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NewsCategoryID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ImageContainerID" Type="uniqueidentifier" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Text" Type="text" Nullable="false" />
+          <Property Name="IsFeatured" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NewsCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
         <EntityType Name="Partner">
           <Key>
             <PropertyRef Name="ID" />
@@ -332,7 +355,7 @@
           <Property Name="LastName" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Nickname" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Password" Type="varchar(max)" Nullable="false" />
           <Property Name="PasswordSalt" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="PasswordReset" Type="varchar" MaxLength="64" />
           <Property Name="Registered" Type="datetime" Nullable="false" />
@@ -540,6 +563,42 @@
             </Principal>
             <Dependent Role="Logs">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_ImageContainerID">
+          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="0..1" />
+          <End Role="News" Type="Self.News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="ImageContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_NewsCategoryID">
+          <End Role="NewsCategory" Type="Self.NewsCategory" Multiplicity="1" />
+          <End Role="News" Type="Self.News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NewsCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="NewsCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsCategory_ImageContainerID">
+          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
+          <End Role="NewsCategory" Type="Self.NewsCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="NewsCategory">
+              <PropertyRef Name="ImageContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -960,6 +1019,8 @@
           <EntitySet Name="FaqQuestion" EntityType="Self.FaqQuestion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImageContainer" EntityType="Self.ImageContainer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NewsCategory" EntityType="Self.NewsCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Partner" EntityType="Self.Partner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PartnerDisplay" EntityType="Self.PartnerDisplay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PartnerDisplayRelation" EntityType="Self.PartnerDisplayRelation" Schema="dbo" store:Type="Tables" />
@@ -1028,6 +1089,18 @@
           <AssociationSet Name="FK_Logs_UserID" Association="Self.FK_Logs_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_ImageContainerID" Association="Self.FK_News_ImageContainerID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_NewsCategoryID" Association="Self.FK_News_NewsCategoryID">
+            <End Role="NewsCategory" EntitySet="NewsCategory" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsCategory_ImageContainerID" Association="Self.FK_NewsCategory_ImageContainerID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="NewsCategory" EntitySet="NewsCategory" />
           </AssociationSet>
           <AssociationSet Name="FK_Partner_ImageOriginalID" Association="Self.FK_Partner_ImageOriginalID">
             <End Role="ImageContainer" EntitySet="ImageContainer" />
@@ -1175,6 +1248,8 @@
           <EntitySet Name="FaqQuestion" EntityType="NetConnectModel.FaqQuestion" />
           <EntitySet Name="ImageContainer" EntityType="NetConnectModel.ImageContainer" />
           <EntitySet Name="Logs" EntityType="NetConnectModel.Logs" />
+          <EntitySet Name="News" EntityType="NetConnectModel.News" />
+          <EntitySet Name="NewsCategory" EntityType="NetConnectModel.NewsCategory" />
           <EntitySet Name="Partner" EntityType="NetConnectModel.Partner" />
           <EntitySet Name="PartnerDisplay" EntityType="NetConnectModel.PartnerDisplay" />
           <EntitySet Name="PartnerDisplayRelation" EntityType="NetConnectModel.PartnerDisplayRelation" />
@@ -1248,6 +1323,14 @@
             <End Role="FaqCategory" EntitySet="FaqCategory" />
             <End Role="FaqQuestion" EntitySet="FaqQuestion" />
           </AssociationSet>
+          <AssociationSet Name="FK_News_ImageContainerID" Association="NetConnectModel.FK_News_ImageContainerID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="News" EntitySet="News" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NewsCategory_ImageContainerID" Association="NetConnectModel.FK_NewsCategory_ImageContainerID">
+            <End Role="ImageContainer" EntitySet="ImageContainer" />
+            <End Role="NewsCategory" EntitySet="NewsCategory" />
+          </AssociationSet>
           <AssociationSet Name="FK_Partner_ImageOriginalID" Association="NetConnectModel.FK_Partner_ImageOriginalID">
             <End Role="ImageContainer" EntitySet="ImageContainer" />
             <End Role="Partner" EntitySet="Partner" />
@@ -1271,6 +1354,10 @@
           <AssociationSet Name="FK_Logs_UserID" Association="NetConnectModel.FK_Logs_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_News_NewsCategoryID" Association="NetConnectModel.FK_News_NewsCategoryID">
+            <End Role="NewsCategory" EntitySet="NewsCategory" />
+            <End Role="News" EntitySet="News" />
           </AssociationSet>
           <AssociationSet Name="FK_Partner_PartnerPackID" Association="NetConnectModel.FK_Partner_PartnerPackID">
             <End Role="PartnerPack" EntitySet="PartnerPack" />
@@ -1546,6 +1633,8 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringProduct_ImageContainerID" FromRole="ImageContainer" ToRole="CateringProduct" />
           <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_Event_ImageContainerID" FromRole="ImageContainer" ToRole="Event" />
+          <NavigationProperty Name="News" Relationship="NetConnectModel.FK_News_ImageContainerID" FromRole="ImageContainer" ToRole="News" />
+          <NavigationProperty Name="NewsCategory" Relationship="NetConnectModel.FK_NewsCategory_ImageContainerID" FromRole="ImageContainer" ToRole="NewsCategory" />
           <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Partner_ImageOriginalID" FromRole="ImageContainer" ToRole="Partner" />
           <NavigationProperty Name="Partner1" Relationship="NetConnectModel.FK_Partner_ImagePassiveID" FromRole="ImageContainer" ToRole="Partner" />
           <NavigationProperty Name="TournamentGame" Relationship="NetConnectModel.FK_TournamentGame_ImageContainerID" FromRole="ImageContainer" ToRole="TournamentGame" />
@@ -1565,6 +1654,33 @@
           <Property Name="ModelAfter" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="Logs" ToRole="User" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NewsCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ImageContainerID" Type="Guid" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IsFeatured" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_News_ImageContainerID" FromRole="News" ToRole="ImageContainer" />
+          <NavigationProperty Name="NewsCategory" Relationship="NetConnectModel.FK_News_NewsCategoryID" FromRole="News" ToRole="NewsCategory" />
+        </EntityType>
+        <EntityType Name="NewsCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_NewsCategory_ImageContainerID" FromRole="NewsCategory" ToRole="ImageContainer" />
+          <NavigationProperty Name="News" Relationship="NetConnectModel.FK_News_NewsCategoryID" FromRole="NewsCategory" ToRole="News" />
         </EntityType>
         <EntityType Name="Partner">
           <Key>
@@ -1767,7 +1883,7 @@
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Nickname" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PasswordReset" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
@@ -2011,6 +2127,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_News_ImageContainerID">
+          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="0..1" />
+          <End Type="NetConnectModel.News" Role="News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="ImageContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NewsCategory_ImageContainerID">
+          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
+          <End Type="NetConnectModel.NewsCategory" Role="NewsCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ImageContainer">
+              <PropertyRef Name="SID" />
+            </Principal>
+            <Dependent Role="NewsCategory">
+              <PropertyRef Name="ImageContainerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Partner_ImageOriginalID">
           <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
           <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
@@ -2080,6 +2220,18 @@
             </Principal>
             <Dependent Role="Logs">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_News_NewsCategoryID">
+          <End Type="NetConnectModel.NewsCategory" Role="NewsCategory" Multiplicity="1" />
+          <End Type="NetConnectModel.News" Role="News" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NewsCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="News">
+              <PropertyRef Name="NewsCategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2582,6 +2734,31 @@
                 <ScalarProperty Name="SQLActionType" ColumnName="SQLActionType" />
                 <ScalarProperty Name="SQLTable" ColumnName="SQLTable" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="NetConnectModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsFeatured" ColumnName="IsFeatured" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NewsCategoryID" ColumnName="NewsCategoryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NewsCategory">
+            <EntityTypeMapping TypeName="NetConnectModel.NewsCategory">
+              <MappingFragment StoreEntitySet="NewsCategory">
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
+                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

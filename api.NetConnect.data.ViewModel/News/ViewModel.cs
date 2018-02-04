@@ -5,6 +5,14 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.News
 {
+    public class NewsListViewModel : ListViewModel<NewsViewModelItem>
+    {
+        public NewsListViewModel() : base()
+        {
+
+        }
+    }
+
     public class NewsViewModel : BaseViewModel
     {
         public NewsViewModelItem Data { get; set; }

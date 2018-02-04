@@ -29,8 +29,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Authenticated = UserHelper.Authenticated;
             var e = EventDataController.GetItem(eventID);
             var tournaments = TournamentDataController.GetByEvent(eventID);
-
-            /*
+            
             if (e.End > DateTime.Now)
                 if(tournaments.Count > 0)
                     foreach (var tournament in tournaments)
@@ -43,17 +42,6 @@ namespace api.NetConnect.Controllers
                     viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
             else
                 viewmodel.AddWarningAlert("Das Event ist vorbei.");
-            */
-
-            if (tournaments.Count > 0)
-                foreach (var tournament in tournaments)
-                {
-                    TournamentViewModelItem item = new TournamentViewModelItem();
-                    item.FromModel(tournament);
-                    viewmodel.Data.Add(item);
-                }
-            else
-                viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
 
             return Ok(viewmodel);
         }

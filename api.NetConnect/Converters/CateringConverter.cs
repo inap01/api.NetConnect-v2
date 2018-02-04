@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel.Catering;
+using api.NetConnect.data.ViewModel.Catering.Backend;
 using api.NetConnect.Helper;
 using Newtonsoft.Json;
 using System;
@@ -70,6 +71,53 @@ namespace api.NetConnect.Converters
             model.Amount = viewModel.Amount;
 
             return model;
+        }
+
+        public static BackendCateringListViewModel FromModel(this BackendCateringListViewModel viewmodel, IEnumerable<CateringOrder> modelList)
+        {
+            viewmodel.Data = new List<BackendCateringViewModelItem>().FromModel(modelList);
+
+            return viewmodel;
+        }
+        public static List<BackendCateringViewModelItem> FromModel(this List<BackendCateringViewModelItem> viewmodel, IEnumerable<CateringOrder> modelList)
+        {
+            viewmodel = modelList.ToList().ConvertAll(x =>
+            {
+                return new BackendCateringViewModelItem().FromModel(x);
+            });
+
+            return viewmodel;
+        }
+        public static BackendCateringViewModelItem FromModel(this BackendCateringViewModelItem viewmodel, CateringOrder model)
+        {
+            viewmodel.ID = model.ID;
+            viewmodel.Event.FromModel(model.Event);
+            viewmodel.User.FromModel(model.User, model.Seat);
+            viewmodel.Order = model.CateringOrderDetail.ToList().ConvertAll(x =>
+            {
+                return new BackendCateringOrderItem().FromModel(x);
+            });
+            viewmodel.Status = new BackendCateringStatusOption(model.OrderState);
+
+            return viewmodel;
+        }
+        public static BackendCateringSeat FromModel(this BackendCateringSeat viewmodel, User user, Seat seat)
+        {
+            viewmodel.Name = $"{user.FirstName} {user.LastName}";
+            viewmodel.SeatNumber = seat.SeatNumber;
+
+            return viewmodel;
+        }
+        public static BackendCateringOrderItem FromModel(this BackendCateringOrderItem viewmodel, CateringOrderDetail model)
+        {
+            var attr = JsonConvert.DeserializeObject<String[]>(model.Attributes);
+
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.CateringProduct.Name;
+            viewmodel.Attributes = attr.ToList();
+            viewmodel.Amount = model.Amount;
+
+            return viewmodel;
         }
     }
 }

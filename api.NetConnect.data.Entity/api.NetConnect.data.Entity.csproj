@@ -102,6 +102,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>NetConnect.edmx</DependentUpon>
     </Compile>
+    <Compile Include="News.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NewsCategory.cs">
+      <DependentUpon>NetConnect.tt</DependentUpon>
+    </Compile>
     <Compile Include="Partner.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>

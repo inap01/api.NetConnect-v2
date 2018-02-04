@@ -9,34 +9,12 @@ using System.Web.Http;
 using api.NetConnect.DataControllers;
 using api.NetConnect.Converters;
 using api.NetConnect.Helper;
+using System.IO;
 
 namespace api.NetConnect.Controllers
 {
-    using GalleryListModel = ListViewModel<GalleryViewModelItem>;
     public class GalleryController : ApiController
     {
-
-        [HttpGet]
-        public IHttpActionResult GetImages(int id)
-        {
-            GalleryImagesViewModel viewmodel = new GalleryImagesViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-
-            var items = GalleryImageDataController.GetItems(id);
-            var ev = EventDataController.GetItem(id);
-
-            viewmodel.Data.EventID = id;
-            viewmodel.Data.ImageCount = items.Count;
-            viewmodel.Data.Title = $"{ev.EventType.Name} Vol.{ev.Volume}";
-            viewmodel.Data.Thumbnail = GalleryImageDataController.GetThumbnail(id).RelativeURL;
-
-            foreach (var model in items)
-            {
-                viewmodel.Data.Images.Add(new GalleryViewModelImageItem().FromModel(model));
-            }
-
-            return Ok(viewmodel);
-        }
         public IHttpActionResult GetGallery()
         {
             GalleryListModel viewmodel = new GalleryListModel();
@@ -45,22 +23,39 @@ namespace api.NetConnect.Controllers
             var ev = EventDataController.GetItems();
 
 
-            foreach(var _event in ev)
+            foreach (var _event in ev)
             {
-                var c = GalleryImageDataController.GetItems(_event.ID).Count;
-                var eid = _event.ID;
-                var thumb = GalleryImageDataController.GetThumbnail(_event.ID)?.RelativeURL;
-                if (thumb == null || c == 0)
-                    continue;
-                var u = new GalleryViewModelItem()
+                Int32 count;
+                try
                 {
-                    EventID = eid,
-                    ImageCount = c,
-                    Thumbnail = thumb,
-                    Title = $"{_event.EventType.Name} Vol.{_event.Volume}",
-                };
-                viewmodel.Data.Add(u);
+                    count = GalleryDataController.Count(_event.ID);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    continue;
+                }
+
+                var eid = _event.ID;
+                var thumb = GalleryDataController.GetGalleryThumbnail(_event.ID)?.ImageUrl;
+                if (thumb == null || count == 0)
+                    continue;
+
+                viewmodel.Data.Add(new GalleryViewModelListItem().FromModel(_event, count, thumb));
             }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetImages(int id)
+        {
+            GalleryViewModel viewmodel = new GalleryViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            var ev = EventDataController.GetItem(id);
+            var items = GalleryDataController.GetItems(id);
+
+            viewmodel.FromModel(ev, items);
 
             return Ok(viewmodel);
         }
