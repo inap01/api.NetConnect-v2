@@ -106,7 +106,7 @@
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" Nullable="false" />
           <Property Name="ReservationCost" Type="float" Nullable="false" />
-          <Property Name="IsActiveReservation" Type="int" Nullable="false" />
+          <Property Name="IsActiveReservation" Type="bit" Nullable="false" />
           <Property Name="IsActiveCatering" Type="bit" Nullable="false" />
           <Property Name="IsActiveFeedback" Type="bit" Nullable="false" />
           <Property Name="IsPrivate" Type="bit" Nullable="false" />
@@ -307,7 +307,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="TournamentID" Type="int" Nullable="false" />
-          <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="100" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="TournamentTeamParticipant">
@@ -1573,7 +1573,7 @@
           <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="End" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReservationCost" Type="Double" Nullable="false" />
-          <Property Name="IsActiveReservation" Type="Int32" Nullable="false" />
+          <Property Name="IsActiveReservation" Type="Boolean" Nullable="false" />
           <Property Name="IsActiveCatering" Type="Boolean" Nullable="false" />
           <Property Name="IsActiveFeedback" Type="Boolean" Nullable="false" />
           <Property Name="IsPrivate" Type="Boolean" Nullable="false" />
@@ -1822,7 +1822,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_TournamentTeam_TournamentID" FromRole="TournamentTeam" ToRole="Tournament" />
           <NavigationProperty Name="TournamentTeamParticipant" Relationship="NetConnectModel.FK_TournamentTeamParticipant_TournamentTeamID" FromRole="TournamentTeam" ToRole="TournamentTeamParticipant" />

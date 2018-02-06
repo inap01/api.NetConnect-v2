@@ -198,6 +198,7 @@
     </Compile>
     <Compile Include="Helper\Enumerations.cs" />
     <Compile Include="Helper\ExceptionHelper.cs" />
+    <Compile Include="Helper\FacebookClient.cs" />
     <Compile Include="Helper\PasswordHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

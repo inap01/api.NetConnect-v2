@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[CateringOrder] (
 	[EventID] int NOT NULL,
 	[UserID] int NOT NULL,
 	[SeatID] int NOT NULL,
+	[Registered] datetime NOT NULL DEFAULT GETDATE(),
 	[OrderState] int NOT NULL DEFAULT 0 CHECK (OrderState in (-1, 0, 1, 2)),
 	[RowVersion] timestamp NOT NULL
 );
@@ -73,7 +74,7 @@ CREATE TABLE [dbo].[Event] (
 	[Start] datetime NOT NULL,
 	[End] datetime NOT NULL,
 	[ReservationCost] FLOAT NOT NULL,
-	[IsActiveReservation] INT NOT NULL DEFAULT 0,
+	[IsActiveReservation] bit NOT NULL DEFAULT 0,
 	[IsActiveCatering] bit NOT NULL DEFAULT 0,
 	[IsActiveFeedback] bit NOT NULL DEFAULT 0,
 	[IsPrivate] bit NOT NULL DEFAULT 0,
@@ -241,7 +242,7 @@ CREATE TABLE [dbo].[TournamentTeam] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[Name] VARCHAR(250) NOT NULL,
 	[TournamentID] INT NOT NULL,
-	[Password] VARCHAR(100) NOT NULL,
+	[Password] VARCHAR(100),
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -288,7 +289,7 @@ CREATE TABLE [dbo].[User] (
 	[ImageContainerID] uniqueidentifier,
 	[IsTeam] bit NOT NULL DEFAULT 0,
 	[IsAdmin] bit NOT NULL DEFAULT 0,
-	[CEO] int CHECK (CEO in (1, 2, 3)),
+	[CEO] int CHECK (CEO in (1, 2, 3, 4, 5)),
 	[IsActive] bit NOT NULL DEFAULT 1,
 	[SteamID] varchar(25),
 	[BattleTag] varchar(25),
@@ -475,6 +476,11 @@ GO
 
 -- TRIGGER fix
 INSERT INTO ChangeSet(CateringProduct)VALUES(NULL)
+
+-- DEFAULT USER
+INSERT INTO dbo.[User] (FirstName, LastName, Nickname, Email, [Password], PasswordSalt, Newsletter)
+VALUES ('Bestellung', 'Theke', 'BestellungTheke', 'bestellung.theke@lan-netconnect.de', 'qweasd', '123456', 0)
+GO
 
 -- EVENTS erstellen
 INSERT INTO dbo.EventType ([Name], [PublicAccess], [Description])

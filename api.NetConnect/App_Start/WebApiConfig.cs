@@ -765,6 +765,16 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
+               name: "POST_Tournament_CreateTeam",
+               routeTemplate: "tournament/{eventID}/{tournamentID}/create",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Tournament",
+                   action = "CreateTeam"
+               }
+            );
+            config.Routes.MapHttpRoute(
                name: "POST_Tournament_Join",
                routeTemplate: "tournament/{eventID}/{tournamentID}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
@@ -775,7 +785,7 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
-               name: "PUT_Tournament_Join",
+               name: "PUT_Tournament_Leave",
                routeTemplate: "tournament/{eventID}/{tournamentID}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
                defaults: new

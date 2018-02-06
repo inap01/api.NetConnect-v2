@@ -32,6 +32,17 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public String Image { get; set; }
+        public Double ReservationCost { get; set; }
+        public Boolean IsActiveReservation { get; set; }
+        public Boolean IsActiveCatering { get; set; }
+        public Boolean IsActiveFeedback { get; set; }
+        public Boolean IsPrivate { get; set; }
+        public String FeedbackLink { get; set; }
+        public String District { get; set; }
+        public String Street { get; set; }
+        public String Housenumber { get; set; }
+        public String Postcode { get; set; }
+        public String City { get; set; }
         public BackendEventTypeViewModelItem EventType { get; set; }
 
         public BackendEventViewModelItem()
@@ -49,6 +60,18 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
             result.Add("Start", new InputInformation() { Type = InputInformationType.datetime, Required = true });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime, Required = true });
             result.Add("Image", new InputInformation() { Type = InputInformationType.image });
+            result.Add("ReservationCost", new InputInformation() { Type = InputInformationType.integer });
+            result.Add("IsActiveReservation", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("IsActiveCatering", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("IsActiveFeedback", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("IsPrivate", new InputInformation() { Type = InputInformationType.boolean });
+            result.Add("FeedbackLink", new InputInformation() { Type = InputInformationType.@string });
+
+            result.Add("District", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("Street", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("Housenumber", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("Postcode", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("City", new InputInformation() { Type = InputInformationType.@string, Required = true });
 
             result.Add("EventType", new InputInformation() { Type = InputInformationType.reference, Reference = "EventType", ReferenceForm = Form.GetReferenceForm(BackendEventTypeViewModelItem.GetForm()) });
 

@@ -76,6 +76,7 @@
     <Compile Include="Navigation\Backend\ViewModel.cs" />
     <Compile Include="Navigation\ViewModel.cs" />
     <Compile Include="News\Backend\ViewModel.cs" />
+    <Compile Include="News\FbNews.cs" />
     <Compile Include="News\ViewModel.cs" />
     <Compile Include="Pagination.cs" />
     <Compile Include="Partner\Backend\DeleteRequest.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Partner\Backend\PositionPartnerUpdateRequest.cs" />
     <Compile Include="Partner\Backend\ViewModel.cs" />
     <Compile Include="Partner\ViewModel.cs" />
+    <Compile Include="Tournament\CreateTeamRequest.cs" />
     <Compile Include="Tournament\JoinTournamentRequest.cs" />
     <Compile Include="User\Backend\DeleteRequest.cs" />
     <Compile Include="User\Backend\Filter.cs" />

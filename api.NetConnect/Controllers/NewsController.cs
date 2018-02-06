@@ -21,10 +21,10 @@ namespace api.NetConnect.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            NewsListViewModel viewmodel = new NewsListViewModel();
+            FbNewsListViewModel viewmodel = new FbNewsListViewModel();
             viewmodel.Authenticated = UserHelper.Authenticated;
 
-            NewsDataController.GetItems(7);
+            viewmodel.Data = NewsDataController.GetItems().data;
 
             return Ok(viewmodel);
         }
@@ -34,34 +34,6 @@ namespace api.NetConnect.Controllers
         {
             NewsViewModel viewmodel = new NewsViewModel();
             viewmodel.Authenticated = UserHelper.Authenticated;
-            FbBaseComment bc = new FbBaseComment()
-            {
-                Name = "Marius Hartmann",
-                Link = "http://www.facebook.com",
-                Date = DateTime.Now,
-                Text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut."
-            };
-            FbComment c = new FbComment()
-            {
-                Name = "Marius Hartmann",
-                Link = "http://www.facebook.com",
-                Date = DateTime.Now,
-                Text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut."
-            };
-            c.Comments.Add(bc);
-            c.Comments.Add(bc);
-            c.Comments.Add(bc);
-            NewsViewModelItem i = new NewsViewModelItem()
-            {
-                ID = 1,
-                Title = "News 1",
-                Image = "image 1",
-                Link = "http://www.google.de",
-                Date = DateTime.Now,
-                Text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut."
-            };
-            i.Comments.Add(c);
-            viewmodel.Data = i;
 
             return Ok(viewmodel);
         }

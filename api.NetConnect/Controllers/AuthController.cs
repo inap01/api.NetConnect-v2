@@ -107,10 +107,7 @@ namespace api.NetConnect.Controllers
             if (viewmodel.Authenticated)
             {
                 viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
-                viewmodel.AddSuccessAlert("Angemeldet als: " + HttpContext.Current.User.Identity.Name);
             }
-            else
-                viewmodel.AddDangerAlert("Du bist nicht angemeldet.");
 
             return Ok(viewmodel);
         }

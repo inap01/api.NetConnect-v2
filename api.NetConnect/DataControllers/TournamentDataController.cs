@@ -109,21 +109,27 @@ namespace api.NetConnect.DataControllers
 
             return result;
         }
+
+        public static new void Delete(Int32 TournamentID)
+        {
+            InitDB();
+
+            var item = db.TournamentParticipant.Single(x => x.TournamentID == TournamentID && x.UserID == UserHelper.CurrentUserID);
+            db.TournamentParticipant.Remove(item);
+            db.SaveChanges();
+        }
     }
 
     public class TournamentTeamDataController : GenericDataController<TournamentTeam>
     {
-        public static TournamentTeam Update(TournamentTeam item)
+        public static TournamentTeam Insert(TournamentTeam item)
         {
-            TournamentTeam dbItem = GetItem(item.ID);
+            InitDB();
 
-            dbItem.Name = item.Name;
-            dbItem.TournamentID = item.TournamentID;
-            dbItem.Password = item.Password;
-
+            var result = db.TournamentTeam.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
         }
     }
 
@@ -147,6 +153,14 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
 
             return result;
+        }
+        public static void Delete(Int32 TournamentID)
+        {
+            InitDB();
+
+            var item = db.TournamentTeamParticipant.Single(x => x.TournamentTeam.TournamentID == TournamentID && x.UserID == UserHelper.CurrentUserID);
+            db.TournamentTeamParticipant.Remove(item);
+            db.SaveChanges();
         }
     }
 }

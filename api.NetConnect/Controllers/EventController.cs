@@ -125,7 +125,7 @@ namespace api.NetConnect.Controllers
                 viewmodel.EventTypeOptions = EventTypeDataController.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventTypeViewModelItem() { ID = x.ID, Name = x.Name };
-                }).OrderBy(x => x.Name).ToList();
+                }).OrderByDescending(x => x.ID).ToList();
 
                 viewmodel.Data.FromModel(EventDataController.GetItem(id));
             }
@@ -184,7 +184,9 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                // TODO
+                EventDataController.Update(request.ToModel());
+
+                viewmodel.AddSuccessAlert("Eintrag wurde gespeichert.");
             }
             catch (Exception ex)
             {

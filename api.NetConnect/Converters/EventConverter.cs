@@ -29,12 +29,18 @@ namespace api.NetConnect.Converters
             viewModel.RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland";
             viewModel.Price = model.ReservationCost;
             viewModel.HasTournaments = model.Tournament.Count > 0;
+
+            Int32 seatsCount = 70 - model.Seat.Count(x => x.State == -1);
+            Int32 flagged = model.Seat.Count(x => x.State == 1);
+            Int32 reserved = model.Seat.Count(x => x.State == 2);
+            Int32 free = seatsCount - flagged - reserved;
+
             viewModel.Seating = new EventViewModelItem.SeatingReservation()
             {
-                SeatsCount = 40,
-                Free = 15,
-                Flagged = 5,
-                Reserved = 20
+                SeatsCount = seatsCount,
+                Flagged = flagged,
+                Reserved = reserved,
+                Free = free
             };
 
             return viewModel;
@@ -50,10 +56,46 @@ namespace api.NetConnect.Converters
             viewModel.Image = "";
             viewModel.Start = model.Start;
             viewModel.End = model.End;
+            viewModel.ReservationCost = model.ReservationCost;
+            viewModel.IsActiveReservation = model.IsActiveReservation;
+            viewModel.IsActiveCatering = model.IsActiveCatering;
+            viewModel.IsActiveFeedback = model.IsActiveFeedback;
+            viewModel.IsPrivate = model.IsPrivate;
+            viewModel.FeedbackLink = model.FeedbackLink;
+            viewModel.District = model.District;
+            viewModel.Street = model.Street;
+            viewModel.Housenumber = model.Housenumber;
+            viewModel.Postcode = model.Postcode;
+            viewModel.City = model.City;
 
             viewModel.EventType.FromModel(model.EventType);
 
             return viewModel;
+        }
+
+        public static Event ToModel(this BackendEventViewModelItem viewmodel)
+        {
+            Event model = new Event();
+
+            model.ID = viewmodel.ID;
+            model.EventTypeID = viewmodel.EventType.ID;
+            model.Volume = viewmodel.Volume;
+            //model.ImageContainerID = viewmodel;
+            model.Start = viewmodel.Start;
+            model.End = viewmodel.End;
+            model.ReservationCost = viewmodel.ReservationCost;
+            model.IsActiveReservation = viewmodel.IsActiveReservation;
+            model.IsActiveCatering = viewmodel.IsActiveCatering;
+            model.IsActiveFeedback = viewmodel.IsActiveFeedback;
+            model.IsPrivate = viewmodel.IsPrivate;
+            model.FeedbackLink = viewmodel.FeedbackLink;
+            model.District = viewmodel.District;
+            model.Street = viewmodel.Street;
+            model.Housenumber = viewmodel.Housenumber;
+            model.Postcode = viewmodel.Postcode;
+            model.City = viewmodel.City;
+
+            return model;
         }
         #endregion
     }
@@ -70,6 +112,7 @@ namespace api.NetConnect.Converters
 
             TotalCount = events.Count();
 
+            events = events.OrderByDescending(x => x.ID).ToList();
             var items = events.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
                  .Take(args.Pagination.ItemsPerPageSelected)
                  .ToList();

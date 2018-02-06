@@ -47,8 +47,8 @@ namespace MYSQL_Migration
                     idToName.Add(Convert.ToInt32(entry["ID"]), new Tuple<string, string>(entry["email"].ToString(), entry["nickname"].ToString()));
                 }
 
-
-                if (db.User.Count() == 0)
+                var i = db.User.Count();
+                if (db.User.Count() <= 1) // Theken Nutzer
                     RunMigrationFor<User>(() => MigrateUser(db, userSet));
                 else
                     Console.WriteLine($"{DateTime.Now.ToLongTimeString()} : Skipped Migrating {typeof(User)} Already Exists(?)");

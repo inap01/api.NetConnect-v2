@@ -29,7 +29,7 @@ namespace api.NetConnect.data.Entity
         public System.DateTime Start { get; set; }
         public System.DateTime End { get; set; }
         public double ReservationCost { get; set; }
-        public int IsActiveReservation { get; set; }
+        public bool IsActiveReservation { get; set; }
         public bool IsActiveCatering { get; set; }
         public bool IsActiveFeedback { get; set; }
         public bool IsPrivate { get; set; }

@@ -140,6 +140,16 @@ namespace api.NetConnect.Converters
 
             return viewModel;
         }
+        public static TournamentTeam ToModel(this CreateTeamRequest request, Int32 TournamentID)
+        {
+            TournamentTeam model = new TournamentTeam();
+
+            model.Name = request.Name;
+            model.Password = !String.IsNullOrEmpty(request.Password) ? request.Password : null;
+            model.TournamentID = TournamentID;
+
+            return model;
+        }
 
         // Tournament Partner
         public static TournamentViewModelItem.TournamentPartner FromModel(this TournamentViewModelItem.TournamentPartner viewModel, Partner model)

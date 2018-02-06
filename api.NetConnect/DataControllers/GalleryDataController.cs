@@ -67,9 +67,12 @@ namespace api.NetConnect.DataControllers
                 Directory.CreateDirectory(thumbnailDir);
             if (!File.Exists(thumbnailPath))
             {
-                Image image = Image.FromFile(originalPath);
-                Image thumb = image.GetThumbnailImage(Properties.Settings.Default.galleryThumbnailWidth, Properties.Settings.Default.galleryThumbnailHeight, () => false, IntPtr.Zero);
-                thumb.Save(thumbnailPath);
+                using (Image image = Image.FromFile(originalPath))
+                {
+                    Image thumb = image.GetThumbnailImage(Properties.Settings.Default.galleryThumbnailWidth, Properties.Settings.Default.galleryThumbnailHeight, () => false, IntPtr.Zero);
+                    thumb.Save(thumbnailPath);
+                    thumb.Dispose();
+                }
             }
 
             return thumbnailPath;

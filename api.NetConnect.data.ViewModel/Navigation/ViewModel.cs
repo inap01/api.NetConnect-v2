@@ -53,7 +53,10 @@ namespace api.NetConnect.data.ViewModel.Navigation
     {
         public Int32 ID { get; set; }
         public String Title { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public SeatingReservation Seating { get; set; }
+        public Boolean PublicAccess { get; set; }
 
         public EventItem()
         {

@@ -12,6 +12,7 @@ using api.NetConnect.Converters;
 using api.NetConnect.Helper;
 using api.NetConnect.data.ViewModel.Event.Backend;
 using api.NetConnect.data.ViewModel.Game.Backend;
+using System.Data.Entity.Validation;
 
 namespace api.NetConnect.Controllers
 {
@@ -67,6 +68,29 @@ namespace api.NetConnect.Controllers
         }
 
         [HttpPost]
+        public IHttpActionResult CreateTeam(Int32 eventID, Int32 tournamentID, CreateTeamRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                var team = TournamentTeamDataController.Insert(request.ToModel(tournamentID));
+                JoinTournamentRequest _tmp = new JoinTournamentRequest() { TeamID = team.ID };
+                TournamentTeamParticipantDataController.Insert(_tmp.ToTeamModel());
+
+                viewmodel.AddSuccessAlert("Team wurde erstellt.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPost]
         public IHttpActionResult Join(Int32 eventID, Int32 tournamentID, JoinTournamentRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
@@ -104,7 +128,7 @@ namespace api.NetConnect.Controllers
                 var participant = TournamentParticipantDataController.GetByTournament(tournamentID);
                 if(participant != null)
                 {
-                    TournamentParticipantDataController.Delete(TournamentParticipantDataController.GetByTournament(tournamentID));
+                    TournamentParticipantDataController.Delete(tournamentID);
                     viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
                 }
                 else
@@ -112,7 +136,7 @@ namespace api.NetConnect.Controllers
                     var teamParticipant = TournamentTeamParticipantDataController.GetByTournament(tournamentID);
                     if (teamParticipant != null)
                     {
-                        TournamentTeamParticipantDataController.Delete(TournamentTeamParticipantDataController.GetByTournament(tournamentID));
+                        TournamentTeamParticipantDataController.Delete(tournamentID);
                         viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
                     }
                     viewmodel.Success = false;

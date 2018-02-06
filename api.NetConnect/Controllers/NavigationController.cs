@@ -77,13 +77,13 @@ namespace api.NetConnect.Controllers
                     StateCompare = "catering",
                     Tooltip = "Catering"
                 });
-                viewmodel.Data.NavigationUser.Add(new NavItem()
-                {
-                    Text = "<i class='fas fa-comments'></i>",
-                    State = "profile.overview",
-                    StateCompare = "profile",
-                    Tooltip = "Chat"
-                });
+                //viewmodel.Data.NavigationUser.Add(new NavItem()
+                //{
+                //    Text = "<i class='fas fa-comments'></i>",
+                //    State = "profile.overview",
+                //    StateCompare = "profile",
+                //    Tooltip = "Chat"
+                //});
                 viewmodel.Data.NavigationUser.Add(new NavItem()
                 {
                     Text = "<i class='fas fa-user-circle'></i>",
@@ -125,13 +125,13 @@ namespace api.NetConnect.Controllers
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
-                Text = "Teilnahme",
+                Text = "Teilnehmer",
                 State = "event.seating({id: 10})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
-                Text = "Jungendschutz",
-                State = "jungendschutz"
+                Text = "Jugendschutz",
+                State = "jugendschutz"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
@@ -145,7 +145,29 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region EventsAside
-
+            foreach (var e in EventDataController.GetItems().Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
+            {
+                var seats = SeatDataController.GetByEvent(e.ID);
+                Int32 seatsCount = 70 - seats.Count(x => x.State == -1);
+                Int32 flagged = seats.Count(x => x.State == 1);
+                Int32 reserved = seats.Count(x => x.State == 2);
+                Int32 free = seatsCount - flagged - reserved;
+                viewmodel.Data.EventsAside.Add(new EventItem()
+                {
+                    ID = e.ID,
+                    Title = $"{e.EventType.Name} Vol.{e.Volume}",
+                    Start = e.Start,
+                    End = e.End,
+                    PublicAccess = !e.IsPrivate,
+                    Seating = new data.ViewModel.Event.EventViewModelItem.SeatingReservation()
+                    {
+                        SeatsCount = 70 - seats.Count(x => x.State == -1),
+                        Flagged = flagged,
+                        Reserved = reserved,
+                        Free = free
+                    }
+                });
+            }
             #endregion
             #region NavigationBottom
             viewmodel.Data.NavigationBottom.Add(new LinkItem()
@@ -211,12 +233,12 @@ namespace api.NetConnect.Controllers
                 StateCompare = "admin.dashboard"
             });
             // News
-            viewmodel.Data.NavigationAside.Add(new NavItem()
-            {
-                Text = "News",
-                State = "admin.news.all",
-                StateCompare = "admin.news"
-            });
+            //viewmodel.Data.NavigationAside.Add(new NavItem()
+            //{
+            //    Text = "News",
+            //    State = "admin.news.all",
+            //    StateCompare = "admin.news"
+            //});
             // Events
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
