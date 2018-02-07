@@ -1,4 +1,5 @@
-﻿using System;
+﻿using api.NetConnect.data.ViewModel.Event;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ namespace api.NetConnect.data.ViewModel.News
 {
     public class FbNewsListViewModel : ListViewModel<FbNewsItem>
     {
+        public EventViewModelItem NextEvent { get; set; }
         public FbNewsListViewModel() : base()
         {
 

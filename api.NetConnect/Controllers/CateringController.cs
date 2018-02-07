@@ -73,6 +73,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize()]
         [HttpPost]
         public IHttpActionResult Insert(OrderRequest request)
         {

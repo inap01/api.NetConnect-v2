@@ -1,5 +1,6 @@
 ﻿using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel;
+using api.NetConnect.data.ViewModel.Event;
 using api.NetConnect.data.ViewModel.News;
 using api.NetConnect.data.ViewModel.News.Backend;
 using api.NetConnect.DataControllers;
@@ -22,6 +23,9 @@ namespace api.NetConnect.Controllers
             FbNewsListViewModel viewmodel = new FbNewsListViewModel();
             viewmodel.Authenticated = UserHelper.Authenticated;
 
+            var nextEvent = EventDataController.GetItems().OrderByDescending(x => x.Start).FirstOrDefault(x => x.Start > DateTime.Now);
+            if(nextEvent != null)
+                viewmodel.NextEvent = new EventViewModelItem().FromModel(nextEvent);
             viewmodel.Data = NewsDataController.GetItems().data;
 
             return Ok(viewmodel);

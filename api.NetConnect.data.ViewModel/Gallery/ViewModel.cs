@@ -52,5 +52,4 @@ namespace api.NetConnect.data.ViewModel.Gallery
         public String ImageUrl { get; set; }
         public String ThumbnailUrl { get; set; }
     }
-
 }
