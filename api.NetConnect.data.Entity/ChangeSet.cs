@@ -24,7 +24,6 @@ namespace api.NetConnect.data.Entity
         public Nullable<System.DateTime> EventType { get; set; }
         public Nullable<System.DateTime> FaqQuestion { get; set; }
         public Nullable<System.DateTime> FaqCategory { get; set; }
-        public Nullable<System.DateTime> ImageContainer { get; set; }
         public Nullable<System.DateTime> Logs { get; set; }
         public Nullable<System.DateTime> Partner { get; set; }
         public Nullable<System.DateTime> PartnerDisplay { get; set; }

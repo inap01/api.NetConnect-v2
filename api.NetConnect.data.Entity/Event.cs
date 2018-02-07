@@ -25,7 +25,7 @@ namespace api.NetConnect.data.Entity
         public int ID { get; set; }
         public int EventTypeID { get; set; }
         public int Volume { get; set; }
-        public Nullable<System.Guid> ImageContainerID { get; set; }
+        public string Image { get; set; }
         public System.DateTime Start { get; set; }
         public System.DateTime End { get; set; }
         public double ReservationCost { get; set; }
@@ -44,7 +44,6 @@ namespace api.NetConnect.data.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CateringOrder> CateringOrder { get; set; }
         public virtual EventType EventType { get; set; }
-        public virtual ImageContainer ImageContainer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Seat> Seat { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

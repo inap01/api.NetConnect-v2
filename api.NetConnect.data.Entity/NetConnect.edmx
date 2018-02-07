@@ -13,6 +13,7 @@
           <Property Name="EventID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="SeatID" Type="int" Nullable="false" />
+          <Property Name="Registered" Type="datetime" Nullable="false" />
           <Property Name="OrderState" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
@@ -33,7 +34,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="text" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="SingleChoice" Type="bit" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -71,7 +72,6 @@
           <Property Name="EventType" Type="datetime" />
           <Property Name="FaqQuestion" Type="datetime" />
           <Property Name="FaqCategory" Type="datetime" />
-          <Property Name="ImageContainer" Type="datetime" />
           <Property Name="Logs" Type="datetime" />
           <Property Name="Partner" Type="datetime" />
           <Property Name="PartnerDisplay" Type="datetime" />
@@ -102,7 +102,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EventTypeID" Type="int" Nullable="false" />
           <Property Name="Volume" Type="int" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" />
+          <Property Name="Image" Type="varchar(max)" />
           <Property Name="Start" Type="datetime" Nullable="false" />
           <Property Name="End" Type="datetime" Nullable="false" />
           <Property Name="ReservationCost" Type="float" Nullable="false" />
@@ -148,15 +148,6 @@
           <Property Name="Position" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <EntityType Name="ImageContainer">
-          <Key>
-            <PropertyRef Name="SID" />
-          </Key>
-          <Property Name="SID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ThumbnailPath" Type="varchar(max)" Nullable="false" />
-          <Property Name="OriginalPath" Type="varchar(max)" Nullable="false" />
-          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <EntityType Name="Logs">
           <Key>
             <PropertyRef Name="ID" />
@@ -177,7 +168,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NewsCategoryID" Type="int" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" />
+          <Property Name="Image" Type="varchar(max)" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Text" Type="text" Nullable="false" />
           <Property Name="IsFeatured" Type="bit" Nullable="false" />
@@ -190,7 +181,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="Partner">
@@ -202,8 +193,8 @@
           <Property Name="Link" Type="varchar(max)" Nullable="false" />
           <Property Name="RefLink" Type="varchar(max)" />
           <Property Name="Content" Type="text" />
-          <Property Name="ImageOriginalID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ImagePassiveID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ImageOriginal" Type="varchar(max)" Nullable="false" />
+          <Property Name="ImagePassive" Type="varchar(max)" Nullable="false" />
           <Property Name="PartnerPackID" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="Position" Type="int" Nullable="false" />
@@ -283,7 +274,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
           <Property Name="Rules" Type="text" Nullable="false" />
           <Property Name="RequireBattleTag" Type="bit" Nullable="false" />
           <Property Name="RequireSteamID" Type="bit" Nullable="false" />
@@ -326,7 +317,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TournamentID" Type="int" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Image" Type="varchar(max)" Nullable="false" />
           <Property Name="Placement" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
@@ -359,7 +350,7 @@
           <Property Name="PasswordSalt" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="PasswordReset" Type="varchar" MaxLength="64" />
           <Property Name="Registered" Type="datetime" Nullable="false" />
-          <Property Name="ImageContainerID" Type="uniqueidentifier" />
+          <Property Name="Image" Type="varchar(max)" />
           <Property Name="IsTeam" Type="bit" Nullable="false" />
           <Property Name="IsAdmin" Type="bit" Nullable="false" />
           <Property Name="CEO" Type="int" />
@@ -480,18 +471,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CateringProduct_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="CateringProduct" Type="Self.CateringProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="CateringProduct">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CateringProductAttributeRelation_CateringProductAttributeID">
           <End Role="CateringProductAttribute" Type="Self.CateringProductAttribute" Multiplicity="1" />
           <End Role="CateringProductAttributeRelation" Type="Self.CateringProductAttributeRelation" Multiplicity="*" />
@@ -528,18 +507,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Event_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="0..1" />
-          <End Role="Event" Type="Self.Event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Event">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_FaqQuestion_FaqCategoryID">
           <End Role="FaqCategory" Type="Self.FaqCategory" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -566,18 +533,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_News_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="0..1" />
-          <End Role="News" Type="Self.News" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="News">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_News_NewsCategoryID">
           <End Role="NewsCategory" Type="Self.NewsCategory" Multiplicity="1" />
           <End Role="News" Type="Self.News" Multiplicity="*" />
@@ -587,42 +542,6 @@
             </Principal>
             <Dependent Role="News">
               <PropertyRef Name="NewsCategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_NewsCategory_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="NewsCategory" Type="Self.NewsCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="NewsCategory">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Partner_ImageOriginalID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Partner">
-              <PropertyRef Name="ImageOriginalID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Partner_ImagePassiveID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="Partner" Type="Self.Partner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Partner">
-              <PropertyRef Name="ImagePassiveID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -764,18 +683,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TournamentGame_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="TournamentGame" Type="Self.TournamentGame" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="TournamentGame">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_TournamentParticipant_TournamentID">
           <End Role="Tournament" Type="Self.Tournament" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -839,18 +746,6 @@
             </Principal>
             <Dependent Role="TournamentTeamParticipant">
               <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TournamentWinner_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="1" />
-          <End Role="TournamentWinner" Type="Self.TournamentWinner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="TournamentWinner">
-              <PropertyRef Name="ImageContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -919,18 +814,6 @@
             </Principal>
             <Dependent Role="TournamentWinnerTeam">
               <PropertyRef Name="TournamentWinnerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_ImageContainerID">
-          <End Role="ImageContainer" Type="Self.ImageContainer" Multiplicity="0..1" />
-          <End Role="User" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ImageContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1017,7 +900,6 @@
           <EntitySet Name="EventType" EntityType="Self.EventType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FaqCategory" EntityType="Self.FaqCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FaqQuestion" EntityType="Self.FaqQuestion" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ImageContainer" EntityType="Self.ImageContainer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NewsCategory" EntityType="Self.NewsCategory" Schema="dbo" store:Type="Tables" />
@@ -1062,10 +944,6 @@
             <End Role="CateringProduct" EntitySet="CateringProduct" />
             <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_CateringProduct_ImageContainerID" Association="Self.FK_CateringProduct_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="CateringProduct" EntitySet="CateringProduct" />
-          </AssociationSet>
           <AssociationSet Name="FK_CateringProductAttributeRelation_CateringProductAttributeID" Association="Self.FK_CateringProductAttributeRelation_CateringProductAttributeID">
             <End Role="CateringProductAttribute" EntitySet="CateringProductAttribute" />
             <End Role="CateringProductAttributeRelation" EntitySet="CateringProductAttributeRelation" />
@@ -1078,10 +956,6 @@
             <End Role="EventType" EntitySet="EventType" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
-          <AssociationSet Name="FK_Event_ImageContainerID" Association="Self.FK_Event_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="Event" EntitySet="Event" />
-          </AssociationSet>
           <AssociationSet Name="FK_FaqQuestion_FaqCategoryID" Association="Self.FK_FaqQuestion_FaqCategoryID">
             <End Role="FaqCategory" EntitySet="FaqCategory" />
             <End Role="FaqQuestion" EntitySet="FaqQuestion" />
@@ -1090,25 +964,9 @@
             <End Role="User" EntitySet="User" />
             <End Role="Logs" EntitySet="Logs" />
           </AssociationSet>
-          <AssociationSet Name="FK_News_ImageContainerID" Association="Self.FK_News_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="News" EntitySet="News" />
-          </AssociationSet>
           <AssociationSet Name="FK_News_NewsCategoryID" Association="Self.FK_News_NewsCategoryID">
             <End Role="NewsCategory" EntitySet="NewsCategory" />
             <End Role="News" EntitySet="News" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NewsCategory_ImageContainerID" Association="Self.FK_NewsCategory_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="NewsCategory" EntitySet="NewsCategory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImageOriginalID" Association="Self.FK_Partner_ImageOriginalID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="Partner" EntitySet="Partner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImagePassiveID" Association="Self.FK_Partner_ImagePassiveID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="Partner" EntitySet="Partner" />
           </AssociationSet>
           <AssociationSet Name="FK_Partner_PartnerPackID" Association="Self.FK_Partner_PartnerPackID">
             <End Role="PartnerPack" EntitySet="PartnerPack" />
@@ -1154,10 +1012,6 @@
             <End Role="TournamentGame" EntitySet="TournamentGame" />
             <End Role="Tournament" EntitySet="Tournament" />
           </AssociationSet>
-          <AssociationSet Name="FK_TournamentGame_ImageContainerID" Association="Self.FK_TournamentGame_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="TournamentGame" EntitySet="TournamentGame" />
-          </AssociationSet>
           <AssociationSet Name="FK_TournamentParticipant_TournamentID" Association="Self.FK_TournamentParticipant_TournamentID">
             <End Role="Tournament" EntitySet="Tournament" />
             <End Role="TournamentParticipant" EntitySet="TournamentParticipant" />
@@ -1178,10 +1032,6 @@
             <End Role="User" EntitySet="User" />
             <End Role="TournamentTeamParticipant" EntitySet="TournamentTeamParticipant" />
           </AssociationSet>
-          <AssociationSet Name="FK_TournamentWinner_ImageContainerID" Association="Self.FK_TournamentWinner_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="TournamentWinner" EntitySet="TournamentWinner" />
-          </AssociationSet>
           <AssociationSet Name="FK_TournamentWinner_TournamentID" Association="Self.FK_TournamentWinner_TournamentID">
             <End Role="Tournament" EntitySet="Tournament" />
             <End Role="TournamentWinner" EntitySet="TournamentWinner" />
@@ -1201,10 +1051,6 @@
           <AssociationSet Name="FK_TournamentWinnerTeam_TournamentWinnerID" Association="Self.FK_TournamentWinnerTeam_TournamentWinnerID">
             <End Role="TournamentWinner" EntitySet="TournamentWinner" />
             <End Role="TournamentWinnerTeam" EntitySet="TournamentWinnerTeam" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_ImageContainerID" Association="Self.FK_User_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
           <AssociationSet Name="FK_UserPrivilegeRelation_UserID" Association="Self.FK_UserPrivilegeRelation_UserID">
             <End Role="User" EntitySet="User" />
@@ -1246,7 +1092,6 @@
           <EntitySet Name="EventType" EntityType="NetConnectModel.EventType" />
           <EntitySet Name="FaqCategory" EntityType="NetConnectModel.FaqCategory" />
           <EntitySet Name="FaqQuestion" EntityType="NetConnectModel.FaqQuestion" />
-          <EntitySet Name="ImageContainer" EntityType="NetConnectModel.ImageContainer" />
           <EntitySet Name="Logs" EntityType="NetConnectModel.Logs" />
           <EntitySet Name="News" EntityType="NetConnectModel.News" />
           <EntitySet Name="NewsCategory" EntityType="NetConnectModel.NewsCategory" />
@@ -1291,10 +1136,6 @@
             <End Role="CateringProduct" EntitySet="CateringProduct" />
             <End Role="CateringOrderDetail" EntitySet="CateringOrderDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_CateringProduct_ImageContainerID" Association="NetConnectModel.FK_CateringProduct_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="CateringProduct" EntitySet="CateringProduct" />
-          </AssociationSet>
           <AssociationSet Name="FK_CateringProductAttributeRelation_CateringProductID" Association="NetConnectModel.FK_CateringProductAttributeRelation_CateringProductID">
             <End Role="CateringProduct" EntitySet="CateringProduct" />
             <End Role="CateringProductAttributeRelation" EntitySet="CateringProductAttributeRelation" />
@@ -1305,10 +1146,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_Event_EventTypeID" Association="NetConnectModel.FK_Event_EventTypeID">
             <End Role="EventType" EntitySet="EventType" />
-            <End Role="Event" EntitySet="Event" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Event_ImageContainerID" Association="NetConnectModel.FK_Event_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
             <End Role="Event" EntitySet="Event" />
           </AssociationSet>
           <AssociationSet Name="FK_Seat_EventID" Association="NetConnectModel.FK_Seat_EventID">
@@ -1322,34 +1159,6 @@
           <AssociationSet Name="FK_FaqQuestion_FaqCategoryID" Association="NetConnectModel.FK_FaqQuestion_FaqCategoryID">
             <End Role="FaqCategory" EntitySet="FaqCategory" />
             <End Role="FaqQuestion" EntitySet="FaqQuestion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_News_ImageContainerID" Association="NetConnectModel.FK_News_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="News" EntitySet="News" />
-          </AssociationSet>
-          <AssociationSet Name="FK_NewsCategory_ImageContainerID" Association="NetConnectModel.FK_NewsCategory_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="NewsCategory" EntitySet="NewsCategory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImageOriginalID" Association="NetConnectModel.FK_Partner_ImageOriginalID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="Partner" EntitySet="Partner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Partner_ImagePassiveID" Association="NetConnectModel.FK_Partner_ImagePassiveID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="Partner" EntitySet="Partner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TournamentGame_ImageContainerID" Association="NetConnectModel.FK_TournamentGame_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="TournamentGame" EntitySet="TournamentGame" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TournamentWinner_ImageContainerID" Association="NetConnectModel.FK_TournamentWinner_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="TournamentWinner" EntitySet="TournamentWinner" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_ImageContainerID" Association="NetConnectModel.FK_User_ImageContainerID">
-            <End Role="ImageContainer" EntitySet="ImageContainer" />
-            <End Role="User" EntitySet="User" />
           </AssociationSet>
           <AssociationSet Name="FK_Logs_UserID" Association="NetConnectModel.FK_Logs_UserID">
             <End Role="User" EntitySet="User" />
@@ -1468,6 +1277,7 @@
           <Property Name="EventID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="SeatID" Type="Int32" Nullable="false" />
+          <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="OrderState" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_CateringOrder_EventID" FromRole="CateringOrder" ToRole="Event" />
@@ -1494,13 +1304,12 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
           <Property Name="SingleChoice" Type="Boolean" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrderDetail" Relationship="NetConnectModel.FK_CateringOrderDetail_CateringProductID" FromRole="CateringProduct" ToRole="CateringOrderDetail" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_CateringProduct_ImageContainerID" FromRole="CateringProduct" ToRole="ImageContainer" />
           <NavigationProperty Name="CateringProductAttributeRelation" Relationship="NetConnectModel.FK_CateringProductAttributeRelation_CateringProductID" FromRole="CateringProduct" ToRole="CateringProductAttributeRelation" />
         </EntityType>
         <EntityType Name="CateringProductAttribute">
@@ -1538,7 +1347,6 @@
           <Property Name="EventType" Type="DateTime" Precision="3" />
           <Property Name="FaqQuestion" Type="DateTime" Precision="3" />
           <Property Name="FaqCategory" Type="DateTime" Precision="3" />
-          <Property Name="ImageContainer" Type="DateTime" Precision="3" />
           <Property Name="Logs" Type="DateTime" Precision="3" />
           <Property Name="Partner" Type="DateTime" Precision="3" />
           <Property Name="PartnerDisplay" Type="DateTime" Precision="3" />
@@ -1569,7 +1377,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="EventTypeID" Type="Int32" Nullable="false" />
           <Property Name="Volume" Type="Int32" Nullable="false" />
-          <Property Name="ImageContainerID" Type="Guid" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="End" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReservationCost" Type="Double" Nullable="false" />
@@ -1586,7 +1394,6 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_EventID" FromRole="Event" ToRole="CateringOrder" />
           <NavigationProperty Name="EventType" Relationship="NetConnectModel.FK_Event_EventTypeID" FromRole="Event" ToRole="EventType" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_Event_ImageContainerID" FromRole="Event" ToRole="ImageContainer" />
           <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_EventID" FromRole="Event" ToRole="Seat" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_EventID" FromRole="Event" ToRole="Tournament" />
         </EntityType>
@@ -1623,24 +1430,6 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="FaqCategory" Relationship="NetConnectModel.FK_FaqQuestion_FaqCategoryID" FromRole="FaqQuestion" ToRole="FaqCategory" />
         </EntityType>
-        <EntityType Name="ImageContainer">
-          <Key>
-            <PropertyRef Name="SID" />
-          </Key>
-          <Property Name="SID" Type="Guid" Nullable="false" />
-          <Property Name="ThumbnailPath" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="OriginalPath" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="CateringProduct" Relationship="NetConnectModel.FK_CateringProduct_ImageContainerID" FromRole="ImageContainer" ToRole="CateringProduct" />
-          <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_Event_ImageContainerID" FromRole="ImageContainer" ToRole="Event" />
-          <NavigationProperty Name="News" Relationship="NetConnectModel.FK_News_ImageContainerID" FromRole="ImageContainer" ToRole="News" />
-          <NavigationProperty Name="NewsCategory" Relationship="NetConnectModel.FK_NewsCategory_ImageContainerID" FromRole="ImageContainer" ToRole="NewsCategory" />
-          <NavigationProperty Name="Partner" Relationship="NetConnectModel.FK_Partner_ImageOriginalID" FromRole="ImageContainer" ToRole="Partner" />
-          <NavigationProperty Name="Partner1" Relationship="NetConnectModel.FK_Partner_ImagePassiveID" FromRole="ImageContainer" ToRole="Partner" />
-          <NavigationProperty Name="TournamentGame" Relationship="NetConnectModel.FK_TournamentGame_ImageContainerID" FromRole="ImageContainer" ToRole="TournamentGame" />
-          <NavigationProperty Name="TournamentWinner" Relationship="NetConnectModel.FK_TournamentWinner_ImageContainerID" FromRole="ImageContainer" ToRole="TournamentWinner" />
-          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_User_ImageContainerID" FromRole="ImageContainer" ToRole="User" />
-        </EntityType>
         <EntityType Name="Logs">
           <Key>
             <PropertyRef Name="ID" />
@@ -1662,13 +1451,12 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NewsCategoryID" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ImageContainerID" Type="Guid" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsFeatured" Type="Boolean" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_News_ImageContainerID" FromRole="News" ToRole="ImageContainer" />
           <NavigationProperty Name="NewsCategory" Relationship="NetConnectModel.FK_News_NewsCategoryID" FromRole="News" ToRole="NewsCategory" />
         </EntityType>
         <EntityType Name="NewsCategory">
@@ -1677,9 +1465,8 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_NewsCategory_ImageContainerID" FromRole="NewsCategory" ToRole="ImageContainer" />
           <NavigationProperty Name="News" Relationship="NetConnectModel.FK_News_NewsCategoryID" FromRole="NewsCategory" ToRole="News" />
         </EntityType>
         <EntityType Name="Partner">
@@ -1691,15 +1478,13 @@
           <Property Name="Link" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RefLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ImageOriginalID" Type="Guid" Nullable="false" />
-          <Property Name="ImagePassiveID" Type="Guid" Nullable="false" />
+          <Property Name="ImageOriginal" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ImagePassive" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="PartnerPackID" Type="Int32" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="ClickCount" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_Partner_ImageOriginalID" FromRole="Partner" ToRole="ImageContainer" />
-          <NavigationProperty Name="ImageContainer1" Relationship="NetConnectModel.FK_Partner_ImagePassiveID" FromRole="Partner" ToRole="ImageContainer" />
           <NavigationProperty Name="PartnerPack" Relationship="NetConnectModel.FK_Partner_PartnerPackID" FromRole="Partner" ToRole="PartnerPack" />
           <NavigationProperty Name="PartnerDisplayRelation" Relationship="NetConnectModel.FK_PartnerDisplayRelation_PartnerID" FromRole="Partner" ToRole="PartnerDisplayRelation" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_PartnerID" FromRole="Partner" ToRole="Tournament" />
@@ -1794,13 +1579,12 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Rules" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="RequireBattleTag" Type="Boolean" Nullable="false" />
           <Property Name="RequireSteamID" Type="Boolean" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_TournamentGame_ImageContainerID" FromRole="TournamentGame" ToRole="ImageContainer" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_Tournament_TournamentGameID" FromRole="TournamentGame" ToRole="Tournament" />
         </EntityType>
         <EntityType Name="TournamentParticipant">
@@ -1846,10 +1630,9 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TournamentID" Type="Int32" Nullable="false" />
-          <Property Name="ImageContainerID" Type="Guid" Nullable="false" />
+          <Property Name="Image" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Placement" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_TournamentWinner_ImageContainerID" FromRole="TournamentWinner" ToRole="ImageContainer" />
           <NavigationProperty Name="Tournament" Relationship="NetConnectModel.FK_TournamentWinner_TournamentID" FromRole="TournamentWinner" ToRole="Tournament" />
           <NavigationProperty Name="TournamentWinnerPlayer" Relationship="NetConnectModel.FK_TournamentWinnerPlayer_TournamentWinnerID" FromRole="TournamentWinner" ToRole="TournamentWinnerPlayer" />
           <NavigationProperty Name="TournamentWinnerTeam" Relationship="NetConnectModel.FK_TournamentWinnerTeam_TournamentWinnerID" FromRole="TournamentWinner" ToRole="TournamentWinnerTeam" />
@@ -1887,7 +1670,7 @@
           <Property Name="PasswordSalt" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PasswordReset" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ImageContainerID" Type="Guid" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="IsTeam" Type="Boolean" Nullable="false" />
           <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
           <Property Name="CEO" Type="Int32" />
@@ -1897,7 +1680,6 @@
           <Property Name="Newsletter" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_UserID" FromRole="User" ToRole="CateringOrder" />
-          <NavigationProperty Name="ImageContainer" Relationship="NetConnectModel.FK_User_ImageContainerID" FromRole="User" ToRole="ImageContainer" />
           <NavigationProperty Name="Logs" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
           <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
           <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
@@ -2029,18 +1811,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CateringProduct_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.CateringProduct" Role="CateringProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="CateringProduct">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CateringProductAttributeRelation_CateringProductID">
           <End Type="NetConnectModel.CateringProduct" Role="CateringProduct" Multiplicity="1" />
           <End Type="NetConnectModel.CateringProductAttributeRelation" Role="CateringProductAttributeRelation" Multiplicity="*" />
@@ -2074,18 +1844,6 @@
             </Principal>
             <Dependent Role="Event">
               <PropertyRef Name="EventTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Event_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="0..1" />
-          <End Type="NetConnectModel.Event" Role="Event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Event">
-              <PropertyRef Name="ImageContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2124,90 +1882,6 @@
             </Principal>
             <Dependent Role="FaqQuestion">
               <PropertyRef Name="FaqCategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_News_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="0..1" />
-          <End Type="NetConnectModel.News" Role="News" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="News">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_NewsCategory_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.NewsCategory" Role="NewsCategory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="NewsCategory">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Partner_ImageOriginalID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Partner">
-              <PropertyRef Name="ImageOriginalID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Partner_ImagePassiveID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.Partner" Role="Partner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="Partner">
-              <PropertyRef Name="ImagePassiveID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TournamentGame_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.TournamentGame" Role="TournamentGame" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="TournamentGame">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TournamentWinner_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="1" />
-          <End Type="NetConnectModel.TournamentWinner" Role="TournamentWinner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="TournamentWinner">
-              <PropertyRef Name="ImageContainerID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_ImageContainerID">
-          <End Type="NetConnectModel.ImageContainer" Role="ImageContainer" Multiplicity="0..1" />
-          <End Type="NetConnectModel.User" Role="User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ImageContainer">
-              <PropertyRef Name="SID" />
-            </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ImageContainerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2566,6 +2240,7 @@
               <MappingFragment StoreEntitySet="CateringOrder">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="OrderState" ColumnName="OrderState" />
+                <ScalarProperty Name="Registered" ColumnName="Registered" />
                 <ScalarProperty Name="SeatID" ColumnName="SeatID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="EventID" ColumnName="EventID" />
@@ -2592,7 +2267,7 @@
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SingleChoice" ColumnName="SingleChoice" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2643,7 +2318,6 @@
                 <ScalarProperty Name="PartnerDisplay" ColumnName="PartnerDisplay" />
                 <ScalarProperty Name="Partner" ColumnName="Partner" />
                 <ScalarProperty Name="Logs" ColumnName="Logs" />
-                <ScalarProperty Name="ImageContainer" ColumnName="ImageContainer" />
                 <ScalarProperty Name="FaqCategory" ColumnName="FaqCategory" />
                 <ScalarProperty Name="FaqQuestion" ColumnName="FaqQuestion" />
                 <ScalarProperty Name="EventType" ColumnName="EventType" />
@@ -2674,7 +2348,7 @@
                 <ScalarProperty Name="ReservationCost" ColumnName="ReservationCost" />
                 <ScalarProperty Name="End" ColumnName="End" />
                 <ScalarProperty Name="Start" ColumnName="Start" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Volume" ColumnName="Volume" />
                 <ScalarProperty Name="EventTypeID" ColumnName="EventTypeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -2714,16 +2388,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ImageContainer">
-            <EntityTypeMapping TypeName="NetConnectModel.ImageContainer">
-              <MappingFragment StoreEntitySet="ImageContainer">
-                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="OriginalPath" ColumnName="OriginalPath" />
-                <ScalarProperty Name="ThumbnailPath" ColumnName="ThumbnailPath" />
-                <ScalarProperty Name="SID" ColumnName="SID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Logs">
             <EntityTypeMapping TypeName="NetConnectModel.Logs">
               <MappingFragment StoreEntitySet="Logs">
@@ -2746,7 +2410,7 @@
                 <ScalarProperty Name="IsFeatured" ColumnName="IsFeatured" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="NewsCategoryID" ColumnName="NewsCategoryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -2757,7 +2421,7 @@
             <EntityTypeMapping TypeName="NetConnectModel.NewsCategory">
               <MappingFragment StoreEntitySet="NewsCategory">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2771,8 +2435,8 @@
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="PartnerPackID" ColumnName="PartnerPackID" />
-                <ScalarProperty Name="ImagePassiveID" ColumnName="ImagePassiveID" />
-                <ScalarProperty Name="ImageOriginalID" ColumnName="ImageOriginalID" />
+                <ScalarProperty Name="ImagePassive" ColumnName="ImagePassive" />
+                <ScalarProperty Name="ImageOriginal" ColumnName="ImageOriginal" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="RefLink" ColumnName="RefLink" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
@@ -2862,7 +2526,7 @@
                 <ScalarProperty Name="RequireSteamID" ColumnName="RequireSteamID" />
                 <ScalarProperty Name="RequireBattleTag" ColumnName="RequireBattleTag" />
                 <ScalarProperty Name="Rules" ColumnName="Rules" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2906,7 +2570,7 @@
               <MappingFragment StoreEntitySet="TournamentWinner">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="Placement" ColumnName="Placement" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="TournamentID" ColumnName="TournamentID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
@@ -2941,7 +2605,7 @@
                 <ScalarProperty Name="CEO" ColumnName="CEO" />
                 <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
                 <ScalarProperty Name="IsTeam" ColumnName="IsTeam" />
-                <ScalarProperty Name="ImageContainerID" ColumnName="ImageContainerID" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Registered" ColumnName="Registered" />
                 <ScalarProperty Name="PasswordReset" ColumnName="PasswordReset" />
                 <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />

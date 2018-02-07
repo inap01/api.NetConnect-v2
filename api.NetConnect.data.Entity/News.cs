@@ -17,14 +17,13 @@ namespace api.NetConnect.data.Entity
         public int ID { get; set; }
         public int NewsCategoryID { get; set; }
         public string Title { get; set; }
-        public Nullable<System.Guid> ImageContainerID { get; set; }
+        public string Image { get; set; }
         public System.DateTime Date { get; set; }
         public string Text { get; set; }
         public bool IsFeatured { get; set; }
         public bool IsActive { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual ImageContainer ImageContainer { get; set; }
         public virtual NewsCategory NewsCategory { get; set; }
     }
 }

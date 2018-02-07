@@ -12,9 +12,6 @@ using api.NetConnect.data.ViewModel.EventType.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendEventTypeListArgs = ListArgsRequest<BackendEventTypeFilter>;
-    using BackendEventTypeListViewModel = ListArgsViewModel<BackendEventTypeViewModelItem, BackendEventTypeFilter>;
-
     public class EventTypeController : ApiController
     {
         #region Backend

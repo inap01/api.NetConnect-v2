@@ -5,6 +5,14 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Partner
 {
+    public class PartnerListViewModel : ListViewModel<PartnerViewModelItem>
+    {
+        public PartnerListViewModel() : base()
+        {
+
+        }
+    }
+
     public class PartnerViewModel : BaseViewModel
     {
         public PartnerViewModelItem Data { get; set; }

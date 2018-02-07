@@ -183,13 +183,6 @@ namespace MYSQL_Migration
 
             foreach (DataRow entry in set.Tables["catering_products"].Rows)
             {
-                ImageContainer img = new ImageContainer()
-                {
-                    SID = Guid.NewGuid(),
-                    ThumbnailPath = entry["image"].ToString(),
-                    OriginalPath = entry["image"].ToString(),
-                };
-
                 var atts = JsonToAttributes(entry["attributes"].ToString());
 
                 var insertAtts = atts.Where(x => !db.CateringProductAttribute.Local.Any(y => x.Name == y.Name)).ToList();
@@ -200,7 +193,7 @@ namespace MYSQL_Migration
                 var product = new CateringProduct()
                 {
                     Name = entry["name"].ToString(),
-                    ImageContainer = img,
+                    Image = entry["image"].ToString(),
                     Price = Convert.ToDecimal(entry["price"]),
                     SingleChoice = Convert.ToBoolean(entry["single_choice"]),
                     IsActive = true,
@@ -242,20 +235,13 @@ namespace MYSQL_Migration
             adapter.Fill(set, "partner");
             foreach (DataRow entry in set.Tables["partner"].Rows)
             {
-                ImageContainer img = new ImageContainer()
-                {
-                    SID = Guid.NewGuid(),
-                    ThumbnailPath = entry["image"].ToString(),
-                    OriginalPath = entry["image"].ToString(),
-                };                
-
                 var p = new Partner()
                 {
                     RefLink = null,
                     ClickCount = Convert.ToInt32(entry["click_count"]),
                     Content = Convert.ToString(entry["content"]),
-                    ImageContainer = img,
-                    ImageContainer1 = img,
+                    ImageOriginal = entry["image"].ToString(),
+                    ImagePassive = entry["image"].ToString(),
                     IsActive = Convert.ToBoolean(entry["active"]),
                     Link = Convert.ToString(entry["link"]),
                     Name = Convert.ToString(entry["name"]),
@@ -345,7 +331,7 @@ namespace MYSQL_Migration
                     UserID = offsetID,
                     Seat = seat,
                     OrderState = Convert.ToInt32(entry["complete_status"]),
-                    
+                    Registered = DateTime.Now
                 };
                 Detail test = null;
                 string json = @entry["details"].ToString();
@@ -374,17 +360,10 @@ namespace MYSQL_Migration
 
             foreach (DataRow entry in set.Tables["tournaments_games"].Rows)
             {
-                var image = new ImageContainer()
-                {
-                    ThumbnailPath = entry["icon"].ToString(),
-                    OriginalPath = entry["icon"].ToString(),
-                    SID = Guid.NewGuid(),                    
-                };
-
                 var tg = new TournamentGame()
                 {
                     RequireBattleTag = Convert.ToBoolean(entry["battletag"]),
-                    ImageContainer = image,
+                    Image = entry["icon"].ToString(),
                     Name = Convert.ToString(entry["name"]),
                     Rules = Convert.ToString(entry["rules"]),
                     RequireSteamID = Convert.ToBoolean(entry["steam"]),
@@ -473,8 +452,6 @@ namespace MYSQL_Migration
             {
                 foreach (DataRow entry in set.Tables["tournaments_participants"].Rows)
                 {
-                    
-
                     if (Convert.ToInt32(entry["user_id"]) == 0 || new int[] { 12, 14, 20 }.Contains(Convert.ToInt32(entry["tournament_id"])))
                         continue;
                     int tournamentTeamID = -1;

@@ -5,6 +5,14 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Event
 {
+    public class EventListViewModel : ListViewModel<EventViewModelItem>
+    {
+        public EventListViewModel() : base()
+        {
+
+        }
+    }
+
     public class EventViewModel : BaseViewModel
     {
         public EventViewModelItem Data { get; set; }

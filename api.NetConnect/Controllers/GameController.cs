@@ -15,9 +15,6 @@ using api.NetConnect.data.ViewModel.Game.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendGameListArgs = ListArgsRequest<BackendGameFilter>;
-    using BackendGameListViewModel = ListArgsViewModel<BackendGameViewModelItem, BackendGameFilter>;
-
     public class GameController : ApiController
     {
         #region Backend

@@ -16,10 +16,6 @@ using System.Data.Entity.Validation;
 
 namespace api.NetConnect.Controllers
 {
-    using TournamentListViewModel = ListViewModel<TournamentViewModelItem>;
-    using BackendTournamentListArgs = ListArgsRequest<BackendTournamentFilter>;
-    using BackendTournamentListViewModel = ListArgsViewModel<BackendTournamentViewModelItem, BackendTournamentFilter>;
-
     public class TournamentController : ApiController
     {
         #region Frontend

@@ -81,9 +81,6 @@
     <Compile Include="FaqQuestion.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="ImageContainer.cs">
-      <DependentUpon>NetConnect.tt</DependentUpon>
-    </Compile>
     <Compile Include="Logs.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>

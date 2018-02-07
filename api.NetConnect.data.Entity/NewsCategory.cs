@@ -22,10 +22,9 @@ namespace api.NetConnect.data.Entity
     
         public int ID { get; set; }
         public string Name { get; set; }
-        public System.Guid ImageContainerID { get; set; }
+        public string Image { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual ImageContainer ImageContainer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<News> News { get; set; }
     }

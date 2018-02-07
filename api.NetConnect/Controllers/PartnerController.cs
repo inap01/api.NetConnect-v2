@@ -1,6 +1,9 @@
 ﻿using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Partner;
 using api.NetConnect.data.ViewModel.Partner.Backend;
+using api.NetConnect.DataControllers;
+using api.NetConnect.Converters;
+using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +13,6 @@ using System.Web.Http;
 
 namespace api.NetConnect.Controllers
 {
-    using PartnerListViewModel = ListViewModel<PartnerViewModelItem>;
-    using BackendPartnerListArgs = ListArgsRequest<BackendPartnerFilter>;
-    using BackendPartnerListViewModel = ListArgsViewModel<BackendPartnerViewModelItem, BackendPartnerFilter>;
-    using data.Entity;
-    using DataControllers;
-    using Converters;
-    using api.NetConnect.Helper;
-
     public class PartnerController : ApiController
     {
         #region Frontend

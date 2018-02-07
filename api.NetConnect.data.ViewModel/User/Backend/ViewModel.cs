@@ -5,6 +5,16 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.User.Backend
 {
+    public class BackendProfileListArgs : ListArgsRequest<BackendProfileFilter>
+    {
+
+    }
+
+    public class BackendProfileListViewModel : ListArgsViewModel<BackendUserViewModelItem, BackendProfileFilter>
+    {
+
+    }
+
     public class BackendUserViewModel : BackendBaseViewModel
     {
         public BackendUserViewModelItem Data { get; set; }

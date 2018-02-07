@@ -5,6 +5,11 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Seating.Backend
 {
+    public class BackendSeatingListViewModel : ListViewModel<BackendSeatingViewModelItem>
+    {
+
+    }
+
     public class BackendSeatingViewModel : BackendBaseViewModel
     {
         public BackendSeatingViewModelItem Data { get; set; }

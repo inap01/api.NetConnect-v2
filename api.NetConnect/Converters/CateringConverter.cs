@@ -18,7 +18,7 @@ namespace api.NetConnect.Converters
             viewModel.Name = model.Name;
             viewModel.Price = model.Price;
             viewModel.SingleChoice = model.SingleChoice;
-            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageContainer.OriginalPath;
+            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.Image;
 
             var vm = new ProductAttributeViewModelItem();
             List<ProductAttributeViewModelItem> atts = new List<ProductAttributeViewModelItem>();

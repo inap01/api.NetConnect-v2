@@ -8,6 +8,16 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Tournament.Backend
 {
+    public class BackendTournamentListArgs : ListArgsRequest<BackendTournamentFilter>
+    {
+
+    }
+
+    public class BackendTournamentListViewModel : ListArgsViewModel<BackendTournamentViewModelItem, BackendTournamentFilter>
+    {
+
+    }
+
     public class BackendTournamentViewModel : BackendBaseViewModel
     {
         public BackendTournamentViewModelItem Data { get; set; }

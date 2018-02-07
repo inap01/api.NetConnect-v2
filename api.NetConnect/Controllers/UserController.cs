@@ -13,8 +13,6 @@ using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendProfileListArgs = ListArgsRequest<BackendProfileFilter>;
-    using BackendProfileListViewModel = ListArgsViewModel<BackendUserViewModelItem, BackendProfileFilter>;
     public class UserController : ApiController
     {
         #region Frontend

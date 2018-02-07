@@ -17,7 +17,7 @@ namespace api.NetConnect.Converters
         {
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
-            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageContainer.OriginalPath + "/image.png";
+            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageOriginal + "/image.png";
             viewModel.Link = model.Link;
             viewModel.RefLink = model.Link;
 

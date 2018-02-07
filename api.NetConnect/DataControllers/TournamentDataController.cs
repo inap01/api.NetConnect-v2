@@ -110,7 +110,7 @@ namespace api.NetConnect.DataControllers
             return result;
         }
 
-        public static new void Delete(Int32 TournamentID)
+        public static void Delete(Int32 TournamentID)
         {
             InitDB();
 

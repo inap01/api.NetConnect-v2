@@ -38,7 +38,7 @@ namespace api.NetConnect.data.Entity
         public string PasswordSalt { get; set; }
         public string PasswordReset { get; set; }
         public System.DateTime Registered { get; set; }
-        public Nullable<System.Guid> ImageContainerID { get; set; }
+        public string Image { get; set; }
         public bool IsTeam { get; set; }
         public bool IsAdmin { get; set; }
         public Nullable<int> CEO { get; set; }
@@ -50,7 +50,6 @@ namespace api.NetConnect.data.Entity
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CateringOrder> CateringOrder { get; set; }
-        public virtual ImageContainer ImageContainer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Logs> Logs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

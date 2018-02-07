@@ -6,6 +6,14 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Tournament
 {
+    public class TournamentListViewModel : ListViewModel<TournamentViewModelItem>
+    {
+        public TournamentListViewModel() : base()
+        {
+
+        }
+    }
+
     public class TournamentViewModel : BaseViewModel
     {
         public TournamentViewModelItem Data { get; set; }

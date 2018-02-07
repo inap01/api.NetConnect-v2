@@ -6,6 +6,15 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Event.Backend
 {
+    public class BackendEventListArgs : ListArgsRequest<BackendEventFilter>
+    {
+
+    }
+
+    public class BackendEventListViewModel : ListArgsViewModel<BackendEventViewModelItem, BackendEventFilter>
+    {
+
+    }
     public class BackendEventViewModel : BackendBaseViewModel
     {
         public BackendEventViewModelItem Data { get; set; }

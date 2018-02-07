@@ -13,8 +13,6 @@ using System.Web.Http;
 
 namespace api.NetConnect.Controllers
 {
-    using BackendNewsListViewModel = ListViewModel<BackendNewsViewModelItem>;
-
     public class NewsController : ApiController
     {
         #region Frontend

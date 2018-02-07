@@ -6,6 +6,16 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Game.Backend
 {
+    public class BackendGameListArgs : ListArgsRequest<BackendGameFilter>
+    {
+
+    }
+
+    public class BackendGameListViewModel : ListArgsViewModel<BackendGameViewModelItem, BackendGameFilter>
+    {
+
+    }
+
     public class BackendGameViewModel : BackendBaseViewModel
     {
         public BackendGameViewModelItem Data { get; set; }

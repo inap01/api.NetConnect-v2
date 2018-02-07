@@ -24,6 +24,7 @@ namespace api.NetConnect.data.Entity
         public int EventID { get; set; }
         public int UserID { get; set; }
         public int SeatID { get; set; }
+        public System.DateTime Registered { get; set; }
         public int OrderState { get; set; }
         public byte[] RowVersion { get; set; }
     

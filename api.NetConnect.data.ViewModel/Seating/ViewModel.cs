@@ -6,6 +6,14 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Seating
 {
+    public class SeatingListViewModel : ListViewModel<SeatingViewModelItem>
+    {
+        public SeatingListViewModel() : base()
+        {
+
+        }
+    }
+
     public class SeatingViewModel : BaseViewModel
     {
         public SeatingViewModelItem Data { get; set; }

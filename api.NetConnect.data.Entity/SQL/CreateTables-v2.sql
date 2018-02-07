@@ -45,7 +45,7 @@ CREATE TABLE [dbo].[CateringOrderDetail] (
 CREATE TABLE [dbo].[CateringProduct] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] text NOT NULL,
-	[ImageContainerID] uniqueidentifier NOT NULL,
+	[Image] varchar(MAX) NOT NULL,
 	[Price] decimal(10,2) NOT NULL,
 	[SingleChoice] bit NOT NULL DEFAULT 0,
 	[IsActive] bit NOT NULL DEFAULT 1,
@@ -70,7 +70,7 @@ CREATE TABLE [dbo].[Event] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[EventTypeID] int NOT NULL,
 	[Volume] int NOT NULL,
-	[ImageContainerID] uniqueidentifier,
+	[Image] varchar(MAX),
 	[Start] datetime NOT NULL,
 	[End] datetime NOT NULL,
 	[ReservationCost] FLOAT NOT NULL,
@@ -111,13 +111,6 @@ CREATE TABLE [dbo].[FaqCategory] (
 	[RowVersion] timestamp NOT NULL
 );
 
-CREATE TABLE [dbo].[ImageContainer] (
-	[SID] uniqueidentifier PRIMARY KEY,
-	[ThumbnailPath] varchar(MAX) NOT NULL,
-	[OriginalPath] varchar(MAX) NOT NULL,
-	[RowVersion] timestamp NOT NULL
-);
-
 CREATE TABLE [dbo].[Logs] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[UserID] int NOT NULL,
@@ -133,7 +126,7 @@ CREATE TABLE [dbo].[News] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[NewsCategoryID] int NOT NULL,
 	[Title] varchar(100) NOT NULL,
-	[ImageContainerID] uniqueidentifier,
+	[Image] varchar(MAX),
 	[Date] datetime NOT NULL DEFAULT GETDATE(),
 	[Text] text NOT NULL,
 	[IsFeatured] bit NOT NULL DEFAULT 0,
@@ -144,7 +137,7 @@ CREATE TABLE [dbo].[News] (
 CREATE TABLE [dbo].[NewsCategory] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[Name] varchar(100) NOT NULL,
-	[ImageContainerID] uniqueidentifier NOT NULL,
+	[Image] varchar(MAX) NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -154,8 +147,8 @@ CREATE TABLE [dbo].[Partner] (
 	[Link] varchar(MAX) NOT NULL,
 	[RefLink] varchar(MAX),
 	[Content] text,
-	[ImageOriginalID] uniqueidentifier NOT NULL,
-	[ImagePassiveID] uniqueidentifier NOT NULL,
+	[ImageOriginal] varchar(MAX) NOT NULL,
+	[ImagePassive] varchar(MAX) NOT NULL,
 	[PartnerPackID] int NOT NULL DEFAULT 1,
 	[IsActive] bit NOT NULL DEFAULT 0,
 	[Position] int NOT NULL DEFAULT 0,
@@ -222,7 +215,7 @@ CREATE TABLE [dbo].[Tournament] (
 CREATE TABLE [dbo].[TournamentGame] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[Name] VARCHAR(50) NOT NULL,
-	[ImageContainerID] uniqueidentifier NOT NULL,
+	[Image] varchar(MAX) NOT NULL,
 	[Rules] text NOT NULL,
 	[RequireBattleTag] bit NOT NULL DEFAULT 0,
 	[RequireSteamID] bit NOT NULL DEFAULT 0,
@@ -258,7 +251,7 @@ CREATE TABLE [dbo].[TournamentTeamParticipant] (
 CREATE TABLE [dbo].[TournamentWinner] (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
 	[TournamentID] int NOT NULL,
-	[ImageContainerID] uniqueidentifier NOT NULL,
+	[Image] varchar(MAX) NOT NULL,
 	[Placement] int NOT NULL CHECK ([Placement] in (1, 2, 3)),
 	[RowVersion] timestamp NOT NULL
 );
@@ -286,7 +279,7 @@ CREATE TABLE [dbo].[User] (
 	[PasswordSalt] varchar(64) NOT NULL,
 	[PasswordReset] varchar(64),
 	[Registered] datetime NOT NULL DEFAULT GETDATE(),
-	[ImageContainerID] uniqueidentifier,
+	[Image] varchar(MAX),
 	[IsTeam] bit NOT NULL DEFAULT 0,
 	[IsAdmin] bit NOT NULL DEFAULT 0,
 	[CEO] int CHECK (CEO in (1, 2, 3, 4, 5)),
@@ -347,7 +340,6 @@ CREATE TABLE [dbo].[ChangeSet] (
 	[EventType] DateTime,
 	[FaqQuestion] DateTime,
 	[FaqCategory] DateTime,
-	[ImageContainer] DateTime,
 	[Logs] DateTime,
 	[Partner] DateTime,
 	[PartnerDisplay] DateTime,
@@ -374,9 +366,6 @@ CREATE TABLE [dbo].[ChangeSet] (
 GO
 
 
--- [dbo].[CateringProduct]
-ALTER TABLE [dbo].[CateringProduct] ADD CONSTRAINT [FK_CateringProduct_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
-
 -- [dbo].[CateringProductAttributeRelation]
 ALTER TABLE [dbo].[CateringProductAttributeRelation] ADD CONSTRAINT [FK_CateringProductAttributeRelation_CateringProductID] FOREIGN KEY (CateringProductID) REFERENCES [dbo].[CateringProduct](ID);
 ALTER TABLE [dbo].[CateringProductAttributeRelation] ADD CONSTRAINT [FK_CateringProductAttributeRelation_CateringProductAttributeID] FOREIGN KEY (CateringProductAttributeID) REFERENCES [dbo].[CateringProductAttribute](ID);
@@ -392,7 +381,6 @@ ALTER TABLE [dbo].[CateringOrderDetail] ADD CONSTRAINT [FK_CateringOrderDetail_C
 
 -- [dbo].[Event]
 ALTER TABLE [dbo].[Event] ADD CONSTRAINT [FK_Event_EventTypeID] FOREIGN KEY (EventTypeID) REFERENCES [dbo].[EventType](ID);
-ALTER TABLE [dbo].[Event] ADD CONSTRAINT [FK_Event_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[FaqQuestion]
 ALTER TABLE [dbo].[FaqQuestion] ADD CONSTRAINT [FK_FaqQuestion_FaqCategoryID] FOREIGN KEY (FaqCategoryID) REFERENCES [dbo].[FaqCategory](ID) ON DELETE CASCADE;
@@ -402,15 +390,9 @@ ALTER TABLE [dbo].[Logs] ADD CONSTRAINT [FK_Logs_UserID] FOREIGN KEY (UserID) RE
 
 -- [dbo].[News]
 ALTER TABLE [dbo].[News] ADD CONSTRAINT [FK_News_NewsCategoryID] FOREIGN KEY (NewsCategoryID) REFERENCES [dbo].[NewsCategory](ID);
-ALTER TABLE [dbo].[News] ADD CONSTRAINT [FK_News_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
-
--- [dbo].[NewsCategory]
-ALTER TABLE [dbo].[NewsCategory] ADD CONSTRAINT [FK_NewsCategory_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[Partner]
 ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_PartnerPackID] FOREIGN KEY (PartnerPackID) REFERENCES [dbo].[PartnerPack](ID);
-ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImageOriginalID] FOREIGN KEY (ImageOriginalID) REFERENCES [dbo].[ImageContainer](SID);
-ALTER TABLE [dbo].[Partner] ADD CONSTRAINT [FK_Partner_ImagePassiveID] FOREIGN KEY (ImagePassiveID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[PartnerDetails]
 ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRelation_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID) ON DELETE CASCADE;
@@ -430,9 +412,6 @@ ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_EventID] FOREIGN KE
 ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_TournamentGameID] FOREIGN KEY (TournamentGameID) REFERENCES [dbo].[TournamentGame](ID);
 ALTER TABLE [dbo].[Tournament] ADD CONSTRAINT [FK_Tournament_PartnerID] FOREIGN KEY (PartnerID) REFERENCES [dbo].[Partner](ID);
 
--- [dbo].[TournamentGame]
-ALTER TABLE [dbo].[TournamentGame] ADD CONSTRAINT [FK_TournamentGame_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
-
 -- [dbo].[TournamentParticipant]
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_TournamentParticipant_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
 ALTER TABLE [dbo].[TournamentParticipant] ADD CONSTRAINT [FK_TournamentParticipant_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID) ON DELETE CASCADE;
@@ -446,7 +425,6 @@ ALTER TABLE [dbo].[TournamentTeamParticipant] ADD CONSTRAINT [FK_TournamentTeamP
 
 -- [dbo].[TournamentWinner]
 ALTER TABLE [dbo].[TournamentWinner] ADD CONSTRAINT [FK_TournamentWinner_TournamentID] FOREIGN KEY (TournamentID) REFERENCES [dbo].[Tournament](ID) ON DELETE CASCADE;
-ALTER TABLE [dbo].[TournamentWinner] ADD CONSTRAINT [FK_TournamentWinner_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[TournamentWinnerPlayer]
 ALTER TABLE [dbo].[TournamentWinnerPlayer] ADD CONSTRAINT [FK_TournamentWinnerPlayer_TournamentWinnerID] FOREIGN KEY (TournamentWinnerID) REFERENCES [dbo].[TournamentWinner](ID) ON DELETE CASCADE;
@@ -455,9 +433,6 @@ ALTER TABLE [dbo].[TournamentWinnerPlayer] ADD CONSTRAINT [FK_TournamentWinnerPl
 -- [dbo].[TournamentWinnerTeam]
 ALTER TABLE [dbo].[TournamentWinnerTeam] ADD CONSTRAINT [FK_TournamentWinnerTeam_TournamentWinnerID] FOREIGN KEY (TournamentWinnerID) REFERENCES [dbo].[TournamentWinner](ID) ON DELETE CASCADE;
 ALTER TABLE [dbo].[TournamentWinnerTeam] ADD CONSTRAINT [FK_TournamentWinnerTeam_TournamentTeamID] FOREIGN KEY (TournamentTeamID) REFERENCES [dbo].[TournamentTeam](ID);
-
--- [dbo].[User]
-ALTER TABLE [dbo].[User] ADD CONSTRAINT [FK_User_ImageContainerID] FOREIGN KEY (ImageContainerID) REFERENCES [dbo].[ImageContainer](SID);
 
 -- [dbo].[UserTaskRelation]
 ALTER TABLE [dbo].[UserTaskRelation] ADD CONSTRAINT [FK_UserTaskRelation_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
@@ -501,15 +476,10 @@ VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', '
 	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich')
 GO
 
-DECLARE @imgSID uniqueidentifier;
-SET @imgSID = NEWID();
-INSERT INTO dbo.ImageContainer([SID], [ThumbnailPath], [OriginalPath])
-VALUES (@imgSID, 'newscategory/default.png', 'newscategory/default.png')
-
-INSERT INTO dbo.NewsCategory ([Name], [ImageContainerID])
-VALUES ('NetConnect', @imgSID),
-	   ('Playground', @imgSID),
-	   ('Sponsoren', @imgSID)
+INSERT INTO dbo.NewsCategory ([Name], [Image])
+VALUES ('NetConnect', 'newscategory/default.png'),
+	   ('Playground', 'newscategory/default.png'),
+	   ('Sponsoren', 'newscategory/default.png')
 GO
 
 INSERT INTO dbo.News ([NewsCategoryID], [Title], [Text])
@@ -678,24 +648,6 @@ as
 	Select @date = GETDATE()
 	UPDATE [dbo].[ChangeSet]
 	SET [FaqCategory] = @date
-go
-
-
-IF (OBJECT_ID(N'[dbo].[UpdateImageContainer]') IS NOT NULL)
-BEGIN
-      DROP TRIGGER [dbo].[UpdateImageContainer];
-END;
-go
-
-
-create trigger [dbo].[UpdateImageContainer]
-on [dbo].[ImageContainer]
-after update, insert, delete
-as	
-	declare @date DateTime
-	Select @date = GETDATE()
-	UPDATE [dbo].[ChangeSet]
-	SET ImageContainer = @date
 go
 
 

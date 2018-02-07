@@ -14,9 +14,6 @@ using api.NetConnect.data.Entity;
 
 namespace api.NetConnect.Controllers
 {
-    using SeatingListViewModel = ListViewModel<SeatingViewModelItem>;
-    using BackendSeatingListViewModel = ListViewModel<BackendSeatingViewModelItem>;
-
     public class SeatingController : ApiController
     {
         #region Frontend

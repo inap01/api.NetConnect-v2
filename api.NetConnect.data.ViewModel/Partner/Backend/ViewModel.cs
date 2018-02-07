@@ -5,6 +5,16 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Partner.Backend
 {
+    public class BackendPartnerListArgs : ListArgsRequest<BackendPartnerFilter>
+    {
+
+    }
+
+    public class BackendPartnerListViewModel : ListArgsViewModel<BackendPartnerViewModelItem, BackendPartnerFilter>
+    {
+
+    }
+
     public class BackendPartnerViewModel : BackendBaseViewModel
     {
         public BackendPartnerViewModelItem Data { get; set; }

@@ -16,11 +16,10 @@ namespace api.NetConnect.data.Entity
     {
         public int ID { get; set; }
         public int TournamentID { get; set; }
-        public System.Guid ImageContainerID { get; set; }
+        public string Image { get; set; }
         public int Placement { get; set; }
         public byte[] RowVersion { get; set; }
     
-        public virtual ImageContainer ImageContainer { get; set; }
         public virtual Tournament Tournament { get; set; }
         public virtual TournamentWinnerPlayer TournamentWinnerPlayer { get; set; }
         public virtual TournamentWinnerTeam TournamentWinnerTeam { get; set; }

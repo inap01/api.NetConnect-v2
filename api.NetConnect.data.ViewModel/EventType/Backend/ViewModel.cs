@@ -5,6 +5,16 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.EventType.Backend
 {
+    public class BackendEventTypeListArgs : ListArgsRequest<BackendEventTypeFilter>
+    {
+
+    }
+
+    public class BackendEventTypeListViewModel : ListArgsViewModel<BackendEventTypeViewModelItem, BackendEventTypeFilter>
+    {
+
+    }
+
     public class BackendEventTypeViewModel : BackendBaseViewModel
     {
         public BackendEventTypeViewModelItem Data { get; set; }
