@@ -239,6 +239,7 @@
           <Property Name="Description" Type="text" Nullable="false" />
           <Property Name="ReservationDate" Type="datetime" Nullable="false" />
           <Property Name="Payed" Type="bit" Nullable="false" />
+          <Property Name="TransferUserID" Type="int" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
@@ -594,6 +595,18 @@
             </Principal>
             <Dependent Role="Seat">
               <PropertyRef Name="EventID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seat_TransferUserID">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Seat" Type="Self.Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="TransferUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -984,6 +997,10 @@
             <End Role="Event" EntitySet="Event" />
             <End Role="Seat" EntitySet="Seat" />
           </AssociationSet>
+          <AssociationSet Name="FK_Seat_TransferUserID" Association="Self.FK_Seat_TransferUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Seat" EntitySet="Seat" />
+          </AssociationSet>
           <AssociationSet Name="FK_Seat_UserID" Association="Self.FK_Seat_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="Seat" EntitySet="Seat" />
@@ -1183,6 +1200,10 @@
           <AssociationSet Name="FK_PartnerDisplayRelation_PartnerDisplayID" Association="NetConnectModel.FK_PartnerDisplayRelation_PartnerDisplayID">
             <End Role="PartnerDisplay" EntitySet="PartnerDisplay" />
             <End Role="PartnerDisplayRelation" EntitySet="PartnerDisplayRelation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Seat_TransferUserID" Association="NetConnectModel.FK_Seat_TransferUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Seat" EntitySet="Seat" />
           </AssociationSet>
           <AssociationSet Name="FK_Seat_UserID" Association="NetConnectModel.FK_Seat_UserID">
             <End Role="User" EntitySet="User" />
@@ -1531,10 +1552,12 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ReservationDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Payed" Type="Boolean" Nullable="false" />
+          <Property Name="TransferUserID" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_SeatID" FromRole="Seat" ToRole="CateringOrder" />
           <NavigationProperty Name="Event" Relationship="NetConnectModel.FK_Seat_EventID" FromRole="Seat" ToRole="Event" />
+          <NavigationProperty Name="TransferUser" Relationship="NetConnectModel.FK_Seat_TransferUserID" FromRole="Seat" ToRole="User" />
           <NavigationProperty Name="User" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="Seat" ToRole="User" />
           <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="Seat" ToRole="SeatTransferLog" />
         </EntityType>
@@ -1549,8 +1572,8 @@
           <Property Name="TransferDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_SeatTransferLog_SeatID" FromRole="SeatTransferLog" ToRole="Seat" />
-          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="SeatTransferLog" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="SeatTransferLog" ToRole="User" />
+          <NavigationProperty Name="DestinationUser" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="SeatTransferLog" ToRole="User" />
+          <NavigationProperty Name="SourceUser" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="SeatTransferLog" ToRole="User" />
         </EntityType>
         <EntityType Name="Tournament">
           <Key>
@@ -1681,9 +1704,10 @@
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="CateringOrder" Relationship="NetConnectModel.FK_CateringOrder_UserID" FromRole="User" ToRole="CateringOrder" />
           <NavigationProperty Name="Logs" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
-          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
-          <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
-          <NavigationProperty Name="SeatTransferLog1" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="User" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_TransferUserID" FromRole="User" ToRole="Seat" />
+          <NavigationProperty Name="Seat1" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
+          <NavigationProperty Name="SeatTransferLogDestination" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="SeatTransferLogSource" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="User" ToRole="SeatTransferLog" />
           <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_TournamentParticipant_UserID" FromRole="User" ToRole="TournamentParticipant" />
           <NavigationProperty Name="TournamentTeamParticipant" Relationship="NetConnectModel.FK_TournamentTeamParticipant_UserID" FromRole="User" ToRole="TournamentTeamParticipant" />
           <NavigationProperty Name="TournamentWinnerPlayer" Relationship="NetConnectModel.FK_TournamentWinnerPlayer_UserID" FromRole="User" ToRole="TournamentWinnerPlayer" />
@@ -1958,6 +1982,18 @@
             </Principal>
             <Dependent Role="PartnerDisplayRelation">
               <PropertyRef Name="PartnerDisplayID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Seat_TransferUserID">
+          <End Type="NetConnectModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="NetConnectModel.Seat" Role="Seat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Seat">
+              <PropertyRef Name="TransferUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2479,6 +2515,7 @@
               <MappingFragment StoreEntitySet="Seat">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TransferUserID" ColumnName="TransferUserID" />
                 <ScalarProperty Name="Payed" ColumnName="Payed" />
                 <ScalarProperty Name="ReservationDate" ColumnName="ReservationDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

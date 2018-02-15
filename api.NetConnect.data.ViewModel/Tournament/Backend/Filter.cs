@@ -9,7 +9,6 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
     public class BackendTournamentFilter
     {
         private TournamentFilterGame gameAll = new TournamentFilterGame() { ID = -1, Name = "Alle" };
-        private TournamentFilterEvent eventAll = new TournamentFilterEvent() { ID = -1, Name = "Alle" };
         public TournamentFilterGame GameSelected { get; set; }
         private List<TournamentFilterGame> _gameOptions;
         public List<TournamentFilterGame> GameOptions
@@ -30,8 +29,6 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
             get { return _eventOptions; }
             set
             {
-                if (!_eventOptions.Contains(eventAll))
-                    _eventOptions.Add(eventAll);
                 var union = _eventOptions.Union(value).Distinct();
                 _eventOptions = union.ToList();
             }
@@ -41,7 +38,6 @@ namespace api.NetConnect.data.ViewModel.Tournament.Backend
         {
             GameSelected = gameAll;
             _gameOptions = new List<TournamentFilterGame>();
-            EventSelected = eventAll;
             _eventOptions = new List<TournamentFilterEvent>();
         }
 

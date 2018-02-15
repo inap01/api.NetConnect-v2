@@ -28,8 +28,7 @@ namespace api.NetConnect.DataControllers
             qry.Include("Event");
             qry.Include("Partner");
 
-            if (args.Filter.EventSelected.ID != -1)
-                qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
+            qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
             if (args.Filter.GameSelected.ID != -1)
                 qry = qry.Where(x => x.TournamentGameID == args.Filter.GameSelected.ID);
 

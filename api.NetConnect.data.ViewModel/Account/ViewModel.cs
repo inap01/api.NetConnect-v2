@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.data.ViewModel.Event;
+using api.NetConnect.data.ViewModel.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,17 +39,27 @@ namespace api.NetConnect.data.ViewModel.Account
     {
         public String Name { get; set; }
         public List<AccountReservationSeatViewModelItem> Seats { get; set; }
+        public List<AccountReservationTransferedSeatViewModelItem> TransferedSeats { get; set; }
 
         public AccountReservationEventViewModelItem()
         {
             Seats = new List<AccountReservationSeatViewModelItem>();
+            TransferedSeats = new List<AccountReservationTransferedSeatViewModelItem>();
         }
     }
-    
+
     public class AccountReservationSeatViewModelItem : BaseViewModelItem
     {
         public Int32 SeatNumber { get; set; }
         public Int32 State { get; set; }
+        public UserViewModelItem TransferUser { get; set; }
+    }
+
+    public class AccountReservationTransferedSeatViewModelItem : BaseViewModelItem
+    {
+        public Int32 SeatNumber { get; set; }
+        public Int32 State { get; set; }
+        public UserViewModelItem From { get; set; }
     }
 
     public class AccountReservationSeatTransferLogViewModelItem

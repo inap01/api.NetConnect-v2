@@ -116,6 +116,7 @@ namespace api.NetConnect.Converters
             viewmodel.Name = model.CateringProduct.Name;
             viewmodel.Attributes = attr.ToList();
             viewmodel.Amount = model.Amount;
+            viewmodel.Price = model.CateringProduct.Price;
 
             return viewmodel;
         }

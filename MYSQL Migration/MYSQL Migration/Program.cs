@@ -164,7 +164,7 @@ namespace MYSQL_Migration
                     BattleTag = entry["battle_tag"].ToString(),
                     SteamID = entry["steam_id"].ToString(),
                     Newsletter = Convert.ToBoolean(entry["newsletter"]),
-                    IsTeam = false,
+                    IsTeam = Convert.ToBoolean(entry["is_admin"]),
                     CEO = ceo,
                     IsActive = true,
                     PasswordReset = entry["password_reset"].ToString(),
@@ -259,11 +259,10 @@ namespace MYSQL_Migration
 
             foreach (DataRow entry in set.Tables["seating"].Rows)
             {
+                var seatnumber = Convert.ToInt32(entry["ID"].ToString());
                 int state = Convert.ToInt32(entry["status"]);
                 if (state == 0)
                 {
-
-                    Console.WriteLine("Skipping Seat : {0} status was free", Convert.ToInt32(entry["id"]));
                     continue;
                 }
                 int id = Convert.ToInt32(entry["user_id"]);
@@ -278,8 +277,7 @@ namespace MYSQL_Migration
                 {
                     try
                     {
-
-                        if (db.User.Find(oldIDTonewID[id]).IsTeam)
+                        if (db.User.Find(TupleToId(db, Convert.ToInt32(entry["user_id"]))).IsTeam)
                             state = 3;
                     }
                     catch(Exception ex)
@@ -287,10 +285,9 @@ namespace MYSQL_Migration
 
                     }
                 }
-                var seatnumber = Convert.ToInt32(entry["ID"].ToString());
-                seatnumber += 10;
-                if (seatnumber > 70)
-                    seatnumber -= 70;
+                seatnumber += 14;
+                if (seatnumber > 74)
+                    seatnumber -= 74;
                 var s = new Seat()
                 {
                     UserID = db.User.SingleOrDefault(x => x.Email == cond1 && x.Nickname == cond2).ID,

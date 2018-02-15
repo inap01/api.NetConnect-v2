@@ -22,7 +22,7 @@ namespace api.NetConnect.data.Entity
         public byte[] RowVersion { get; set; }
     
         public virtual Seat Seat { get; set; }
-        public virtual User User { get; set; }
-        public virtual User User1 { get; set; }
+        public virtual User DestinationUser { get; set; }
+        public virtual User SourceUser { get; set; }
     }
 }

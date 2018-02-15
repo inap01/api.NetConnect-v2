@@ -1,4 +1,5 @@
 ﻿using api.NetConnect.Converters;
+using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Account;
 using api.NetConnect.DataControllers;
@@ -30,6 +31,139 @@ namespace api.NetConnect.Controllers
                 viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
             }
             catch(Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult TransferReservation(TransferReservationRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                Int32 TransferUserID;
+                Seat seat = SeatDataController.GetItem(request.SeatID);
+                try
+                {
+                    TransferUserID = UserDataController.GetItem(request.Email, "Email").ID;
+                }
+                catch(Exception ex)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Die Email wurde nicht vergeben.");
+                    return Ok(viewmodel);
+                }
+
+                if(TransferUserID == UserHelper.CurrentUserID)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Du kannst keine Tickets an dich selber versenden.");
+                    return Ok(viewmodel);
+                }
+
+                if (seat.UserID != UserHelper.CurrentUserID)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Du bist nicht Inhaber dieses Tickets.");
+                    return Ok(viewmodel);
+                }
+
+                if(UserDataController.ValidateUser(UserHelper.CurrentUserEmail, request.Password))
+                {
+                    seat.TransferUserID = TransferUserID;
+                    SeatDataController.Update(seat);
+                }
+                else
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Das eingegebene Passwort stimmt nicht.");
+                    return Ok(viewmodel);
+                }
+
+                viewmodel.AddSuccessAlert("Ticket wurde versendet.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult AcceptTransfer(Int32 ID)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                Seat seat = SeatDataController.GetItem(ID);
+                
+                if(seat.TransferUserID == null)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddDangerAlert("Der Platz wurde nicht transferiert.");
+                }
+
+                if (seat.TransferUserID != UserHelper.CurrentUserID)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Der Platz wurde dir nicht zugesendet.");
+                }
+
+
+                seat.UserID = seat.TransferUserID ?? default(int);
+                seat.TransferUserID = null;
+                SeatDataController.Update(seat);
+
+                viewmodel.AddSuccessAlert("Transfer wurde durchgeführt.");
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult RefuseTransfer(Int32 ID)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+
+            try
+            {
+                Seat seat = SeatDataController.GetItem(ID);
+
+                if (seat.TransferUserID == null)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddDangerAlert("Der Platz wurde nicht transferiert.");
+                }
+
+                if (seat.TransferUserID != UserHelper.CurrentUserID)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddWarningAlert("Der Platz wurde dir nicht zugesendet.");
+                }
+
+                
+                seat.TransferUserID = null;
+                SeatDataController.Update(seat);
+
+                viewmodel.AddSuccessAlert("Transfer wurde abgelehnt.");
+            }
+            catch (Exception ex)
             {
                 viewmodel.Success = false;
                 viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");

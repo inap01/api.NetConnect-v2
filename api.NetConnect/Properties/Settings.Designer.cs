@@ -193,5 +193,14 @@ namespace api.NetConnect.Properties {
                 return ((int)(this["galleryThumbnailWidth"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("74")]
+        public int SeatAmount {
+            get {
+                return ((int)(this["SeatAmount"]));
+            }
+        }
     }
 }

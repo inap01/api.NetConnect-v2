@@ -5,6 +5,7 @@ using api.NetConnect.data.ViewModel.Seating.Backend;
 using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -18,7 +19,12 @@ namespace api.NetConnect.DataControllers
         {
             db = InitDB();
 
-            return db.Seat.Where(x => x.EventID == eventID).ToList();
+            var qry = db.Seat.AsQueryable();
+            qry.Include(x => x.Event);
+            qry.Include(x => x.User);
+            qry.Include(x => x.TransferUser);
+
+            return qry.Where(x => x.EventID == eventID).ToList();
         }
         public static List<Seat> GetCurrentUserSeats(Int32 eventID)
         {
@@ -51,6 +57,27 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
 
             return result;
+        }
+
+        public static Seat Update(Seat item)
+        {
+            db = InitDB();
+
+            var dbItem = db.Seat.Single(x => x.ID == item.ID);
+
+            dbItem.SeatNumber = item.SeatNumber;
+            dbItem.EventID = item.EventID;
+            dbItem.UserID = item.UserID;
+            dbItem.State = item.State;
+            dbItem.Description = item.Description;
+            dbItem.ReservationDate = item.ReservationDate;
+            dbItem.Payed = item.Payed;
+            dbItem.TransferUserID = item.TransferUserID;
+            dbItem.IsActive = item.IsActive;
+
+            db.SaveChanges();
+
+            return dbItem;
         }
 
         public static void Delete(Int32 ID)

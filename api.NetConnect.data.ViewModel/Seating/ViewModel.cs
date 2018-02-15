@@ -35,6 +35,7 @@ namespace api.NetConnect.data.ViewModel.Seating
         public Boolean IsPayed { get; set; }
         public Boolean IsTeam { get; set; }
         public SeatingUser User { get; set; }
+        public SeatingUser TransferUser { get; set; }
 
         public SeatingViewModelItem()
         {

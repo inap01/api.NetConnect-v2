@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\TransferReservationRequest.cs" />
     <Compile Include="Account\ViewModel.cs" />
     <Compile Include="Auth\LoginRequest.cs" />
     <Compile Include="Auth\RegisterRequest.cs" />

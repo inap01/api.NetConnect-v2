@@ -6,6 +6,7 @@ using System.Web;
 using api.NetConnect.data.ViewModel.Account;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.DataControllers;
+using api.NetConnect.data.ViewModel.User;
 
 namespace api.NetConnect.Converters
 {
@@ -27,11 +28,11 @@ namespace api.NetConnect.Converters
             viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-2), Text = "asdfghjkl" });
             viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-1), Text = "asdfghjkl" });
 
-            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.User.ID == model.ID).ToList().ConvertAll(x =>
+            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.DestinationUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return SendTicketString(x);
             }));
-            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.User1.ID == model.ID).ToList().ConvertAll(x =>
+            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.SourceUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return RecivedTicketString(x);
             }));
@@ -49,6 +50,11 @@ namespace api.NetConnect.Converters
                 vm.FromModel(x);
                 return vm;
             });
+            viewModel.TransferedSeats = SeatDataController.GetItems().Where(x => x.EventID == model.ID && x.TransferUserID == user.ID).ToList().ConvertAll(x => {
+                var vm = new AccountReservationTransferedSeatViewModelItem();
+                vm.FromModel(x);
+                return vm;
+            });
 
             return viewModel;
         }
@@ -58,6 +64,19 @@ namespace api.NetConnect.Converters
             viewModel.ID = model.ID;
             viewModel.SeatNumber = model.SeatNumber;
             viewModel.State = model.State;
+            if (model.TransferUser != null)
+                viewModel.TransferUser = new UserViewModelItem().FromModel(model.TransferUser);
+
+            return viewModel;
+        }
+
+        public static AccountReservationTransferedSeatViewModelItem FromModel(this AccountReservationTransferedSeatViewModelItem viewModel, Seat model)
+        {
+            viewModel.ID = model.ID;
+            viewModel.SeatNumber = model.SeatNumber;
+            viewModel.State = model.State;
+            if (model.TransferUser != null)
+                viewModel.From = new UserViewModelItem().FromModel(model.User);
 
             return viewModel;
         }
@@ -78,7 +97,7 @@ namespace api.NetConnect.Converters
             AccountReservationSeatTransferLogViewModelItem item = new AccountReservationSeatTransferLogViewModelItem();
 
             item.Date = LogEntry.TransferDate;
-            item.Text = $"Du hast Platz #{LogEntry.SeatID} an {LogEntry.User1.FirstName} {LogEntry.User1.LastName} transferiert.";
+            item.Text = $"Du hast Platz #{LogEntry.SeatID} an {LogEntry.DestinationUser.FirstName} {LogEntry.DestinationUser.LastName} transferiert.";
 
             return item;
         }
@@ -88,7 +107,7 @@ namespace api.NetConnect.Converters
             AccountReservationSeatTransferLogViewModelItem item = new AccountReservationSeatTransferLogViewModelItem();
 
             item.Date = LogEntry.TransferDate;
-            item.Text = $"Du hast Platz #{LogEntry.SeatID} von {LogEntry.User.FirstName} {LogEntry.User.LastName} erhalten.";
+            item.Text = $"Du hast Platz #{LogEntry.SeatID} von {LogEntry.SourceUser.FirstName} {LogEntry.SourceUser.LastName} erhalten.";
 
             return item;
         }

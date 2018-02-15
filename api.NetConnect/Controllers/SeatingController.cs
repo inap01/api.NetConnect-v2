@@ -11,6 +11,8 @@ using api.NetConnect.Converters;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.Helper;
 using api.NetConnect.data.Entity;
+using api.NetConnect.data.ViewModel.User.Backend;
+using api.NetConnect.data.ViewModel.Event.Backend;
 
 namespace api.NetConnect.Controllers
 {
@@ -24,7 +26,7 @@ namespace api.NetConnect.Controllers
             viewmodel.Authenticated = UserHelper.Authenticated;
             var seats = SeatDataController.GetByEvent(eventID);
 
-            for (int i = 1; i <= 70; i++)
+            for (int i = 1; i <= Properties.Settings.Default.SeatAmount; i++)
             {
                 SeatingViewModelItem item = new SeatingViewModelItem();
                 Seat model = seats.FirstOrDefault(x => x.SeatNumber == i);
@@ -116,21 +118,110 @@ namespace api.NetConnect.Controllers
         #endregion
         #region Backend
         [HttpGet]
-        public IHttpActionResult Backend_Get([FromUri] BackendSeatingFilter filter)
+        public IHttpActionResult Backend_Get()
         {
             BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            // TODO
+            var events = EventDataController.GetItems().OrderByDescending(x => x.Start).ToList();
+            var users = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList();
+            var seats = SeatDataController.GetByEvent(events[0].ID);
+
+            viewmodel.Filter.EventOptions = events.ConvertAll(x =>
+            {
+                return new SeatingFilterEvent()
+                {
+                    ID = x.ID,
+                    Name = $"{x.EventType.Name} Vol.{x.Volume}"
+                };
+            });
+            viewmodel.Filter.EventSelected = viewmodel.Filter.EventOptions[0];
+
+            for (int i = 1; i <= Properties.Settings.Default.SeatAmount; i++)
+            {
+                BackendSeatingViewModelItem item = new BackendSeatingViewModelItem();
+                Seat model = seats.FirstOrDefault(x => x.SeatNumber == i);
+                if (model == null)
+                    model = new Seat()
+                    {
+                        SeatNumber = i,
+                        State = 0,
+                        Event = events[0]
+                    };
+                item.FromModel(model);
+                viewmodel.Data.Add(item);
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult Backend_FilterList(BackendSeatingFilter filter)
+        {
+            BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
+
+            var events = EventDataController.GetItems().OrderByDescending(x => x.Start).ToList();
+            var users = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList();
+            var seats = SeatDataController.GetByEvent(filter.EventSelected.ID);
+
+            viewmodel.Filter.EventOptions = events.ConvertAll(x =>
+            {
+                return new SeatingFilterEvent()
+                {
+                    ID = x.ID,
+                    Name = $"{x.EventType.Name} Vol.{x.Volume}"
+                };
+            });
+
+            for (int i = 1; i <= Properties.Settings.Default.SeatAmount; i++)
+            {
+                BackendSeatingViewModelItem item = new BackendSeatingViewModelItem();
+                Seat model = seats.FirstOrDefault(x => x.SeatNumber == i);
+                if (model == null)
+                    model = new Seat()
+                    {
+                        SeatNumber = i,
+                        State = 0,
+                        Event = events[0]
+                    };
+                item.FromModel(model);
+                viewmodel.Data.Add(item);
+            }
 
             return Ok(viewmodel);
         }
 
         [HttpGet]
-        public IHttpActionResult Backend_Detail(Int32 id)
+        public IHttpActionResult Backend_Detail(Int32 EventID, Int32 SeatNumber)
         {
             BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
+            viewmodel.Authenticated = UserHelper.Authenticated;
 
-            // TODO
+            try
+            {
+                viewmodel.UserOptions = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList().ConvertAll(x =>
+                {
+                    return new BackendUserViewModelItem().FromModel(x);
+                });
+
+                var seats = SeatDataController.GetByEvent(EventID);
+                Seat model = seats.FirstOrDefault(x => x.SeatNumber == SeatNumber);
+                if (model == null)
+                    model = new Seat()
+                    {
+                        SeatNumber = SeatNumber,
+                        State = 0,
+                        Event = EventDataController.GetItem(EventID)
+                    };
+                viewmodel.Data.FromModel(model);
+            }
+            catch (Exception ex)
+            {
+                viewmodel.Success = false;
+                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
+                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+            }
 
             return Ok(viewmodel);
         }

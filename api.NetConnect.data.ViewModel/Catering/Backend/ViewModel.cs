@@ -113,5 +113,6 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         public String Name { get; set; }
         public List<String> Attributes { get; set; }
         public Int32 Amount { get; set; }
+        public Decimal Price { get; set; }
     }
 }

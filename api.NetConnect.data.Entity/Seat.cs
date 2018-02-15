@@ -29,12 +29,14 @@ namespace api.NetConnect.data.Entity
         public string Description { get; set; }
         public System.DateTime ReservationDate { get; set; }
         public bool Payed { get; set; }
+        public Nullable<int> TransferUserID { get; set; }
         public bool IsActive { get; set; }
         public byte[] RowVersion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CateringOrder> CateringOrder { get; set; }
         public virtual Event Event { get; set; }
+        public virtual User TransferUser { get; set; }
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SeatTransferLog> SeatTransferLog { get; set; }

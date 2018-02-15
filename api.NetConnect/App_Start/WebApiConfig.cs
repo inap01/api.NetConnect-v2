@@ -149,8 +149,38 @@ namespace api.NetConnect
                }
             );
             config.Routes.MapHttpRoute(
+               name: "PUT_Account_TransferReservation",
+               routeTemplate: "account/reservation/transfer",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "TransferReservation"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Account_AcceptTransfer",
+               routeTemplate: "account/reservation/transfer/accept/{ID}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "AcceptTransfer"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Account_RefuseTransfer",
+               routeTemplate: "account/reservation/transfer/refuse/{ID}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Account",
+                   action = "RefuseTransfer"
+               }
+            );
+            config.Routes.MapHttpRoute(
                name: "DELETE_Account_CancelReservation",
-               routeTemplate: "account/reservation/{id}",
+               routeTemplate: "account/reservation/{ID}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
                defaults: new
                {
@@ -620,6 +650,78 @@ namespace api.NetConnect
                {
                    controller = "Seating",
                    action = "NewReservation"
+               }
+            );
+            #endregion
+            #region Backend
+            config.Routes.MapHttpRoute(
+               name: "GET_Seating_Backend_Get",
+               routeTemplate: "backend/seating",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Seating_Backend_FilterList",
+               routeTemplate: "backend/seating",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Seating_Backend_New",
+               routeTemplate: "backend/seating/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Seating_Backend_Insert",
+               routeTemplate: "backend/seating/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Seating_Backend_Detail",
+               routeTemplate: "backend/seating/{EventID}/{SeatNumber}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Seating_Backend_Update",
+               routeTemplate: "backend/seating/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Detail_Update"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "DELETE_Seating_Backend_Delete",
+               routeTemplate: "backend/seating",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Delete) },
+               defaults: new
+               {
+                   controller = "Seating",
+                   action = "Backend_Delete"
                }
             );
             #endregion

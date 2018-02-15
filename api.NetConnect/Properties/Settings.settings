@@ -59,5 +59,8 @@
     <Setting Name="galleryThumbnailWidth" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="SeatAmount" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">74</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

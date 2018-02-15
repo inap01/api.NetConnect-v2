@@ -186,6 +186,7 @@ CREATE TABLE [dbo].[Seat] (
 	[Description] text NOT NULL,
 	[ReservationDate] datetime NOT NULL DEFAULT GETDATE(),
 	[Payed] bit NOT NULL DEFAULT 0,
+	[TransferUserID] INT,
 	[IsActive] bit NOT NULL DEFAULT 1,
 	[RowVersion] timestamp NOT NULL
 );
@@ -401,6 +402,7 @@ ALTER TABLE [dbo].[PartnerDisplayRelation] ADD CONSTRAINT [FK_PartnerDisplayRela
 -- [dbo].[Seat]
 ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_EventID] FOREIGN KEY (EventID) REFERENCES [dbo].[Event](ID);
 ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
+ALTER TABLE [dbo].[Seat] ADD CONSTRAINT [FK_Seat_TransferUserID] FOREIGN KEY (TransferUserID) REFERENCES [dbo].[User](ID);
 
 -- [dbo].[SeatTransferLog]
 ALTER TABLE [dbo].[SeatTransferLog] ADD CONSTRAINT [FK_SeatTransferLog_SeatID] FOREIGN KEY (SeatID) REFERENCES [dbo].[Seat](ID) ON DELETE CASCADE;

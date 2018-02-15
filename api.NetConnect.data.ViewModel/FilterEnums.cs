@@ -26,4 +26,15 @@ namespace api.NetConnect.data.ViewModel
             return (IEnumerable<CateringStatusFilterEnum>)(Enum.GetValues(typeof(CateringStatusFilterEnum)));
         }
     }
+
+
+    public enum SeatingStatusFilterEnum { Ungefiltert, Frei, Vorgemerkt, Reserviert, NetConnect }
+
+    public class SeatingStatusFilter
+    {
+        public static IEnumerable<SeatingStatusFilterEnum> getOptions()
+        {
+            return (IEnumerable<SeatingStatusFilterEnum>)(Enum.GetValues(typeof(SeatingStatusFilterEnum)));
+        }
+    }
 }

@@ -290,6 +290,24 @@ namespace api.NetConnect.Controllers
                     }
                 }
             });
+            // Seating
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Sitzplan",
+                StateCompare = "admin.seating",
+                SubMenu = new List<NavItem>() {
+                    new NavItem() {
+                        Text = "Alle Plätze",
+                        State = "admin.seating.all",
+                        StateCompare = "admin.seating.all"
+                    },
+                    new NavItem() {
+                        Text = "Plätze Tauschen",
+                        State = "admin.seating.swap",
+                        StateCompare = "admin.seating.swap"
+                    }
+                }
+            });
             // Catering
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {

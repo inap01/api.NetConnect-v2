@@ -39,6 +39,12 @@ namespace api.NetConnect.DataControllers
             return dbItem;
         }
 
+        public static Boolean ValidateUser(String email, String password)
+        {
+            User u;
+            return ValidateUser(email, password, out u);
+        }
+
         public static Boolean ValidateUser(String email, String password, out User User)
         {
             var user = UserDataController.GetItem(email, "Email");

@@ -70,6 +70,13 @@ namespace api.NetConnect.Controllers
 
             try
             {
+                if(SeatDataController.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddDangerAlert("Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
+                    return Ok(viewmodel);
+                }
+
                 var team = TournamentTeamDataController.Insert(request.ToModel(tournamentID));
                 JoinTournamentRequest _tmp = new JoinTournamentRequest() { TeamID = team.ID };
                 TournamentTeamParticipantDataController.Insert(_tmp.ToTeamModel());
@@ -93,7 +100,14 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                if(request.TeamID == null)
+                if (SeatDataController.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
+                {
+                    viewmodel.Success = false;
+                    viewmodel.AddDangerAlert("Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
+                    return Ok(viewmodel);
+                }
+
+                if (request.TeamID == null)
                 {
                     TournamentParticipantDataController.Insert(request.ToModel(tournamentID));
                 }
@@ -135,8 +149,11 @@ namespace api.NetConnect.Controllers
                         TournamentTeamParticipantDataController.Delete(tournamentID);
                         viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
                     }
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Du bist nicht angemeldet.");
+                    else
+                    {
+                        viewmodel.Success = false;
+                        viewmodel.AddWarningAlert("Du bist nicht angemeldet.");
+                    }
                 }
 
             }
@@ -166,13 +183,15 @@ namespace api.NetConnect.Controllers
                         Name = x.Name
                     };
                 });
-                viewmodel.Filter.EventOptions = EventDataController.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
+                viewmodel.Filter.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterEvent()
                     {
                         ID = x.ID,
                         Name = x.EventType.Name + " Vol. " + x.Volume.ToString()
                     };
-                });
+                }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.Filter.EventSelected = viewmodel.Filter.EventOptions[0];
+                args.Filter.EventSelected = viewmodel.Filter.EventSelected;
 
                 Int32 TotalItemsCount = 0;
                 viewmodel.Data = TournamentConverter.FilterList(args, out TotalItemsCount);
@@ -273,8 +292,8 @@ namespace api.NetConnect.Controllers
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
 
-            viewmodel.Data.Start = DateTime.Now;
-                viewmodel.Data.End = DateTime.Now;
+                viewmodel.Data.Event = viewmodel.EventOptions[0];
+                viewmodel.Data.Start = viewmodel.Data.Event.Start;
             }
             catch (Exception ex)
             {
