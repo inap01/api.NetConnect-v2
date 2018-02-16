@@ -13,24 +13,22 @@ using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    public class UserController : ApiController
+    public class UserController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Detail(Int32 id)
         {
             UserViewModel viewmodel = new UserViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(id));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -43,19 +41,18 @@ namespace api.NetConnect.Controllers
         {
             BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
             BackendProfileListArgs args = new BackendProfileListArgs();
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
                 Int32 TotalItemsCount;
-                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -65,6 +62,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendProfileListArgs args)
         {
             BackendProfileListViewModel viewmodel = new BackendProfileListViewModel();
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
@@ -74,15 +72,13 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount;
-                viewmodel.Data = UserConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -92,16 +88,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendUserViewModel viewmodel = new BackendUserViewModel();
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(id));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -111,21 +106,18 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendUserViewModelItem request)
         {
             BackendUserViewModel viewmodel = new BackendUserViewModel();
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.Update(request.ToModel()));
-
-                viewmodel.AddSuccessAlert("Benutzer wurde erfolgreich aktualisiert.");
+                viewmodel.Data.FromModel(dataCtrl.Update(request.ToModel()));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Benutzer wurde erfolgreich aktualisiert.");
         }
         #endregion
     }

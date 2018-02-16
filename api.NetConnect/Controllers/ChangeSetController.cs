@@ -11,22 +11,21 @@ using api.NetConnect.Helper;
 
 namespace api.NetConnect.Controllers
 {
-    public class ChangeSetController : ApiController
+    public class ChangeSetController : BaseController
     {
         [HttpGet]
         public IHttpActionResult GetItem()
         {
             ChangeSetViewModel viewmodel = new ChangeSetViewModel();
+            ChangeSetDataController dataCtrl = new ChangeSetDataController();
 
             try
             {
-                viewmodel.Data.FromModel(ChangeSetDataController.GetItem(1));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(1));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

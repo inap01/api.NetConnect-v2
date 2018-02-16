@@ -17,7 +17,7 @@ namespace api.NetConnect.data.ViewModel
             AlertMessages = new List<AlertMessage>();
         }
 
-        public void AddInfoAlert(String message)
+        public void AddInfoMessage(String message)
         {
             AlertMessages.Add(new AlertMessage()
             {
@@ -26,7 +26,7 @@ namespace api.NetConnect.data.ViewModel
             });
         }
 
-        public void AddSuccessAlert(String message)
+        public void AddSuccessMessage(String message)
         {
             AlertMessages.Add(new AlertMessage()
             {
@@ -35,7 +35,7 @@ namespace api.NetConnect.data.ViewModel
             });
         }
 
-        public void AddWarningAlert(String message)
+        public void AddWarningMessage(String message)
         {
             AlertMessages.Add(new AlertMessage()
             {
@@ -44,7 +44,7 @@ namespace api.NetConnect.data.ViewModel
             });
         }
 
-        public void AddDangerAlert(String message)
+        public void AddErrorMessage(String message)
         {
             AlertMessages.Add(new AlertMessage()
             {

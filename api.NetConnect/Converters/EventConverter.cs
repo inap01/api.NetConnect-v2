@@ -48,6 +48,14 @@ namespace api.NetConnect.Converters
         #endregion
 
         #region Backend
+        public static List<BackendEventViewModelItem> FromModel(this List<BackendEventViewModelItem> viewModel, List<Event> model)
+        {
+            foreach (var m in model)
+                viewModel.Add(new BackendEventViewModelItem().FromModel(m));
+
+            return viewModel;
+        }
+
         public static BackendEventViewModelItem FromModel(this BackendEventViewModelItem viewModel, Event model)
         {
             viewModel.ID = model.ID;
@@ -98,33 +106,5 @@ namespace api.NetConnect.Converters
             return model;
         }
         #endregion
-    }
-
-    public class EventConverter
-    {
-        public static List<BackendEventViewModelItem> FilterList(ListArgsRequest<BackendEventFilter> args, out Int32 TotalCount)
-        {
-            List<BackendEventViewModelItem> result = new List<BackendEventViewModelItem>();
-
-            var events = EventDataController.GetItems();
-
-            events = events.Where(x => (x.EventType.Name + " Vol." + x.Volume).ToLower().Contains(args.Filter.Name.ToLower())).ToList();
-
-            TotalCount = events.Count();
-
-            events = events.OrderByDescending(x => x.ID).ToList();
-            var items = events.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected)
-                 .ToList();
-
-            foreach (var model in items)
-            {
-                BackendEventViewModelItem item = new BackendEventViewModelItem();
-                item.FromModel(model);
-                result.Add(item);
-            }
-
-            return result;
-        }
     }
 }

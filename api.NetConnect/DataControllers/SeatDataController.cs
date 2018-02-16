@@ -13,57 +13,49 @@ namespace api.NetConnect.DataControllers
 {
     using SeatingArgsRequest = ListArgsRequest<BackendSeatingFilter>;
 
-    public class SeatDataController : GenericDataController<Seat>
+    public class SeatDataController : BaseDataController, IDataController<Seat>
     {
-        public static List<Seat> GetByEvent(Int32 eventID)
+        public SeatDataController() : base()
         {
-            db = InitDB();
 
+        }
+
+        #region Basic Functions
+        public Seat GetItem(int ID)
+        {
             var qry = db.Seat.AsQueryable();
             qry.Include(x => x.Event);
             qry.Include(x => x.User);
             qry.Include(x => x.TransferUser);
+            qry.Include(x => x.SeatTransferLog);
+            qry.Include(x => x.CateringOrder);
 
-            return qry.Where(x => x.EventID == eventID).ToList();
-        }
-        public static List<Seat> GetCurrentUserSeats(Int32 eventID)
-        {
-            Int32 userID = UserHelper.CurrentUserID;
-
-            return GetByEvent(eventID).Where(x => x.UserID == userID).OrderBy(x => x.SeatNumber).ToList();
+            return qry.Single(x => x.ID == ID);
         }
 
-        public static Seat GetItem(Int32 seatNumber, Int32 eventID)
+        public IQueryable<Seat> GetItems()
         {
-            db = InitDB();
+            var qry = db.Seat.AsQueryable();
+            qry.Include(x => x.Event);
+            qry.Include(x => x.User);
+            qry.Include(x => x.TransferUser);
+            qry.Include(x => x.SeatTransferLog);
+            qry.Include(x => x.CateringOrder);
 
-            var seat = db.Seat.FirstOrDefault(x => x.SeatNumber == seatNumber && x.EventID == eventID);
-            if (seat != null)
-                return seat;
-
-            return new Seat()
-            {
-                SeatNumber = seatNumber,
-                State = 0,
-                Payed = false
-            };
+            return qry;
         }
 
-        public static Seat Insert(Seat item)
+        public Seat Insert(Seat item)
         {
-            db = InitDB();
-
             var result = db.Seat.Add(item);
             db.SaveChanges();
 
             return result;
         }
 
-        public static Seat Update(Seat item)
+        public Seat Update(Seat item)
         {
-            db = InitDB();
-
-            var dbItem = db.Seat.Single(x => x.ID == item.ID);
+            var dbItem = GetItem(item.ID);
 
             dbItem.SeatNumber = item.SeatNumber;
             dbItem.EventID = item.EventID;
@@ -80,12 +72,32 @@ namespace api.NetConnect.DataControllers
             return dbItem;
         }
 
-        public static void Delete(Int32 ID)
+        public void Delete(int ID)
         {
-            db = InitDB();
-
-            db.Seat.Remove(db.Seat.Single(x => x.ID == ID));
+            db.Seat.Remove(GetItem(ID));
             db.SaveChanges();
+        }
+        #endregion
+
+        public List<Seat> GetCurrentUserSeats(Int32 eventID)
+        {
+            Int32 userID = UserHelper.CurrentUserID;
+
+            return GetItems().Where(x => x.EventID == eventID && x.UserID == userID).OrderBy(x => x.SeatNumber).ToList();
+        }
+
+        public Seat GetItem(Int32 seatNumber, Int32 eventID)
+        {
+            var seat = db.Seat.FirstOrDefault(x => x.SeatNumber == seatNumber && x.EventID == eventID);
+            if (seat != null)
+                return seat;
+
+            return new Seat()
+            {
+                SeatNumber = seatNumber,
+                State = 0,
+                Payed = false
+            };
         }
     }
 }

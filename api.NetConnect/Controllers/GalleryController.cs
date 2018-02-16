@@ -13,14 +13,14 @@ using System.IO;
 
 namespace api.NetConnect.Controllers
 {
-    public class GalleryController : ApiController
+    public class GalleryController : BaseController
     {
         public IHttpActionResult GetGallery()
         {
             GalleryListModel viewmodel = new GalleryListModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            EventDataController dataCtrl = new EventDataController();
 
-            var ev = EventDataController.GetItems();
+            var ev = dataCtrl.GetItems();
 
 
             foreach (var _event in ev)
@@ -50,9 +50,9 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult GetImages(int id)
         {
             GalleryViewModel viewmodel = new GalleryViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            EventDataController dataCtrl = new EventDataController();
 
-            var ev = EventDataController.GetItem(id);
+            var ev = dataCtrl.GetItem(id);
             var items = GalleryDataController.GetItems(id);
 
             viewmodel.FromModel(ev, items);

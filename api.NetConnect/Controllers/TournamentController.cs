@@ -16,19 +16,22 @@ using System.Data.Entity.Validation;
 
 namespace api.NetConnect.Controllers
 {
-    public class TournamentController : ApiController
+    public class TournamentController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get(Int32 eventID)
         {
             TournamentListViewModel viewmodel = new TournamentListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-            var e = EventDataController.GetItem(eventID);
-            var tournaments = TournamentDataController.GetByEvent(eventID);
+            TournamentDataController dataCtrl = new TournamentDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+
+
+            var e = eventDataCtrl.GetItem(eventID);
+            var tournaments = dataCtrl.GetItems().Where(x => x.EventID == eventID);
             
             if (e.End > DateTime.Now)
-                if(tournaments.Count > 0)
+                if(tournaments.Count() > 0)
                     foreach (var tournament in tournaments)
                     {
                         TournamentViewModelItem item = new TournamentViewModelItem();
@@ -36,9 +39,9 @@ namespace api.NetConnect.Controllers
                         viewmodel.Data.Add(item);
                     }
                 else
-                    viewmodel.AddInfoAlert("Es wurden keine Turniere für dieses Event angelegt.");
+                    return Info(viewmodel, "Es wurden keine Turniere für dieses Event angelegt.");
             else
-                viewmodel.AddWarningAlert("Das Event ist vorbei.");
+                return Warning(viewmodel, "Das Event ist vorbei.");
 
             return Ok(viewmodel);
         }
@@ -47,17 +50,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 eventID, Int32 tournamentID)
         {
             TournamentViewModel viewmodel = new TournamentViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            TournamentDataController dataCtrl = new TournamentDataController();
 
             try
             {
-                viewmodel.Data.FromModel(TournamentDataController.GetItem(tournamentID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(tournamentID));
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -67,104 +68,96 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult CreateTeam(Int32 eventID, Int32 tournamentID, CreateTeamRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            SeatDataController seatDataCtrl = new SeatDataController();
+            TournamentTeamDataController teamDataCtrl = new TournamentTeamDataController();
+            TournamentTeamParticipantDataController teamParticipantDataCtrl = new TournamentTeamParticipantDataController();
 
             try
             {
-                if(SeatDataController.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
+                if(seatDataCtrl.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddDangerAlert("Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
-                    return Ok(viewmodel);
+                    return Error(viewmodel, "Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
                 }
 
-                var team = TournamentTeamDataController.Insert(request.ToModel(tournamentID));
+                var team = teamDataCtrl.Insert(request.ToModel(tournamentID));
                 JoinTournamentRequest _tmp = new JoinTournamentRequest() { TeamID = team.ID };
-                TournamentTeamParticipantDataController.Insert(_tmp.ToTeamModel());
-
-                viewmodel.AddSuccessAlert("Team wurde erstellt.");
+                teamParticipantDataCtrl.Insert(_tmp.ToTeamModel());
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Team wurde erstellt.");
         }
 
         [HttpPost]
         public IHttpActionResult Join(Int32 eventID, Int32 tournamentID, JoinTournamentRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            SeatDataController seatDataCtrl = new SeatDataController();
+            TournamentParticipantDataController participantDataCtrl = new TournamentParticipantDataController();
+            TournamentTeamParticipantDataController teamParticipantDataCtrl = new TournamentTeamParticipantDataController();
 
             try
             {
-                if (SeatDataController.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
+                if (seatDataCtrl.GetCurrentUserSeats(eventID).FindAll(x => x.State >= 2).Count == 0)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddDangerAlert("Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
-                    return Ok(viewmodel);
+                    return Error(viewmodel, "Du bist kein Teilnehmer dieser Veranstaltung. Bitte reserviere einen Platz.");
                 }
 
                 if (request.TeamID == null)
                 {
-                    TournamentParticipantDataController.Insert(request.ToModel(tournamentID));
+                    participantDataCtrl.Insert(request.ToModel(tournamentID));
                 }
                 else
                 {
-                    TournamentTeamParticipantDataController.Insert(request.ToTeamModel());
+                    teamParticipantDataCtrl.Insert(request.ToTeamModel());
                 }
-
-                viewmodel.AddSuccessAlert("Anmeldung erfolgreich.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Anmeldung erfolgreich.");
         }
 
         [HttpPut]
         public IHttpActionResult Leave(Int32 eventID, Int32 tournamentID)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            TournamentParticipantDataController participantDataCtrl = new TournamentParticipantDataController();
+            TournamentTeamParticipantDataController teamParticipantDataCtrl = new TournamentTeamParticipantDataController();
 
             try
             {
-                var participant = TournamentParticipantDataController.GetByTournament(tournamentID);
+                var participant = participantDataCtrl.GetItems().SingleOrDefault(x => x.TournamentID == tournamentID && x.UserID == UserHelper.CurrentUserID);
                 if(participant != null)
                 {
-                    TournamentParticipantDataController.Delete(tournamentID);
-                    viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
+                    participantDataCtrl.Delete(tournamentID);
                 }
                 else
                 {
-                    var teamParticipant = TournamentTeamParticipantDataController.GetByTournament(tournamentID);
+                    var teamParticipant = teamParticipantDataCtrl.GetItemByTournament(tournamentID);
                     if (teamParticipant != null)
                     {
-                        TournamentTeamParticipantDataController.Delete(tournamentID);
-                        viewmodel.AddSuccessAlert("Abmeldung erfolgreich.");
+                        teamParticipantDataCtrl.Delete(tournamentID);
                     }
                     else
                     {
-                        viewmodel.Success = false;
-                        viewmodel.AddWarningAlert("Du bist nicht angemeldet.");
+                        return Warning(viewmodel, "Du bist nicht angemeldet.");
                     }
                 }
 
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Abmeldung erfolgreich.");
         }
         #endregion
         #region Backend
@@ -173,17 +166,20 @@ namespace api.NetConnect.Controllers
         {
             BackendTournamentListViewModel viewmodel = new BackendTournamentListViewModel();
             BackendTournamentListArgs args = new BackendTournamentListArgs();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.Filter.GameOptions = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
+                viewmodel.Filter.GameOptions = gameDataCtrl.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterGame()
                     {
                         ID = x.ID,
                         Name = x.Name
                     };
                 });
-                viewmodel.Filter.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x => {
+                viewmodel.Filter.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterEvent()
                     {
                         ID = x.ID,
@@ -194,15 +190,13 @@ namespace api.NetConnect.Controllers
                 args.Filter.EventSelected = viewmodel.Filter.EventSelected;
 
                 Int32 TotalItemsCount = 0;
-                viewmodel.Data = TournamentConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -212,19 +206,22 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendTournamentListArgs args)
         {
             BackendTournamentListViewModel viewmodel = new BackendTournamentListViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
                 viewmodel.Filter.GameSelected = args.Filter.GameSelected;
                 viewmodel.Filter.EventSelected = args.Filter.EventSelected;
-                viewmodel.Filter.GameOptions = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
+                viewmodel.Filter.GameOptions = gameDataCtrl.GetItems().OrderBy(x => x.Name).ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterGame()
                     {
                         ID = x.ID,
                         Name = x.Name
                     };
                 });
-                viewmodel.Filter.EventOptions = EventDataController.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
+                viewmodel.Filter.EventOptions = eventDataCtrl.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterEvent()
                     {
                         ID = x.ID,
@@ -234,15 +231,13 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount = 0;
-                viewmodel.Data = TournamentConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -252,25 +247,26 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
-                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.GameOptions = gameDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
 
-                viewmodel.Data.FromModel(TournamentDataController.GetItem(id));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -280,14 +276,16 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_New()
         {
             BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
-                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.GameOptions = gameDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
@@ -297,9 +295,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -309,62 +305,61 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_Insert(BackendTournamentViewModelItem request)
         {
             BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
-                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.GameOptions = gameDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
 
-                var data = TournamentDataController.Insert(request.ToModel());
+                var data = dataCtrl.Insert(request.ToModel());
                 viewmodel.Data.FromModel(data);
-
-                viewmodel.AddSuccessAlert("Das Turnier wurder erstellt.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Das Turnier wurder erstellt.");
         }
 
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendTournamentViewModelItem request)
         {
             BackendTournamentViewModel viewmodel = new BackendTournamentViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
+            TournamentGameDataController gameDataCtrl = new TournamentGameDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
-                viewmodel.GameOptions = TournamentGameDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.GameOptions = gameDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendGameViewModelItem().FromModel(x);
                 }).OrderBy(x => x.Name).ToList();
 
-                var data = TournamentDataController.Update(request.ToModel());
+                var data = dataCtrl.Update(request.ToModel());
                 viewmodel.Data.FromModel(data);
-
-                viewmodel.AddSuccessAlert("Speichern erfolgreich.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Speichern erfolgreich.");
         }
 
         [HttpDelete]
@@ -378,9 +373,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

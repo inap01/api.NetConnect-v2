@@ -16,15 +16,16 @@ using api.NetConnect.data.ViewModel.Event.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    public class SeatingController : ApiController
+    public class SeatingController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get(Int32 eventID)
         {
             SeatingListViewModel viewmodel = new SeatingListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-            var seats = SeatDataController.GetByEvent(eventID);
+            SeatDataController dataCtrl = new SeatDataController();
+
+            var seats = dataCtrl.GetItems().Where(x => x.EventID == eventID);
 
             for (int i = 1; i <= Properties.Settings.Default.SeatAmount; i++)
             {
@@ -47,23 +48,21 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 eventID, Int32 seatNumber)
         {
             SeatingViewModel viewmodel = new SeatingViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            SeatDataController dataCtrl = new SeatDataController();
 
             try
             {
                 viewmodel.BankAccount.FromProperties();
-                viewmodel.Data.FromModel(SeatDataController.GetItem(seatNumber, eventID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(seatNumber, eventID));
 
                 if (viewmodel.Data.ReservationState < 0)
-                    viewmodel.AddInfoAlert("Dieser Platz ist gesperrt und kann nicht reserviert werden.");
+                    return Info(viewmodel, "Dieser Platz ist gesperrt und kann nicht reserviert werden.");
                 else if(viewmodel.Data.ReservationState > 0)
-                    viewmodel.AddWarningAlert($"Dieser Platz wurde bereits von {viewmodel.Data.User.Nickname} reserviert.");
+                    return Warning(viewmodel, $"Dieser Platz wurde bereits von {viewmodel.Data.User.Nickname} reserviert.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -73,11 +72,11 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult NewReservation(Int32 eventID, Int32 seatNumber)
         {
             BaseViewModel viewmodel = new BaseViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            SeatDataController dataCtrl = new SeatDataController();
 
             try
             {
-                SeatingViewModelItem seat = new SeatingViewModelItem().FromModel(SeatDataController.GetItem(seatNumber, eventID));
+                SeatingViewModelItem seat = new SeatingViewModelItem().FromModel(dataCtrl.GetItem(seatNumber, eventID));
                 if (seat.ReservationState == 0)
                 {
                     Seat item = new Seat()
@@ -91,29 +90,23 @@ namespace api.NetConnect.Controllers
                         State = 1,
                         Description = ""
                     };
-                    SeatDataController.Insert(item);
-
-                    viewmodel.AddSuccessAlert("Platz wurde reserviert.");
+                    dataCtrl.Insert(item);
                 }
                 else if (seat.ReservationState < 0)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Dieser Platz ist gesperrt und kann nicht reserviert werden.");
+                    return Warning(viewmodel, "Dieser Platz ist gesperrt und kann nicht reserviert werden.");
                 }
                 else
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert($"Dieser Platz wurde bereits von {seat.User.Nickname} reserviert.");
+                    return Warning(viewmodel, $"Dieser Platz wurde bereits von {seat.User.Nickname} reserviert.");
                 }
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Platz wurde reserviert.");
         }
         #endregion
         #region Backend
@@ -121,11 +114,13 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Get()
         {
             BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            SeatDataController dataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
-            var events = EventDataController.GetItems().OrderByDescending(x => x.Start).ToList();
-            var users = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList();
-            var seats = SeatDataController.GetByEvent(events[0].ID);
+            var events = eventDataCtrl.GetItems().OrderByDescending(x => x.Start).ToList();
+            var users = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList();
+            var seats = dataCtrl.GetItems().Where(x => x.EventID == events[0].ID);
 
             viewmodel.Filter.EventOptions = events.ConvertAll(x =>
             {
@@ -159,11 +154,13 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendSeatingFilter filter)
         {
             BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            SeatDataController dataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
-            var events = EventDataController.GetItems().OrderByDescending(x => x.Start).ToList();
-            var users = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList();
-            var seats = SeatDataController.GetByEvent(filter.EventSelected.ID);
+            var events = eventDataCtrl.GetItems().OrderByDescending(x => x.Start).ToList();
+            var users = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList();
+            var seats = dataCtrl.GetItems().Where(x => x.EventID == filter.EventSelected.ID);
 
             viewmodel.Filter.EventOptions = events.ConvertAll(x =>
             {
@@ -196,31 +193,31 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 EventID, Int32 SeatNumber)
         {
             BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            SeatDataController dataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.UserOptions = UserDataController.GetItems().OrderBy(x => x.FirstName).ToList().ConvertAll(x =>
+                viewmodel.UserOptions = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList().ConvertAll(x =>
                 {
                     return new BackendUserViewModelItem().FromModel(x);
                 });
 
-                var seats = SeatDataController.GetByEvent(EventID);
+                var seats = dataCtrl.GetItems().Where(x => x.EventID == EventID);
                 Seat model = seats.FirstOrDefault(x => x.SeatNumber == SeatNumber);
                 if (model == null)
                     model = new Seat()
                     {
                         SeatNumber = SeatNumber,
                         State = 0,
-                        Event = EventDataController.GetItem(EventID)
+                        Event = eventDataCtrl.GetItem(EventID)
                     };
                 viewmodel.Data.FromModel(model);
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

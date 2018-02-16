@@ -10,17 +10,60 @@ using System.Web;
 namespace api.NetConnect.DataControllers
 {
 
-    public class CateringOrderDataController : GenericDataController<CateringOrder>
+    public class CateringOrderDataController : BaseDataController, IDataController<CateringOrder>
     {
-        public static IEnumerable<CateringOrder> FilterList(ListArgsRequest<BackendCateringFilter> args, out Int32 TotalCount)
+        public CateringOrderDataController() : base()
         {
-            db = InitDB();
 
+        }
+
+        #region Basic Functions
+        public CateringOrder GetItem(int ID)
+        {
             var qry = db.CateringOrder.AsQueryable();
-            qry.Include("CateringOrderDetails");
-            qry.Include("CateringProduct");
-            qry.Include("CateringProductAttribute");
-            qry.Include("CateringProductAttributeRelation");
+            qry.Include(x => x.CateringOrderDetail);
+            qry.Include(x => x.User);
+            qry.Include(x => x.Seat);
+            qry.Include(x => x.Event);
+
+            return qry.Single(x => x.ID == ID);
+        }
+
+        public IQueryable<CateringOrder> GetItems()
+        {
+            var qry = db.CateringOrder.AsQueryable();
+            qry.Include(x => x.CateringOrderDetail);
+            qry.Include(x => x.User);
+            qry.Include(x => x.Seat);
+            qry.Include(x => x.Event);
+
+            return qry;
+        }
+
+        public CateringOrder Insert(CateringOrder item)
+        {
+            var result = db.CateringOrder.Add(item);
+            db.SaveChanges();
+
+            return result;
+        }
+
+        public CateringOrder Update(CateringOrder item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int ID)
+        {
+            db.CateringOrder.Remove(GetItem(ID));
+            db.SaveChanges();
+        }
+        #endregion
+
+        public IEnumerable<CateringOrder> FilterList(ListArgsRequest<BackendCateringFilter> args, out Int32 TotalCount)
+        {
+            var qry = db.CateringOrder.AsQueryable();
+            qry.Include(x => x.CateringOrderDetail);
 
             qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
 
@@ -40,27 +83,6 @@ namespace api.NetConnect.DataControllers
                  .Take(args.Pagination.ItemsPerPageSelected);
 
             return qry;
-        }
-
-        public static CateringOrder Insert(CateringOrder item)
-        {
-            InitDB();
-
-            var result = db.CateringOrder.Add(item);
-            db.SaveChanges();
-
-            return result;
-        }
-
-        public static CateringOrder Update(CateringOrder item)
-        {
-            CateringOrder dbItem = GetItem(item.ID);
-
-
-
-            db.SaveChanges();
-
-            return dbItem;
         }
     }
 }

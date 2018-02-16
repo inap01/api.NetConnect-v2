@@ -1,27 +1,54 @@
 ﻿using api.NetConnect.data.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class LogsDataController : GenericDataController<Logs>
+    public class LogsDataController : BaseDataController, IDataController<Logs>
     {
-        public static Logs Update (Logs item)
+        public LogsDataController() : base()
         {
-            Logs dbItem = GetItem(item.ID);
 
-            dbItem.UserID = item.UserID;
-            dbItem.SQLTable = item.SQLTable;
-            dbItem.SQLActionType = item.SQLActionType;
-            dbItem.SQLQuery = item.SQLQuery;
-            dbItem.ModelBefore = item.ModelBefore;
-            dbItem.ModelAfter = item.ModelAfter;
+        }
 
+        #region Basic Functions
+        public Logs GetItem(int ID)
+        {
+            var qry = db.Logs.AsQueryable();
+            qry.Include(x => x.User);
+
+            return qry.Single(x => x.ID == ID);
+        }
+
+        public IQueryable<Logs> GetItems()
+        {
+            var qry = db.Logs.AsQueryable();
+            qry.Include(x => x.User);
+
+            return qry;
+        }
+
+        public Logs Insert(Logs item)
+        {
+            var result = db.Logs.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
         }
+
+        public Logs Update(Logs item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int ID)
+        {
+            db.Logs.Remove(GetItem(ID));
+            db.SaveChanges();
+        }
+        #endregion
     }
 }

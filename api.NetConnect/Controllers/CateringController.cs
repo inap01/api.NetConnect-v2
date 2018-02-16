@@ -13,29 +13,35 @@ using api.NetConnect.data.ViewModel.Event.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    public class CateringController : ApiController
+    public class CateringController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get()
         {
             CateringListViewModel viewmodel = new CateringListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-            
+            CateringDataController dataCtrl = new CateringDataController();
+            SeatDataController seatDataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+
             try
             {
-                foreach (var model in CateringDataController.GetItems())
+                foreach (var model in dataCtrl.GetItems())
                 {
                     ProductViewModelItem item = new ProductViewModelItem();
 
                     item.FromModel(model);
                     viewmodel.Data.Add(item);
                 }
+                
+                var e = eventDataCtrl.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now);
+                if(e == null)
+                {
+                    return Warning(viewmodel, "Keine passende Veranstaltung gefunden.");
+                }
 
-                // TODO: 
-                //Int32 eventID = EventDataController.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now).ID;
-                Int32 eventID = 10;
-                foreach (var model in SeatDataController.GetCurrentUserSeats(eventID))
+                int eventID = e.ID;
+                foreach (var model in seatDataCtrl.GetCurrentUserSeats(eventID))
                 {
                     CateringSeat item = new CateringSeat();
 
@@ -45,9 +51,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -57,17 +61,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 ID)
         {
             CateringViewModel viewmodel = new CateringViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-            
+            CateringDataController dataCtrl = new CateringDataController();
+
             try
             {
-                viewmodel.Data.FromModel(CateringDataController.GetItem(ID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(ID));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -78,24 +80,26 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Insert(OrderRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            CateringOrderDataController dataCtrl = new CateringOrderDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                // TODO: 
-                //Int32 eventID = EventDataController.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now).ID;
-                Int32 eventID = 10;
+                var e = eventDataCtrl.GetItems().FirstOrDefault(x => x.Start <= DateTime.Now && x.End >= DateTime.Now);
+                if (e == null)
+                {
+                    return Warning(viewmodel, "Die Bestellung konnte keiner Veranstaltung zugeordnet werden.");
+                }
 
-                CateringOrderDataController.Insert(request.ToModel(eventID));
-                viewmodel.AddSuccessAlert("Bestellung ist eingegangen.");
+                int eventID = e.ID;
+                dataCtrl.Insert(request.ToModel(eventID));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Bestellung ist eingegangen.");
         }
         #endregion
         #region Backend
@@ -104,10 +108,12 @@ namespace api.NetConnect.Controllers
         {
             BackendCateringListViewModel viewmodel = new BackendCateringListViewModel();
             BackendCateringListArgs args = new BackendCateringListArgs();
+            EventDataController eventDataCtrl = new EventDataController();
+            CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
 
             try
             {
-                var events = EventDataController.GetItems().OrderByDescending(x => x.ID).ToList();
+                var events = eventDataCtrl.GetItems().OrderByDescending(x => x.ID).ToList();
                 viewmodel.Filter.EventOptions = events.ConvertAll(x =>
                 {
                     return new BackendCateringFilter.CateringFilterEvent()
@@ -120,14 +126,12 @@ namespace api.NetConnect.Controllers
                 args.Filter.EventSelected = viewmodel.Filter.EventOptions[0];
 
                 Int32 TotalItemsCount = 0;
-                viewmodel.FromModel(CateringOrderDataController.FilterList(args, out TotalItemsCount));
+                viewmodel.FromModel(orderDataCtrl.FilterList(args, out TotalItemsCount));
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -137,10 +141,12 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendCateringListArgs args)
         {
             BackendCateringListViewModel viewmodel = new BackendCateringListViewModel();
+            EventDataController eventDataCtrl = new EventDataController();
+            CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
 
             try
             {
-                var events = EventDataController.GetItems().OrderByDescending(x => x.ID).ToList();
+                var events = eventDataCtrl.GetItems().OrderByDescending(x => x.ID).ToList();
                 viewmodel.Filter.EventOptions = events.ConvertAll(x =>
                 {
                     return new BackendCateringFilter.CateringFilterEvent()
@@ -157,14 +163,12 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
                 
                 Int32 TotalItemsCount = 0;
-                viewmodel.FromModel(CateringOrderDataController.FilterList(args, out TotalItemsCount));
+                viewmodel.FromModel(orderDataCtrl.FilterList(args, out TotalItemsCount));
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -174,21 +178,21 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendCateringViewModel viewmodel = new BackendCateringViewModel();
+            CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.EventOptions = EventDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
 
-                viewmodel.Data.FromModel(CateringOrderDataController.GetItem(id));
+                viewmodel.Data.FromModel(orderDataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -205,9 +209,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -224,9 +226,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

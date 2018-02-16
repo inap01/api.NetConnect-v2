@@ -152,6 +152,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CateringController.cs" />
     <Compile Include="Controllers\ChangeSetController.cs" />
     <Compile Include="Controllers\EventTypeController.cs" />
@@ -185,13 +186,21 @@
     <Compile Include="DataControllers\EventTypeDataController.cs" />
     <Compile Include="DataControllers\EventDataController.cs" />
     <Compile Include="DataControllers\GalleryDataController.cs" />
-    <Compile Include="DataControllers\GenericDataController.cs" />
+    <Compile Include="DataControllers\BaseDataController.cs" />
+    <Compile Include="DataControllers\IDataController.cs" />
     <Compile Include="DataControllers\NewsDataController.cs" />
+    <Compile Include="DataControllers\PartnerDisplayDataController.cs" />
+    <Compile Include="DataControllers\PartnerDisplayRelationDataController.cs" />
+    <Compile Include="DataControllers\PartnerPackDataController.cs" />
     <Compile Include="DataControllers\SeatTransferLogDataController.cs" />
     <Compile Include="DataControllers\TournamentDataController.cs" />
     <Compile Include="DataControllers\SeatDataController.cs" />
     <Compile Include="DataControllers\PartnerDataController.cs" />
     <Compile Include="DataControllers\LogsDataController.cs" />
+    <Compile Include="DataControllers\TournamentGameDataController.cs" />
+    <Compile Include="DataControllers\TournamentParticipantDataController.cs" />
+    <Compile Include="DataControllers\TournamentTeamDataController.cs" />
+    <Compile Include="DataControllers\TournamentTeamParticipantDataController.cs" />
     <Compile Include="DataControllers\UserDataController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -1,63 +1,86 @@
 ﻿using api.NetConnect.data.Entity;
+using api.NetConnect.data.ViewModel;
+using api.NetConnect.data.ViewModel.Partner.Backend;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class PartnerDataController : GenericDataController<Partner>
+    public class PartnerDataController : BaseDataController, IDataController<Partner>
     {
-        public static Partner Create(Partner item)
+        public PartnerDataController() : base()
         {
-            Partner dbItem = db.Partner.Add(item);
 
+        }
+
+        #region Basic Functions
+        public Partner GetItem(int ID)
+        {
+            var qry = db.Partner.AsQueryable();
+            qry.Include(x => x.PartnerPack);
+            qry.Include(x => x.PartnerDisplayRelation);
+            qry.Include(x => x.Tournament);
+
+            return qry.Single(x => x.ID == ID);
+        }
+
+        public IQueryable<Partner> GetItems()
+        {
+            var qry = db.Partner.AsQueryable();
+            qry.Include(x => x.PartnerPack);
+            qry.Include(x => x.PartnerDisplayRelation);
+            qry.Include(x => x.Tournament);
+
+            return qry;
+        }
+
+        public Partner Insert(Partner item)
+        {
+            var result = db.Partner.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
         }
 
-        public static Partner Update(Partner item)
+        public Partner Update(Partner item)
         {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int ID)
+        {
+            db.Partner.Remove(GetItem(ID));
             db.SaveChanges();
-
-            return item;
         }
-    }
+        #endregion
 
-    public class PartnerPackDataController : GenericDataController<PartnerPack>
-    {
-        public static PartnerPack Update(PartnerPack item)
+        public List<Partner> FilterList(ListArgsRequest<BackendPartnerFilter> args, out Int32 TotalCount)
         {
-            PartnerPack dbItem = GetItem(item.ID);
+            var qry = GetItems();
 
-            dbItem.Name = item.Name;
+            if (args.Filter.StatusSelected != StatusFilterEnum.Alle)
+            {
+                if (args.Filter.StatusSelected == StatusFilterEnum.Aktiv)
+                    qry = qry.Where(x => x.IsActive);
+                else
+                    qry = qry.Where(x => !x.IsActive);
+            }
 
-            db.SaveChanges();
+            if (args.Filter.PartnerTypeSelected != "Alle")
+                qry = qry.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected);
 
-            return dbItem;
-        }
-    }
+            qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
 
-    public class PartnerDisplayDataController : GenericDataController<PartnerDisplay>
-    {
-        public static PartnerDisplay Update(PartnerDisplay item)
-        {
-            PartnerDisplay dbItem = GetItem(item.ID);
+            TotalCount = qry.Count();
 
+            var items = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected)
+                 .ToList();
 
-            return dbItem;
-        }
-    }
-
-    public class PartnerDisplayRelationDataController : GenericDataController<PartnerDisplayRelation>
-    {
-        public static PartnerDisplayRelation Update(PartnerDisplayRelation item)
-        {
-            PartnerDisplayRelation dbItem = GetItem(item.ID);
-
-
-            return dbItem;
+            return items;
         }
     }
 }

@@ -12,12 +12,14 @@ using System.Web.Http;
 
 namespace api.NetConnect.Controllers
 {
-    public class NavigationController : ApiController
+    public class NavigationController : BaseController
     {
         [HttpGet]
         public IHttpActionResult Frontend()
         {
             NavigationViewModel viewmodel = new NavigationViewModel();
+            EventDataController dataCtrl = new EventDataController();
+            SeatDataController seatDataCtrl = new SeatDataController();
 
             #region NavigationTop
             viewmodel.Data.NavigationTop.Add(new NavItem()
@@ -145,9 +147,9 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region EventsAside
-            foreach (var e in EventDataController.GetItems().Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
+            foreach (var e in dataCtrl.GetItems().Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
             {
-                var seats = SeatDataController.GetByEvent(e.ID);
+                var seats = seatDataCtrl.GetItems().Where(x => x.EventID == e.ID);
                 Int32 seatsCount = 70 - seats.Count(x => x.State == -1);
                 Int32 flagged = seats.Count(x => x.State == 1);
                 Int32 reserved = seats.Count(x => x.State == 2);

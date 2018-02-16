@@ -58,6 +58,15 @@ namespace api.NetConnect.Converters
 
             return viewModel;
         }
+        public static List<BackendTournamentViewModelItem> FromModel(this List<BackendTournamentViewModelItem> viewModel, List<Tournament> model)
+        {
+            viewModel = model.ConvertAll(x =>
+            {
+                return new BackendTournamentViewModelItem().FromModel(x);
+            });
+
+            return viewModel;
+        }
         public static BackendTournamentViewModelItem FromModel(this BackendTournamentViewModelItem viewModel, Tournament model)
         {
             viewModel.ID = model.ID;
@@ -90,7 +99,7 @@ namespace api.NetConnect.Converters
 
             return viewModel;
         }
-        
+
         // Tournament Participant
         public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewModel, TournamentParticipant model)
         {
@@ -168,6 +177,16 @@ namespace api.NetConnect.Converters
         }
 
         // Tournament Game
+        public static List<BackendGameViewModelItem> FromModel(this List<BackendGameViewModelItem> viewModel, List<TournamentGame> model)
+        {
+            viewModel = model.ConvertAll(x =>
+            {
+                return new BackendGameViewModelItem().FromModel(x);
+            });
+
+            return viewModel;
+        }
+
         public static BackendGameViewModelItem FromModel(this BackendGameViewModelItem viewModel, TournamentGame model)
         {
             viewModel.ID = model.ID;
@@ -218,52 +237,6 @@ namespace api.NetConnect.Converters
                 model.PartnerID = viewmodel.Partner.ID;
 
             return model;
-        }
-    }
-
-    public class TournamentConverter
-    {
-        public static List<BackendTournamentViewModelItem> FilterList(ListArgsRequest<BackendTournamentFilter> args, out Int32 TotalCount)
-        {
-            List<BackendTournamentViewModelItem> result = new List<BackendTournamentViewModelItem>();
-
-            var items = TournamentDataController.FilterList(args, out TotalCount).OrderByDescending(x => x.EventID).ToList();
-
-            foreach (var model in items)
-            {
-                BackendTournamentViewModelItem item = new BackendTournamentViewModelItem();
-                item.FromModel(model);
-                result.Add(item);
-            }
-
-            return result;
-        }
-    }
-
-    public class GameConverter
-    {
-        public static List<BackendGameViewModelItem> FilterList(ListArgsRequest<BackendGameFilter> args, out Int32 TotalCount)
-        {
-            List<BackendGameViewModelItem> result = new List<BackendGameViewModelItem>();
-
-            var items = TournamentGameDataController.GetItems().OrderBy(x => x.Name).ToList();
-            
-            items = items.Where(x => x.Name.ToLower().IndexOf(args.Filter.Name.ToLower()) != -1).ToList();
-
-            TotalCount = items.Count;
-
-            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected)
-                 .ToList();
-
-            foreach (var model in items)
-            {
-                BackendGameViewModelItem item = new BackendGameViewModelItem();
-                item.FromModel(model);
-                result.Add(item);
-            }
-
-            return result;
         }
     }
 }

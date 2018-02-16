@@ -15,7 +15,7 @@ using api.NetConnect.data.ViewModel.Game.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    public class GameController : ApiController
+    public class GameController : BaseController
     {
         #region Backend
         [HttpGet]
@@ -23,19 +23,18 @@ namespace api.NetConnect.Controllers
         {
             BackendGameListViewModel viewmodel = new BackendGameListViewModel();
             BackendGameListArgs args = new BackendGameListArgs();
+            TournamentGameDataController dataCtrl = new TournamentGameDataController();
 
             try
             {
                 Int32 TotalItemsCount = 0;
-                viewmodel.Data = GameConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -45,6 +44,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendGameListArgs args)
         {
             BackendGameListViewModel viewmodel = new BackendGameListViewModel();
+            TournamentGameDataController dataCtrl = new TournamentGameDataController();
 
             try
             {
@@ -52,15 +52,13 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount = 0;
-                viewmodel.Data = GameConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -70,16 +68,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendGameViewModel viewmodel = new BackendGameViewModel();
+            TournamentGameDataController dataCtrl = new TournamentGameDataController();
 
             try
             {
-                viewmodel.Data.FromModel(TournamentGameDataController.GetItem(id));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -96,9 +93,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -115,9 +110,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -134,9 +127,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

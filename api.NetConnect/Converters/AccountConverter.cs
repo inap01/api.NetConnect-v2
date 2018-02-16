@@ -15,9 +15,12 @@ namespace api.NetConnect.Converters
         #region Reservation
         public static AccountReservationViewModelItem FromModel(this AccountReservationViewModelItem viewModel, User model)
         {
+            EventDataController eventDataCtrl = new EventDataController();
+            SeatTransferLogDataController transferDataCtrl = new SeatTransferLogDataController();
+
             viewModel.Name = $"{model.FirstName} {model.LastName}";
             viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Events = EventDataController.GetItems().Where(x => x.End > DateTime.Now).ToList().ConvertAll(x => {
+            viewModel.Events = eventDataCtrl.GetItems().Where(x => x.End > DateTime.Now).ToList().ConvertAll(x => {
                 var vm = new AccountReservationEventViewModelItem();
                 vm.FromModel(x, model);
                 return vm;
@@ -28,11 +31,11 @@ namespace api.NetConnect.Converters
             viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-2), Text = "asdfghjkl" });
             viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-1), Text = "asdfghjkl" });
 
-            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.DestinationUser.ID == model.ID).ToList().ConvertAll(x =>
+            viewModel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.DestinationUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return SendTicketString(x);
             }));
-            viewModel.TransferLog.AddRange(SeatTransferLogDataController.GetItems().Where(x => x.SourceUser.ID == model.ID).ToList().ConvertAll(x =>
+            viewModel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.SourceUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return RecivedTicketString(x);
             }));
@@ -43,14 +46,16 @@ namespace api.NetConnect.Converters
 
         public static AccountReservationEventViewModelItem FromModel(this AccountReservationEventViewModelItem viewModel, Event model, User user)
         {
+            SeatDataController seatDataCtrl = new SeatDataController();
+
             viewModel.ID = model.ID;
             viewModel.Name = model.EventType.Name + " Vol." + model.Volume;
-            viewModel.Seats = SeatDataController.GetItems().Where(x => x.EventID == model.ID && x.UserID == user.ID).ToList().ConvertAll(x => {
+            viewModel.Seats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.UserID == user.ID).ToList().ConvertAll(x => {
                 var vm = new AccountReservationSeatViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
-            viewModel.TransferedSeats = SeatDataController.GetItems().Where(x => x.EventID == model.ID && x.TransferUserID == user.ID).ToList().ConvertAll(x => {
+            viewModel.TransferedSeats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.TransferUserID == user.ID).ToList().ConvertAll(x => {
                 var vm = new AccountReservationTransferedSeatViewModelItem();
                 vm.FromModel(x);
                 return vm;
@@ -116,10 +121,12 @@ namespace api.NetConnect.Converters
         #region Tournament
         public static AccountTournamentViewModelItem FromModel(this AccountTournamentViewModelItem viewModel, User model)
         {
+            TournamentParticipantDataController participantDataCtrl = new TournamentParticipantDataController();
+
             viewModel.Name = $"{model.FirstName} {model.LastName}";
             viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             
-            viewModel.TournamentParticipation.AddRange(TournamentParticipantDataController.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.Event.End > DateTime.Now).ToList().ConvertAll(x =>
+            viewModel.TournamentParticipation.AddRange(participantDataCtrl.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.Event.End > DateTime.Now).ToList().ConvertAll(x =>
             {
                 return new AccountTournamentParticipantViewModelItem().FromModel(x.Tournament);
             }));

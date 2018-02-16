@@ -13,16 +13,16 @@ using System.Web.Http;
 
 namespace api.NetConnect.Controllers
 {
-    public class PartnerController : ApiController
+    public class PartnerController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get()
         {
             PartnerListViewModel viewmodel = new PartnerListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            PartnerDataController dataCtrl = new PartnerDataController();
 
-            foreach (var model in PartnerDataController.GetItems().Where(x => x.IsActive).OrderBy(x => x.PartnerPackID).ThenBy(x => x.Position))
+            foreach (var model in dataCtrl.GetItems().Where(x => x.IsActive).OrderBy(x => x.PartnerPackID).ThenBy(x => x.Position))
             {
                 PartnerViewModelItem item = new PartnerViewModelItem();
                 
@@ -37,9 +37,9 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             PartnerViewModel viewmodel = new PartnerViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            PartnerDataController dataCtrl = new PartnerDataController();
 
-            viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
+            viewmodel.Data.FromModel(dataCtrl.GetItem(id));
 
             return Ok(viewmodel);
         }
@@ -51,21 +51,21 @@ namespace api.NetConnect.Controllers
         {
             BackendPartnerListViewModel viewmodel = new BackendPartnerListViewModel();
             BackendPartnerListArgs args = new BackendPartnerListArgs();
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackdataCtrl = new PartnerPackDataController();
 
             try
             {
-                viewmodel.Filter.PartnerTypeOptions = PartnerPackDataController.GetItems().Select(x => x.Name).OrderBy(x => x).ToList();
+                viewmodel.Filter.PartnerTypeOptions = partnerPackdataCtrl.GetItems().Select(x => x.Name).OrderBy(x => x).ToList();
 
                 Int32 TotalItemsCount;
-                viewmodel.Data = PartnerConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -75,6 +75,8 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendPartnerListArgs args)
         {
             BackendPartnerListViewModel viewmodel = new BackendPartnerListViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackdataCtrl = new PartnerPackDataController();
 
             try
             {
@@ -82,18 +84,16 @@ namespace api.NetConnect.Controllers
                 viewmodel.Filter.StatusSelected = args.Filter.StatusSelected;
                 viewmodel.Filter.PartnerTypeSelected = args.Filter.PartnerTypeSelected;
                 viewmodel.Pagination = args.Pagination;
-                viewmodel.Filter.PartnerTypeOptions = PartnerPackDataController.GetItems().Select(x => x.Name).OrderBy(x => x).ToList();
+                viewmodel.Filter.PartnerTypeOptions = partnerPackdataCtrl.GetItems().Select(x => x.Name).OrderBy(x => x).ToList();
 
                 Int32 TotalItemsCount;
-                viewmodel.Data = PartnerConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -103,20 +103,20 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackdataCtrl = new PartnerPackDataController();
 
             try
             {
-                viewmodel.Data.FromModel(PartnerDataController.GetItem(id));
-                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x => 
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
+                viewmodel.PartnerTypeOptions = partnerPackdataCtrl.GetItems().ToList().ConvertAll(x => 
                 {
                     return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -126,14 +126,17 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_New()
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackdataCtrl = new PartnerPackDataController();
+            PartnerDisplayDataController partnerDisplayDataCtrl = new PartnerDisplayDataController();
 
             try
             {
-                viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.PartnerTypeOptions = partnerPackdataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendPartnerType() { ID = x.ID, Name = x.Name };
                 }).OrderBy(x => x.Name).ToList();
-                foreach (var display in PartnerDisplayDataController.GetItems())
+                foreach (var display in partnerDisplayDataCtrl.GetItems())
                         viewmodel.Data.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
                         {
                             ID = display.ID,
@@ -143,9 +146,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -155,42 +156,36 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_Insert(BackendPartnerViewModelItem request)
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
 
             try
             {
-                viewmodel.Data.FromModel(PartnerDataController.Create(request.ToModel()));
-
-                viewmodel.AddSuccessAlert("Partner wurde erstellt.");
+                viewmodel.Data.FromModel(dataCtrl.Insert(request.ToModel()));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Partner wurde erstellt.");
         }
 
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendPartnerViewModelItem request)
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
 
             try
             {
-                viewmodel.Data.FromModel(PartnerDataController.Update(request.ToModel()));
-
-                viewmodel.AddSuccessAlert("Partner wurde erfolgreich aktualisiert.");
+                viewmodel.Data.FromModel(dataCtrl.Update(request.ToModel()));
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Partner wurde erfolgreich aktualisiert.");
         }
 
         [HttpDelete]
@@ -207,12 +202,14 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Position(PositionPartnerTypeRequest args)
         {
             BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackDataCtrl = new PartnerPackDataController();
 
             if (args.PartnerType == null)
-                args.PartnerType = PartnerPackDataController.GetItems().First().Name;
+                args.PartnerType = partnerPackDataCtrl.GetItems().First().Name;
 
             int position = 1;
-            viewmodel.Data = PartnerDataController.GetItems()
+            viewmodel.Data = dataCtrl.GetItems()
                 .Where(x => x.PartnerPack.Name == args.PartnerType && x.IsActive)
                 .OrderBy(x => x.Position).ToList()
                 .ConvertAll(x =>
@@ -225,7 +222,7 @@ namespace api.NetConnect.Controllers
                 };
             }).ToList();
 
-            viewmodel.PartnerTypeOptions = PartnerPackDataController.GetItems().ToList().ConvertAll(x =>
+            viewmodel.PartnerTypeOptions = partnerPackDataCtrl.GetItems().ToList().ConvertAll(x =>
             {
                 return x.Name;
             });
@@ -237,24 +234,21 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Position_Update(PositionPartnerUpdateRequest request)
         {
             BackendPartnerPositionViewModel viewmodel = new BackendPartnerPositionViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
 
             try
             {
                 request.Partner.ForEach(x =>
                 {
-                    PartnerDataController.Update(x.ToModel());
+                    dataCtrl.Update(x.ToModel());
                 });
-
-                viewmodel.AddSuccessAlert("Sortierung wurde aktualisiert.");
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Sortierung wurde aktualisiert.");
         }
         #endregion
     }

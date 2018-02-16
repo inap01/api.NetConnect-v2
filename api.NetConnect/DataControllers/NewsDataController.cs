@@ -28,6 +28,11 @@ namespace api.NetConnect.DataControllers
             Task.WaitAll(task);
             modelList = task.Result;
 
+            // NewsTitel Fix
+            foreach (var item in modelList.data)
+                if (item.story == null)
+                    item.story = "NetConnect hat etwas gepostet";
+
             return modelList;
         }
         #endregion

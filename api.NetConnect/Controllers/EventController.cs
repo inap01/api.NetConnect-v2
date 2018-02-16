@@ -14,18 +14,18 @@ using api.NetConnect.data.ViewModel.EventType.Backend;
 
 namespace api.NetConnect.Controllers
 {
-    public class EventController : ApiController
+    public class EventController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get()
         {
             EventListViewModel viewmodel = new EventListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
-                var events = EventDataController.GetItems().Where(x => x.End >= DateTime.Now).OrderBy(y => y.Start);
+                var events = dataCtrl.GetItems().Where(x => x.End >= DateTime.Now).OrderBy(y => y.Start);
                 foreach(var e in events)
                 {
                     viewmodel.Data.Add(new EventViewModelItem().FromModel(e));
@@ -33,9 +33,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -45,17 +43,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             EventViewModel viewmodel = new EventViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
-                viewmodel.Data = new EventViewModelItem().FromModel(EventDataController.GetItem(id));
+                viewmodel.Data = new EventViewModelItem().FromModel(dataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -68,19 +64,18 @@ namespace api.NetConnect.Controllers
         {
             BackendEventListViewModel viewmodel = new BackendEventListViewModel();
             BackendEventListArgs args = new BackendEventListArgs();
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
                 Int32 TotalItemsCount;
-                viewmodel.Data = EventConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -90,6 +85,7 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_FilterList(BackendEventListArgs args)
         {
             BackendEventListViewModel viewmodel = new BackendEventListViewModel();
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
@@ -97,15 +93,13 @@ namespace api.NetConnect.Controllers
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount;
-                viewmodel.Data = EventConverter.FilterList(args, out TotalItemsCount);
+                viewmodel.Data.FromModel(dataCtrl.FilterList(args, out TotalItemsCount));
 
                 viewmodel.Pagination.TotalItemsCount = TotalItemsCount;
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -115,21 +109,21 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendEventViewModel viewmodel = new BackendEventViewModel();
+            EventDataController dataCtrl = new EventDataController();
+            EventTypeDataController eventTypeDataCtrl = new EventTypeDataController();
 
             try
             {
-                viewmodel.EventTypeOptions = EventTypeDataController.GetItems().ToList().ConvertAll(x =>
+                viewmodel.EventTypeOptions = eventTypeDataCtrl.GetItems().ToList().ConvertAll(x =>
                 {
                     return new BackendEventTypeViewModelItem() { ID = x.ID, Name = x.Name };
                 }).OrderByDescending(x => x.ID).ToList();
 
-                viewmodel.Data.FromModel(EventDataController.GetItem(id));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -146,9 +140,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -165,9 +157,7 @@ namespace api.NetConnect.Controllers
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -177,21 +167,18 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendEventViewModelItem request)
         {
             BackendEventViewModel viewmodel = new BackendEventViewModel();
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
-                EventDataController.Update(request.ToModel());
-
-                viewmodel.AddSuccessAlert("Eintrag wurde gespeichert.");
+                dataCtrl.Update(request.ToModel());
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler ist aufgetreten:");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Eintrag wurde gespeichert.");
         }
 
         [HttpDelete]

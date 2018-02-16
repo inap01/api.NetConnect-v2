@@ -1,25 +1,46 @@
 ﻿using api.NetConnect.data.Entity;
+using api.NetConnect.data.ViewModel;
+using api.NetConnect.data.ViewModel.User.Backend;
 using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class UserDataController : GenericDataController<User>
+    public class UserDataController : BaseDataController, IDataController<User>
     {
-        public static User Insert(User item)
+        public UserDataController() : base()
         {
-            InitDB();
 
+        }
+
+        #region Basic Functions
+        public User GetItem(int ID)
+        {
+            var qry = db.User.AsQueryable();
+
+            return qry.Single(x => x.ID == ID);
+        }
+
+        public IQueryable<User> GetItems()
+        {
+            var qry = db.User.AsQueryable();
+
+            return qry;
+        }
+
+        public User Insert(User item)
+        {
             var result = db.User.Add(item);
             db.SaveChanges();
 
             return result;
         }
 
-        public static User Update(User item)
+        public User Update(User item)
         {
             User dbItem = GetItem(item.ID);
 
@@ -39,15 +60,41 @@ namespace api.NetConnect.DataControllers
             return dbItem;
         }
 
-        public static Boolean ValidateUser(String email, String password)
+        public void Delete(int ID)
+        {
+            db.User.Remove(GetItem(ID));
+            db.SaveChanges();
+        }
+        #endregion
+
+        public List<User> FilterList(ListArgsRequest<BackendProfileFilter> args, out Int32 TotalCount)
+        {
+            List<BackendUserViewModelItem> result = new List<BackendUserViewModelItem>();
+
+            var qry = GetItems();
+
+            qry = qry.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower()));
+            qry = qry.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower()));
+            qry = qry.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower()));
+
+            TotalCount = qry.Count();
+
+            var items = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected)
+                 .ToList();
+
+            return items;
+        }
+
+        public Boolean ValidateUser(String email, String password)
         {
             User u;
             return ValidateUser(email, password, out u);
         }
 
-        public static Boolean ValidateUser(String email, String password, out User User)
+        public Boolean ValidateUser(String email, String password, out User User)
         {
-            var user = UserDataController.GetItem(email, "Email");
+            var user = GetItems().Single(x => x.Email == email);
             if(PasswordHelper.HashPassword(password, user.PasswordSalt) == user.Password)
             {
                 User = user;
@@ -58,26 +105,14 @@ namespace api.NetConnect.DataControllers
             return false;
         }
 
-        public static Boolean CheckExistingEmail(String email)
+        public Boolean CheckExistingEmail(String email)
         {
-            InitDB();
-
-            var user = db.User.AsQueryable();
-            if (user.Where(x => x.Email == email).Count() > 0)
-                return true;
-
-            return false;
+            return GetItems().Count(x => x.Email == email) > 0;
         }
 
-        public static Boolean CheckExistingNickname(String nickname)
+        public Boolean CheckExistingNickname(String nickname)
         {
-            InitDB();
-
-            var user = db.User.AsQueryable();
-            if (user.Where(x => x.Nickname == nickname).Count() > 0)
-                return true;
-
-            return false;
+            return GetItems().Count(x => x.Nickname == nickname) > 0;
         }
     }
 }

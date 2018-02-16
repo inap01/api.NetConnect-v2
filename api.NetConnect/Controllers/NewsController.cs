@@ -14,16 +14,16 @@ using System.Web.Http;
 
 namespace api.NetConnect.Controllers
 {
-    public class NewsController : ApiController
+    public class NewsController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Get()
         {
             FbNewsListViewModel viewmodel = new FbNewsListViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            EventDataController dataCtrl = new EventDataController();
 
-            var nextEvent = EventDataController.GetItems().OrderByDescending(x => x.Start).FirstOrDefault(x => x.Start > DateTime.Now);
+            var nextEvent = dataCtrl.GetItems().OrderByDescending(x => x.Start).FirstOrDefault(x => x.Start > DateTime.Now);
             if(nextEvent != null)
                 viewmodel.NextEvent = new EventViewModelItem().FromModel(nextEvent);
             viewmodel.Data = NewsDataController.GetItems().data;
@@ -35,7 +35,6 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Detail(Int32 id)
         {
             NewsViewModel viewmodel = new NewsViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
 
             return Ok(viewmodel);
         }

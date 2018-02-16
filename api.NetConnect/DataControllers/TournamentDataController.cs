@@ -1,7 +1,6 @@
 ﻿using api.NetConnect.data.Entity;
 using api.NetConnect.data.ViewModel;
 using api.NetConnect.data.ViewModel.Tournament.Backend;
-using api.NetConnect.Helper;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,41 +9,42 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class TournamentDataController : GenericDataController<Tournament>
+    public class TournamentDataController : BaseDataController, IDataController<Tournament>
     {
-        public static List<Tournament> GetByEvent(Int32 eventID)
+        public TournamentDataController() : base()
         {
-            db = InitDB();
 
-            return db.Tournament.Where(x => x.EventID == eventID).OrderBy(x => x.Start).ToList();
         }
 
-        public static List<Tournament> FilterList(ListArgsRequest<BackendTournamentFilter> args, out Int32 TotalCount)
+        #region Basic Functions
+        public Tournament GetItem(int ID)
         {
-            db = InitDB();
-
             var qry = db.Tournament.AsQueryable();
-            qry.Include("TournamentGame");
-            qry.Include("Event");
-            qry.Include("Partner");
+            qry.Include(x => x.TournamentGame);
+            qry.Include(x => x.Event);
+            qry.Include(x => x.Partner);
+            qry.Include(x => x.TournamentParticipant);
+            qry.Include(x => x.TournamentTeam);
+            qry.Include(x => x.TournamentWinner);
 
-            qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
-            if (args.Filter.GameSelected.ID != -1)
-                qry = qry.Where(x => x.TournamentGameID == args.Filter.GameSelected.ID);
-
-            TotalCount = qry.Count();
-
-            qry = qry.OrderByDescending(x => x.EventID);
-            qry = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected);
-
-            return qry.ToList();
+            return qry.Single(x => x.ID == ID);
         }
 
-        public static Tournament Insert(Tournament item)
+        public IQueryable<Tournament> GetItems()
         {
-            InitDB();
+            var qry = db.Tournament.AsQueryable();
+            qry.Include(x => x.TournamentGame);
+            qry.Include(x => x.Event);
+            qry.Include(x => x.Partner);
+            qry.Include(x => x.TournamentParticipant);
+            qry.Include(x => x.TournamentTeam);
+            qry.Include(x => x.TournamentWinner);
 
+            return qry;
+        }
+
+        public Tournament Insert(Tournament item)
+        {
             var result = db.Tournament.Add(item);
             db.SaveChanges();
 
@@ -54,10 +54,10 @@ namespace api.NetConnect.DataControllers
             return result;
         }
 
-        public static Tournament Update(Tournament item)
+        public Tournament Update(Tournament item)
         {
             Tournament dbItem = GetItem(item.ID);
-            
+
             dbItem.TournamentGameID = item.TournamentGameID;
             dbItem.TeamSize = item.TeamSize;
             dbItem.ChallongeLink = item.ChallongeLink;
@@ -70,96 +70,29 @@ namespace api.NetConnect.DataControllers
 
             return dbItem;
         }
-    }
 
-    public class TournamentGameDataController : GenericDataController<TournamentGame>
-    {
-        public static TournamentGame Update(TournamentGame item)
+        public void Delete(int ID)
         {
-            TournamentGame dbItem = GetItem(item.ID);
-
-            dbItem.Name = item.Name;
-            dbItem.Rules = item.Rules;
-
-            db.SaveChanges();
-
-            return dbItem;
-        }
-    }
-
-    public class TournamentParticipantDataController : GenericDataController<TournamentParticipant>
-    {
-        public static TournamentParticipant GetByTournament(Int32 TournamentID)
-        {
-            Int32 UserID = UserHelper.CurrentUserID;
-
-            InitDB();
-
-            var result = db.TournamentParticipant.FirstOrDefault(x => x.TournamentID == TournamentID && x.UserID == UserID);
-
-            return result;
-        }
-        public static TournamentParticipant Insert(TournamentParticipant item)
-        {
-            InitDB();
-
-            var result = db.TournamentParticipant.Add(item);
-            db.SaveChanges();
-
-            return result;
-        }
-
-        public static void Delete(Int32 TournamentID)
-        {
-            InitDB();
-
-            var item = db.TournamentParticipant.Single(x => x.TournamentID == TournamentID && x.UserID == UserHelper.CurrentUserID);
-            db.TournamentParticipant.Remove(item);
+            db.Tournament.Remove(GetItem(ID));
             db.SaveChanges();
         }
-    }
-
-    public class TournamentTeamDataController : GenericDataController<TournamentTeam>
-    {
-        public static TournamentTeam Insert(TournamentTeam item)
+        #endregion
+        
+        public List<Tournament> FilterList(ListArgsRequest<BackendTournamentFilter> args, out Int32 TotalCount)
         {
-            InitDB();
+            var qry = GetItems();
 
-            var result = db.TournamentTeam.Add(item);
-            db.SaveChanges();
+            qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
+            if (args.Filter.GameSelected.ID != -1)
+                qry = qry.Where(x => x.TournamentGameID == args.Filter.GameSelected.ID);
 
-            return result;
-        }
-    }
+            TotalCount = qry.Count();
 
-    public class TournamentTeamParticipantDataController : GenericDataController<TournamentTeamParticipant>
-    {
-        public static TournamentTeamParticipant GetByTournament(Int32 TournamentID)
-        {
-            Int32 UserID = UserHelper.CurrentUserID;
+            qry = qry.OrderByDescending(x => x.EventID);
+            qry = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected);
 
-            InitDB();
-
-            var result = db.TournamentTeamParticipant.FirstOrDefault(x => x.TournamentTeam.TournamentID == TournamentID && x.UserID == UserID);
-
-            return result;
-        }
-        public static TournamentTeamParticipant Insert(TournamentTeamParticipant item)
-        {
-            InitDB();
-
-            var result = db.TournamentTeamParticipant.Add(item);
-            db.SaveChanges();
-
-            return result;
-        }
-        public static void Delete(Int32 TournamentID)
-        {
-            InitDB();
-
-            var item = db.TournamentTeamParticipant.Single(x => x.TournamentTeam.TournamentID == TournamentID && x.UserID == UserHelper.CurrentUserID);
-            db.TournamentTeamParticipant.Remove(item);
-            db.SaveChanges();
+            return qry.ToList();
         }
     }
 }

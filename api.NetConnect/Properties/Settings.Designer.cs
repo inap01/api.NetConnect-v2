@@ -202,5 +202,14 @@ namespace api.NetConnect.Properties {
                 return ((int)(this["SeatAmount"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ClientDebugMode {
+            get {
+                return ((bool)(this["ClientDebugMode"]));
+            }
+        }
     }
 }

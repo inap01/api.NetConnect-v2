@@ -9,18 +9,48 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class CateringDataController : GenericDataController<CateringProduct>
+    public class CateringDataController : BaseDataController, IDataController<CateringProduct>
     {
-
-        public static CateringProduct Update(CateringProduct item)
+        public CateringDataController() : base()
         {
-            CateringProduct dbItem = GetItem(item.ID);
 
-            dbItem.Name = item.Name;
+        }
 
+        #region Basic Functions
+        public CateringProduct GetItem(int ID)
+        {
+            var qry = db.CateringProduct.AsQueryable();
+            qry.Include(x => x.CateringProductAttributeRelation);
+
+            return qry.Single(x => x.ID == ID);
+        }
+
+        public IQueryable<CateringProduct> GetItems()
+        {
+            var qry = db.CateringProduct.AsQueryable();
+            qry.Include(x => x.CateringProductAttributeRelation);
+
+            return qry;
+        }
+
+        public CateringProduct Insert(CateringProduct item)
+        {
+            var result = db.CateringProduct.Add(item);
             db.SaveChanges();
 
-            return dbItem;
+            return result;
         }
+
+        public CateringProduct Update(CateringProduct item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int ID)
+        {
+            db.CateringProduct.Remove(GetItem(ID));
+            db.SaveChanges();
+        }
+        #endregion
     }
 }

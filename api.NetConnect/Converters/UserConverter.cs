@@ -26,6 +26,15 @@ namespace api.NetConnect.Converters
 
             return viewModel;
         }
+        public static List<BackendUserViewModelItem> FromModel(this List<BackendUserViewModelItem> viewModel, List<User> model)
+        {
+            viewModel = model.ConvertAll(x =>
+            {
+                return new BackendUserViewModelItem().FromModel(x);
+            });
+
+            return viewModel;
+        }
         public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewModel, User model)
         {
             viewModel.ID = model.ID;
@@ -126,35 +135,6 @@ namespace api.NetConnect.Converters
             model.IsTeam = viewModel.IsTeam;
 
             return model;
-        }
-    }
-
-    public class UserConverter
-    {
-        public static List<BackendUserViewModelItem> FilterList(ListArgsRequest<BackendProfileFilter> args, out Int32 TotalCount)
-        {
-            List<BackendUserViewModelItem> result = new List<BackendUserViewModelItem>();
-
-            var users = UserDataController.GetItems();
-
-            users = users.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower())).ToList();
-            users = users.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower())).ToList();
-            users = users.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower())).ToList();
-
-            TotalCount = users.Count();
-
-            var items = users.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected)
-                 .ToList();
-
-            foreach (var model in items)
-            {
-                BackendUserViewModelItem item = new BackendUserViewModelItem();
-                item.FromModel(model);
-                result.Add(item);
-            }
-
-            return result;
         }
     }
 }

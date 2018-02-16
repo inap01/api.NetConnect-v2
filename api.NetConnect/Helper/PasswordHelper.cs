@@ -13,7 +13,9 @@ namespace api.NetConnect.Helper
     {
         public static Boolean CheckPassword(User User, String password)
         {
-            var user = UserDataController.GetItem(User.ID);
+            UserDataController userDataCtrl = new UserDataController();
+
+            var user = userDataCtrl.GetItem(User.ID);
 
             return HashPassword(password, User.PasswordSalt) == user.Password;
         }

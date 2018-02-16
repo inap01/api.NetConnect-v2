@@ -17,24 +17,22 @@ using static api.NetConnect.Helper.PasswordHelper;
 namespace api.NetConnect.Controllers
 {
     [Authorize()]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         #region Frontend
         [HttpGet]
         public IHttpActionResult Reservations()
         {
             AccountReservationViewModel viewmodel = new AccountReservationViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(UserHelper.CurrentUserID));
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -44,171 +42,144 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult TransferReservation(TransferReservationRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            UserDataController dataCtrl = new UserDataController();
+            SeatDataController seatDataCtrl = new SeatDataController();
 
             try
             {
                 Int32 TransferUserID;
-                Seat seat = SeatDataController.GetItem(request.SeatID);
+                Seat seat = seatDataCtrl.GetItem(request.SeatID);
                 try
                 {
-                    TransferUserID = UserDataController.GetItem(request.Email, "Email").ID;
+                    TransferUserID = dataCtrl.GetItems().Single(x => x.Email == request.Email).ID;
                 }
                 catch(Exception ex)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Die Email wurde nicht vergeben.");
-                    return Ok(viewmodel);
+                    return Warning(viewmodel, "Die Email wurde nicht vergeben.");
                 }
 
                 if(TransferUserID == UserHelper.CurrentUserID)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Du kannst keine Tickets an dich selber versenden.");
-                    return Ok(viewmodel);
+                    return Warning(viewmodel, "Du kannst keine Tickets an dich selber versenden.");
                 }
 
                 if (seat.UserID != UserHelper.CurrentUserID)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Du bist nicht Inhaber dieses Tickets.");
-                    return Ok(viewmodel);
+                    return Warning(viewmodel, "Du bist nicht Inhaber dieses Tickets.");
                 }
 
-                if(UserDataController.ValidateUser(UserHelper.CurrentUserEmail, request.Password))
+                if(dataCtrl.ValidateUser(UserHelper.CurrentUserEmail, request.Password))
                 {
                     seat.TransferUserID = TransferUserID;
-                    SeatDataController.Update(seat);
+                    seatDataCtrl.Update(seat);
                 }
                 else
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Das eingegebene Passwort stimmt nicht.");
-                    return Ok(viewmodel);
+                    return Warning(viewmodel, "Das eingegebene Passwort stimmt nicht.");
                 }
-
-                viewmodel.AddSuccessAlert("Ticket wurde versendet.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Ticket wurde versendet.");
         }
 
         [HttpPut]
         public IHttpActionResult AcceptTransfer(Int32 ID)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            SeatDataController seatDataCtrl = new SeatDataController();
 
             try
             {
-                Seat seat = SeatDataController.GetItem(ID);
+                Seat seat = seatDataCtrl.GetItem(ID);
                 
                 if(seat.TransferUserID == null)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddDangerAlert("Der Platz wurde nicht transferiert.");
+                    return Error(viewmodel, "Der Platz wurde nicht transferiert.");
                 }
 
                 if (seat.TransferUserID != UserHelper.CurrentUserID)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Der Platz wurde dir nicht zugesendet.");
+                    return Warning(viewmodel, "Der Platz wurde dir nicht zugesendet.");
                 }
-
 
                 seat.UserID = seat.TransferUserID ?? default(int);
                 seat.TransferUserID = null;
-                SeatDataController.Update(seat);
-
-                viewmodel.AddSuccessAlert("Transfer wurde durchgeführt.");
+                seatDataCtrl.Update(seat);
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Transfer wurde durchgeführt.");
         }
 
         [HttpPut]
         public IHttpActionResult RefuseTransfer(Int32 ID)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            SeatDataController seatDataCtrl = new SeatDataController();
 
             try
             {
-                Seat seat = SeatDataController.GetItem(ID);
+                Seat seat = seatDataCtrl.GetItem(ID);
 
                 if (seat.TransferUserID == null)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddDangerAlert("Der Platz wurde nicht transferiert.");
+                    return Error(viewmodel, "Der Platz wurde nicht transferiert.");
                 }
 
                 if (seat.TransferUserID != UserHelper.CurrentUserID)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Der Platz wurde dir nicht zugesendet.");
+                    return Warning(viewmodel, "Der Platz wurde dir nicht zugesendet.");
                 }
-
                 
                 seat.TransferUserID = null;
-                SeatDataController.Update(seat);
-
-                viewmodel.AddSuccessAlert("Transfer wurde abgelehnt.");
+                seatDataCtrl.Update(seat);
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Transfer wurde abgelehnt.");
         }
 
         [HttpDelete]
         public IHttpActionResult CancelReservation(Int32 ID)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            SeatDataController seatDataCtrl = new SeatDataController();
 
             try
             {
-                SeatDataController.Delete(ID);
-
-                viewmodel.AddSuccessAlert("Stornierung war erfolgreich.");
+                seatDataCtrl.Delete(ID);
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Stornierung war erfolgreich.");
         }
 
         [HttpGet]
         public IHttpActionResult Tournaments()
         {
             AccountTournamentViewModel viewmodel = new AccountTournamentViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(UserHelper.CurrentUserID));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -218,17 +189,15 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Edit()
         {
             AccountEditViewModel viewmodel = new AccountEditViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(UserHelper.CurrentUserID));
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);
@@ -238,34 +207,30 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Edit(AccountEditViewModelItem request)
         {
             AccountEditViewModel viewmodel = new AccountEditViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                var updateModel = UserDataController.GetItem(request.ID);
+                var updateModel = dataCtrl.GetItem(request.ID);
                 updateModel.ToModel(request);
 
                 if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
-                    updateModel.Password = PasswordHelper.ChangePassword(UserDataController.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
+                    updateModel.Password = PasswordHelper.ChangePassword(dataCtrl.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
 
-                updateModel = UserDataController.Update(updateModel);
+                updateModel = dataCtrl.Update(updateModel);
                 viewmodel.Data.FromModel(updateModel);
             }
             catch (WrongPasswordException ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
+                return Warning(viewmodel, "Das eingegebene Passwort stimmt nicht.");
             }
             catch (PasswordsNotEqualException ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddWarningAlert(ExceptionHelper.FullException(ex));
+                return Warning(viewmodel, "Die eingegebenen Passwörter stimmt nicht überein.");
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
             return Ok(viewmodel);

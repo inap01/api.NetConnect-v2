@@ -17,19 +17,20 @@ using api.NetConnect.data.ViewModel;
 
 namespace api.NetConnect.Controllers
 {
-    public class AuthController : ApiController
+    public class AuthController : BaseController
     {
         [HttpPost]
         public IHttpActionResult Auth(LoginRequest request)
         {
             LoginViewModel viewmodel = new LoginViewModel();
             viewmodel.Authenticated = this.User.Identity.IsAuthenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
                 User u;
 
-                if(UserDataController.ValidateUser(request.Email, request.Password, out u))
+                if(dataCtrl.ValidateUser(request.Email, request.Password, out u))
                 {
                     ClaimsIdentity identity = InitializeIdentity(u);
 
@@ -40,26 +41,22 @@ namespace api.NetConnect.Controllers
                     }, identity);
 
                     viewmodel.Data.FromModel(u);
-                    viewmodel.AddSuccessAlert("Die Anmeldung war erfolgreich!");
 
                     HttpContext.Current.Response.AddHeader("X-Redirect", Properties.Settings.Default.BaseAbosulteUrl + "/user/" + u.ID);
                 }
                 else
                 {
-                    viewmodel.Success = false;
                     viewmodel.Data = null;
-                    viewmodel.AddWarningAlert("Anmeldung fehlerhaft.");
+                    return Warning(viewmodel, "Anmeldung fehlerhaft.");
                 }
             }
             catch(Exception ex)
             {
-                viewmodel.Success = false;
                 viewmodel.Data = null;
-                viewmodel.AddDangerAlert("Anmeldung fehlgeschlagen.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex, "Anmeldung fehlgeschlagen.");
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Die Anmeldung war erfolgreich!");
         }
 
         private static ClaimsIdentity InitializeIdentity(User u)
@@ -102,11 +99,11 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult CheckLogin()
         {
             LoginViewModel viewmodel = new LoginViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
-            
+            UserDataController dataCtrl = new UserDataController();
+
             if (viewmodel.Authenticated)
             {
-                viewmodel.Data.FromModel(UserDataController.GetItem(UserHelper.CurrentUserID));
+                viewmodel.Data.FromModel(dataCtrl.GetItem(UserHelper.CurrentUserID));
             }
 
             return Ok(viewmodel);
@@ -116,21 +113,19 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Register(RegisterRequest request)
         {
             BaseViewModel viewmodel = new BaseViewModel();
-            viewmodel.Authenticated = UserHelper.Authenticated;
+            UserDataController dataCtrl = new UserDataController();
 
             try
             {
-                Boolean checkEmail = UserDataController.CheckExistingEmail(request.Email);
-                Boolean checkNickname = UserDataController.CheckExistingNickname(request.Nickname);
+                Boolean checkEmail = dataCtrl.CheckExistingEmail(request.Email);
+                Boolean checkNickname = dataCtrl.CheckExistingNickname(request.Nickname);
                 if (checkEmail)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Eingegebene Email wird bereits verwendet.");
+                    return Warning(viewmodel, "Eingegebene Email wird bereits verwendet.");
                 }
                 else if (checkNickname)
                 {
-                    viewmodel.Success = false;
-                    viewmodel.AddWarningAlert("Eingegebener Nickname wird bereits verwendet.");
+                    return Warning(viewmodel, "Eingegebener Nickname wird bereits verwendet.");
                 }
                 else
                 {
@@ -138,24 +133,20 @@ namespace api.NetConnect.Controllers
                     {
                         String Salt;
                         String HashedPassword = PasswordHelper.CreatePassword(request.Password1, out Salt);
-                        UserDataController.Insert(request.ToModel(HashedPassword, Salt));
-                        viewmodel.AddSuccessAlert("Registrierung erfolgreich. Du kannst dich nun einloggen.");
+                        dataCtrl.Insert(request.ToModel(HashedPassword, Salt));
                     }
                     else
                     {
-                        viewmodel.Success = false;
-                        viewmodel.AddWarningAlert("Die eingegebenen Passwörter stimmen nicht überein.");
+                        return Warning(viewmodel, "Die eingegebenen Passwörter stimmen nicht überein.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                viewmodel.Success = false;
-                viewmodel.AddDangerAlert("Ein unerwarteter Fehler is aufgetreten.");
-                viewmodel.AddDangerAlert(ExceptionHelper.FullException(ex));
+                return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Registrierung erfolgreich. Du kannst dich nun einloggen.");
         }
     }
 }

@@ -40,8 +40,20 @@ namespace api.NetConnect.Converters
         }
         #endregion
         #region Backend
+        public static List<BackendPartnerViewModelItem> FromModel(this List<BackendPartnerViewModelItem> viewModel, List<Partner> model)
+        {
+            viewModel = model.ConvertAll(x =>
+            {
+                return new BackendPartnerViewModelItem().FromModel(x);
+            });
+
+            return viewModel;
+        }
+
         public static BackendPartnerViewModelItem FromModel(this BackendPartnerViewModelItem viewModel, Partner model)
         {
+            PartnerDisplayDataController displayDataCtrl = new PartnerDisplayDataController();
+
             viewModel.ID = model.ID;
             viewModel.Name = model.Name;
             viewModel.Description = model.Content;
@@ -57,7 +69,7 @@ namespace api.NetConnect.Converters
                 Name = model.PartnerPack.Name
             };
             
-            foreach (var display in PartnerDisplayDataController.GetItems())
+            foreach (var display in displayDataCtrl.GetItems())
             {
                 if(model.PartnerDisplayRelation.FirstOrDefault(x => x.PartnerID == model.ID && x.PartnerDisplayID == display.ID) != null)
                     viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
@@ -80,9 +92,12 @@ namespace api.NetConnect.Converters
 
         public static Partner ToModel(this BackendPartnerViewModelItem viewModel)
         {
+            PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerPackDataController partnerPackDataCtrl = new PartnerPackDataController();
+
             Partner model = new Partner();
             if (viewModel.ID != 0) 
-                model = PartnerDataController.GetItem(viewModel.ID);
+                model = dataCtrl.GetItem(viewModel.ID);
             
             model.Name = viewModel.Name;
             model.Content = viewModel.Description;
@@ -91,7 +106,7 @@ namespace api.NetConnect.Converters
             //model.Image = viewModel.Image;
             model.IsActive = viewModel.IsActive;
 
-            model.PartnerPack = PartnerPackDataController.GetItem(viewModel.PartnerTypeSelected.ID);
+            model.PartnerPack = partnerPackDataCtrl.GetItem(viewModel.PartnerTypeSelected.ID);
 
             /*
             foreach (var display in viewModel.Display.Where(x => x.Value))
@@ -109,53 +124,16 @@ namespace api.NetConnect.Converters
 
         public static Partner ToModel(this BackendPartnerPositionViewModelItem viewModel)
         {
+            PartnerDataController dataCtrl = new PartnerDataController();
+
             Partner model = new Partner();
             if (viewModel.ID != 0)
-                model = PartnerDataController.GetItem(viewModel.ID);
+                model = dataCtrl.GetItem(viewModel.ID);
 
             model.Position = viewModel.Position;
 
             return model;
         }
         #endregion
-    }
-
-    public class PartnerConverter
-    {
-        public static List<BackendPartnerViewModelItem> FilterList(ListArgsRequest<BackendPartnerFilter> args, out Int32 TotalCount)
-        {
-            List<BackendPartnerViewModelItem> result = new List<BackendPartnerViewModelItem>();
-
-            var partner = PartnerDataController.GetItems();
-            List<Partner> items;
-
-            if (args.Filter.StatusSelected != data.ViewModel.StatusFilterEnum.Alle)
-            {
-                if (args.Filter.StatusSelected == data.ViewModel.StatusFilterEnum.Aktiv)
-                    partner = partner.Where(x => x.IsActive).ToList();
-                else
-                    partner = partner.Where(x => !x.IsActive).ToList();
-            }
-
-            if (args.Filter.PartnerTypeSelected != "Alle")
-                partner = partner.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected).ToList();
-
-            items = partner.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower())).ToList();
-
-            TotalCount = items.Count;
-
-            items = items.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
-                 .Take(args.Pagination.ItemsPerPageSelected)
-                 .ToList();
-
-            foreach (var model in items)
-            {
-                BackendPartnerViewModelItem item = new BackendPartnerViewModelItem();
-                item.FromModel(model);
-                result.Add(item);
-            }
-
-            return result;
-        }
     }
 }
