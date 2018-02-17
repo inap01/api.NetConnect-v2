@@ -20,6 +20,11 @@ namespace api.NetConnect.Controllers
             NavigationViewModel viewmodel = new NavigationViewModel();
             EventDataController dataCtrl = new EventDataController();
             SeatDataController seatDataCtrl = new SeatDataController();
+            PartnerDisplayRelationDataController displayDataCtrl = new PartnerDisplayRelationDataController();
+            var partner = displayDataCtrl.GetItems()
+                .Where(x => x.Partner.IsActive)
+                .OrderBy(x => x.Partner.PartnerPackID)
+                .ThenBy(x => x.Partner.Position);
 
             #region NavigationTop
             viewmodel.Data.NavigationTop.Add(new NavItem()
@@ -171,37 +176,23 @@ namespace api.NetConnect.Controllers
                 });
             }
             #endregion
+            #region PartnerTop
+            foreach (var p in partner.Where(x => x.PartnerDisplay.Name == "Header"))
+                viewmodel.Data.PartnerTop.Add(new PartnerItem()
+                {
+                    Name = p.Partner.Name,
+                    Link = p.Partner.Link,
+                    ImagePassive = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImagePassive + "/passive.png",
+                    ImageOriginal = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImageOriginal + "/image.png"
+                });
+            #endregion
             #region NavigationBottom
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 1",
-                Link = "http://google.de"
-            });
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 2",
-                Link = "http://google.de"
-            });
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 3",
-                Link = "http://google.de"
-            });
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 4",
-                Link = "http://google.de"
-            });
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 5",
-                Link = "http://google.de"
-            });
-            viewmodel.Data.NavigationBottom.Add(new LinkItem()
-            {
-                Text = "Sponsor 6",
-                Link = "http://google.de"
-            });
+            foreach (var p in partner.Where(x => x.PartnerDisplay.Name == "Footer"))
+                viewmodel.Data.NavigationBottom.Add(new LinkItem()
+                {
+                    Text = p.Partner.Name,
+                    Link = p.Partner.Link
+                });
             #endregion
 
             return Ok(viewmodel);

@@ -17,8 +17,8 @@ namespace api.NetConnect.Controllers
             Boolean isActive = Properties.Settings.Default.APIStatus_IsActive;
             String titel = Properties.Settings.Default.APIStatus_Titel;
             String text = Properties.Settings.Default.APIStatus_Text;
-            model.Success = Properties.Settings.Default.APIStatus_IsActive;
             model = isActive ? new StatusViewModel(null, null) : new StatusViewModel(titel, text);
+            model.Success = Properties.Settings.Default.APIStatus_IsActive;
 
             return Ok(model);
         }

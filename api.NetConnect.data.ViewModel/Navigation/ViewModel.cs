@@ -22,6 +22,7 @@ namespace api.NetConnect.data.ViewModel.Navigation
         public List<NavItem> NavigationTop { get; set; }
         public List<NavItem> NavigationAside { get; set; }
         public List<EventItem> EventsAside { get; set; }
+        public List<PartnerItem> PartnerTop { get; set; }
         public List<LinkItem> NavigationBottom { get; set; }
 
         public NavigationViewModelItem()
@@ -30,6 +31,7 @@ namespace api.NetConnect.data.ViewModel.Navigation
             NavigationTop = new List<NavItem>();
             NavigationAside = new List<NavItem>();
             EventsAside = new List<EventItem>();
+            PartnerTop = new List<PartnerItem>();
             NavigationBottom = new List<LinkItem>();
         }
     }
@@ -46,6 +48,14 @@ namespace api.NetConnect.data.ViewModel.Navigation
     public class LinkItem
     {
         public String Text { get; set; }
+        public String Link { get; set; }
+    }
+
+    public class PartnerItem
+    {
+        public String Name { get; set; }
+        public String ImagePassive { get; set; }
+        public String ImageOriginal { get; set; }
         public String Link { get; set; }
     }
 

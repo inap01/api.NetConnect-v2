@@ -215,7 +215,10 @@ namespace api.NetConnect.Controllers
                 updateModel.ToModel(request);
 
                 if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
+                {
                     updateModel.Password = PasswordHelper.ChangePassword(dataCtrl.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
+                    viewmodel.AddSuccessMessage("Passwort wurde geändert.");
+                }
 
                 updateModel = dataCtrl.Update(updateModel);
                 viewmodel.Data.FromModel(updateModel);
@@ -233,7 +236,7 @@ namespace api.NetConnect.Controllers
                 return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Profil wurde aktualisiert.");
         }
         #endregion
     }

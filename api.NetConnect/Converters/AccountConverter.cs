@@ -157,6 +157,7 @@ namespace api.NetConnect.Converters
             viewModel.Email = model.Email;
             viewModel.SteamID = model.SteamID;
             viewModel.BattleTag = model.BattleTag;
+            viewModel.Newsletter = model.Newsletter;
             viewModel.OldPassword = null;
             viewModel.NewPassword1 = null;
             viewModel.NewPassword2 = null;
