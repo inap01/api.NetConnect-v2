@@ -65,5 +65,14 @@
     <Setting Name="ClientDebugMode" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="Email_FromAdress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">lan.netconnect@gmail.com</Value>
+    </Setting>
+    <Setting Name="Email_FromName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">NetConnect e.V.</Value>
+    </Setting>
+    <Setting Name="Email_FromPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">rurich17</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -151,16 +151,10 @@
     <Compile Include="User.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserPrivilege.cs">
-      <DependentUpon>NetConnect.tt</DependentUpon>
-    </Compile>
-    <Compile Include="UserPrivilegeRelation.cs">
-      <DependentUpon>NetConnect.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserRole.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserRolePrivilegeRelation.cs">
+    <Compile Include="UserRoleRelation.cs">
       <DependentUpon>NetConnect.tt</DependentUpon>
     </Compile>
     <Compile Include="UserTask.cs">

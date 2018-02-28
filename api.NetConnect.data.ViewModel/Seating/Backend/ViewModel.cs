@@ -7,13 +7,12 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Seating.Backend
 {
-    public class BackendSeatingListViewModel : ListViewModel<BackendSeatingViewModelItem>
+    public class BackendSeatingListViewModel : ListArgsViewModel<BackendSeatingViewModelItem, BackendSeatingFilter>
     {
-        public BackendSeatingFilter Filter { get; set; }
 
         public BackendSeatingListViewModel() : base()
         {
-            Filter = new BackendSeatingFilter();
+
         }
     }
 
@@ -72,9 +71,9 @@ namespace api.NetConnect.data.ViewModel.Seating.Backend
             result.Add("Description", new InputInformation() { Type = InputInformationType.@string });
             result.Add("IsPayed", new InputInformation() { Type = InputInformationType.boolean });
 
-            result.Add("User", new InputInformation() { Type = InputInformationType.reference, Reference = "User", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()) });
+            result.Add("User", new InputInformation() { Type = InputInformationType.reference, Reference = "User", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()), Required = true });
             result.Add("TransferUser", new InputInformation() { Type = InputInformationType.reference, Reference = "TransferUser", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()) });
-            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Required = true });
+            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Required = true, Readonly = true });
 
             return result;
         }

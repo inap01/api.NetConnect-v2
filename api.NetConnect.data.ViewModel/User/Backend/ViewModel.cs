@@ -53,7 +53,7 @@ namespace api.NetConnect.data.ViewModel.User.Backend
             result.Add("FirstName", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("LastName", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("Nickname", new InputInformation() { Type = InputInformationType.@string, Required = true });
-            result.Add("Image", new InputInformation() { Type = InputInformationType.image });
+            result.Add("Image", new InputInformation() { Type = InputInformationType.@string });
             result.Add("Email", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("SteamID", new InputInformation() { Type = InputInformationType.@string });
             result.Add("BattleTag", new InputInformation() { Type = InputInformationType.@string });

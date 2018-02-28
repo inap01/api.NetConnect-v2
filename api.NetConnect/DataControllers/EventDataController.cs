@@ -47,7 +47,7 @@ namespace api.NetConnect.DataControllers
 
             dbitem.EventTypeID = item.EventTypeID;
             dbitem.Volume = item.Volume;
-            //dbitem.ImageContainerID = item.ImageContainerID;
+            dbitem.Image = item.Image;
             dbitem.Start = item.Start;
             dbitem.End = item.End;
             dbitem.ReservationCost = item.ReservationCost;

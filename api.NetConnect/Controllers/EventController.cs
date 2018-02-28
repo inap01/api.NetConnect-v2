@@ -59,6 +59,7 @@ namespace api.NetConnect.Controllers
         #endregion
 
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -81,6 +82,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_FilterList(BackendEventListArgs args)
         {
@@ -105,6 +107,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
@@ -129,14 +132,22 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail_New()
         {
             BackendEventViewModel viewmodel = new BackendEventViewModel();
+            EventDataController dataCtrl = new EventDataController();
+            EventTypeDataController eventTypeDataCtrl = new EventTypeDataController();
 
             try
             {
-                // TODO
+                viewmodel.EventTypeOptions = eventTypeDataCtrl.GetItems().ToList().ConvertAll(x =>
+                {
+                    return new BackendEventTypeViewModelItem() { ID = x.ID, Name = x.Name };
+                }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.Data.Start = DateTime.Now;
+                viewmodel.Data.End = DateTime.Now;
             }
             catch (Exception ex)
             {
@@ -146,6 +157,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
         public IHttpActionResult Backend_Detail_Insert(BackendEventViewModelItem request)
         {
@@ -160,9 +172,10 @@ namespace api.NetConnect.Controllers
                 return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Eintrag wurde gespeichert.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendEventViewModelItem request)
         {
@@ -181,8 +194,9 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel, "Eintrag wurde gespeichert.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendEventDeleteRequest request)
+        public IHttpActionResult Backend_Delete(Int32[] IDs)
         {
             BaseViewModel viewmodel = new BaseViewModel();
 

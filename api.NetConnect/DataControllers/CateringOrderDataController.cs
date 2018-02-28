@@ -50,7 +50,12 @@ namespace api.NetConnect.DataControllers
 
         public CateringOrder Update(CateringOrder item)
         {
-            throw new NotImplementedException();
+            var dbItem = GetItem(item.ID);
+
+            dbItem.OrderState = item.OrderState;
+            db.SaveChanges();
+
+            return dbItem;
         }
 
         public void Delete(int ID)

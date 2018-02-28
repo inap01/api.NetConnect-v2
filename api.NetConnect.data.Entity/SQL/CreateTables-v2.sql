@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[CateringOrder] (
 	[EventID] int NOT NULL,
 	[UserID] int NOT NULL,
 	[SeatID] int NOT NULL,
+	[Note] text,
 	[Registered] datetime NOT NULL DEFAULT GETDATE(),
 	[OrderState] int NOT NULL DEFAULT 0 CHECK (OrderState in (-1, 0, 1, 2)),
 	[RowVersion] timestamp NOT NULL
@@ -183,7 +184,7 @@ CREATE TABLE [dbo].[Seat] (
 	[EventID] int NOT NULL,
 	[UserID] INT NOT NULL DEFAULT 0,
 	[State] INT NOT NULL CHECK ([State] in (-1, 1, 2, 3)),
-	[Description] text NOT NULL,
+	[Description] text,
 	[ReservationDate] datetime NOT NULL DEFAULT GETDATE(),
 	[Payed] bit NOT NULL DEFAULT 0,
 	[TransferUserID] INT,
@@ -310,23 +311,9 @@ CREATE TABLE [dbo].[UserRole] (
 	[RowVersion] timestamp NOT NULL
 );
 
-CREATE TABLE [dbo].[UserPrivilege] (
-	[ID] int IDENTITY(1,1) PRIMARY KEY,
-	[Name] varchar(250) NOT NULL UNIQUE,
-	[RowVersion] timestamp NOT NULL
-);
-
-CREATE TABLE [dbo].[UserPrivilegeRelation] (
-	[ID] int IDENTITY(1,1) PRIMARY KEY,
-	[UserID] int NOT NULL,
-	[UserPrivilegeID] int NOT NULL,
-	[RowVersion] timestamp NOT NULL
-);
-
-CREATE TABLE [dbo].[UserRolePrivilegeRelation] (
+CREATE TABLE [dbo].[UserRoleRelation] (
 	[ID] int IDENTITY(1,1) PRIMARY KEY,
 	[UserRoleID] int NOT NULL,
-	[UserPrivilegeID] int NOT NULL,
 	[RowVersion] timestamp NOT NULL
 );
 
@@ -359,9 +346,7 @@ CREATE TABLE [dbo].[ChangeSet] (
 	[UserTask] DateTime,
 	[UserTaskRelation] DateTime,
 	[UserRole] DateTime,
-	[UserPrivilege] DateTime,
-	[UserPrivilegeRelation] DateTime,
-	[UserRolePrivilegeRelation] DateTime,
+	[UserRoleRelation] DateTime,
 	[RowVersion] rowversion
 );
 GO
@@ -440,13 +425,8 @@ ALTER TABLE [dbo].[TournamentWinnerTeam] ADD CONSTRAINT [FK_TournamentWinnerTeam
 ALTER TABLE [dbo].[UserTaskRelation] ADD CONSTRAINT [FK_UserTaskRelation_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
 ALTER TABLE [dbo].[UserTaskRelation] ADD CONSTRAINT [FK_UserTaskRelation_UserTaskID] FOREIGN KEY (UserTaskID) REFERENCES [dbo].[UserTask](ID);
 
--- [dbo].[UserPrivilegeRelation]
-ALTER TABLE [dbo].[UserPrivilegeRelation] ADD CONSTRAINT [FK_UserPrivilegeRelation_UserID] FOREIGN KEY (UserID) REFERENCES [dbo].[User](ID);
-ALTER TABLE [dbo].[UserPrivilegeRelation] ADD CONSTRAINT [FK_UserPrivilegeRelation_UserPrivilegeID] FOREIGN KEY (UserID) REFERENCES [dbo].[UserPrivilege](ID);
-
 -- [dbo].[UserRolePrivilegeRelation]
-ALTER TABLE [dbo].[UserRolePrivilegeRelation] ADD CONSTRAINT [FK_UserRolePrivilegeRelation_UserID] FOREIGN KEY (UserRoleID) REFERENCES [dbo].[UserRole](ID);
-ALTER TABLE [dbo].[UserRolePrivilegeRelation] ADD CONSTRAINT [FK_UserRolePrivilegeRelation_UserPrivilegeID] FOREIGN KEY (UserPrivilegeID) REFERENCES [dbo].[UserPrivilege](ID);
+ALTER TABLE [dbo].[UserRoleRelation] ADD CONSTRAINT [FK_UserRolePrivilegeRelation_UserRoleID] FOREIGN KEY (UserRoleID) REFERENCES [dbo].[UserRole](ID);
 
 GO
 
@@ -465,17 +445,16 @@ VALUES ('Playground', 1, ''),
        ('NetConnect & Friends', 0, '')
 GO
 
-INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink], [District], [Street], [Housenumber], [Postcode], [City])
-VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-	   (2, 1, '20171215', '20171217', 10, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich'),
-	   (1, 9, '20180309', '20180311', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich')
+INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink], [District], [Street], [Housenumber], [Postcode], [City], [Image])
+VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
+	   (1, 9, '20180309 17:00:00 PM', '20180311 12:00:00 PM', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', '')
 GO
 
 INSERT INTO dbo.NewsCategory ([Name], [Image])
@@ -496,6 +475,11 @@ GO
 INSERT INTO dbo.PartnerDisplay([Name])
 VALUES ('Header'), ('Footer')
 GO
+
+--INSERT INTO dbo.PartnerDisplayRelation([PartnerID], [PartnerDisplayID])
+--VALUES (9,1), (9,2), --Saturo
+--	   (25,1), (25,2) --Lioncast
+--GO
 
 
 -- Trigger ChangeSet
@@ -964,52 +948,18 @@ as
 go
 
 
-IF (OBJECT_ID(N'[dbo].[UpdateUserPrivilege]') IS NOT NULL)
+IF (OBJECT_ID(N'[dbo].[UpdateUserRoleRelation]') IS NOT NULL)
 BEGIN
-      DROP TRIGGER [dbo].[UpdateUserPrivilege];
+      DROP TRIGGER [dbo].[UpdateUserRoleRelation];
 END;
 go
 
-create trigger [dbo].[UpdateUserPrivilege]
-on [dbo].[UserPrivilege]
+create trigger [dbo].[UpdateUserRoleRelation]
+on [dbo].[UserRoleRelation]
 after update, insert, delete
 as	
 	declare @date DateTime
 	Select @date = GETDATE()
 	UPDATE [dbo].[ChangeSet]
-	SET [UserPrivilege] = @date
-go
-
-
-IF (OBJECT_ID(N'[dbo].[UpdateUserPrivilegeRelation]') IS NOT NULL)
-BEGIN
-      DROP TRIGGER [dbo].[UpdateUserPrivilegeRelation];
-END;
-go
-
-create trigger [dbo].[UpdateUserPrivilegeRelation]
-on [dbo].[UserPrivilegeRelation]
-after update, insert, delete
-as	
-	declare @date DateTime
-	Select @date = GETDATE()
-	UPDATE [dbo].[ChangeSet]
-	SET [UserPrivilegeRelation] = @date
-go
-
-
-IF (OBJECT_ID(N'[dbo].[UpdateUserRolePrivilegeRelation]') IS NOT NULL)
-BEGIN
-      DROP TRIGGER [dbo].[UpdateUserRolePrivilegeRelation];
-END;
-go
-
-create trigger [dbo].[UpdateUserRolePrivilegeRelation]
-on [dbo].[UserRolePrivilegeRelation]
-after update, insert, delete
-as	
-	declare @date DateTime
-	Select @date = GETDATE()
-	UPDATE [dbo].[ChangeSet]
-	SET [UserRolePrivilegeRelation] = @date
+	SET [UserRoleRelation] = @date
 go

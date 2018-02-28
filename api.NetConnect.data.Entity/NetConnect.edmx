@@ -13,6 +13,7 @@
           <Property Name="EventID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="SeatID" Type="int" Nullable="false" />
+          <Property Name="Note" Type="text" />
           <Property Name="Registered" Type="datetime" Nullable="false" />
           <Property Name="OrderState" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
@@ -90,9 +91,7 @@
           <Property Name="UserTask" Type="datetime" />
           <Property Name="UserTaskRelation" Type="datetime" />
           <Property Name="UserRole" Type="datetime" />
-          <Property Name="UserPrivilege" Type="datetime" />
-          <Property Name="UserPrivilegeRelation" Type="datetime" />
-          <Property Name="UserRolePrivilegeRelation" Type="datetime" />
+          <Property Name="UserRoleRelation" Type="datetime" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="Event">
@@ -236,7 +235,7 @@
           <Property Name="EventID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="State" Type="int" Nullable="false" />
-          <Property Name="Description" Type="text" Nullable="false" />
+          <Property Name="Description" Type="text" />
           <Property Name="ReservationDate" Type="datetime" Nullable="false" />
           <Property Name="Payed" Type="bit" Nullable="false" />
           <Property Name="TransferUserID" Type="int" />
@@ -361,23 +360,6 @@
           <Property Name="Newsletter" Type="bit" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <EntityType Name="UserPrivilege">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="250" Nullable="false" />
-          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
-        <EntityType Name="UserPrivilegeRelation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
-          <Property Name="UserPrivilegeID" Type="int" Nullable="false" />
-          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <EntityType Name="UserRole">
           <Key>
             <PropertyRef Name="ID" />
@@ -386,13 +368,12 @@
           <Property Name="Name" Type="varchar" MaxLength="250" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
-        <EntityType Name="UserRolePrivilegeRelation">
+        <EntityType Name="UserRoleRelation">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserRoleID" Type="int" Nullable="false" />
-          <Property Name="UserPrivilegeID" Type="int" Nullable="false" />
           <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="UserTask">
@@ -830,51 +811,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserPrivilegeRelation_UserID">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserPrivilegeRelation" Type="Self.UserPrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPrivilegeRelation">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserPrivilegeRelation_UserPrivilegeID">
-          <End Role="UserPrivilege" Type="Self.UserPrivilege" Multiplicity="1" />
-          <End Role="UserPrivilegeRelation" Type="Self.UserPrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserPrivilege">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPrivilegeRelation">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRolePrivilegeRelation_UserID">
+        <Association Name="FK_UserRolePrivilegeRelation_UserRoleID">
           <End Role="UserRole" Type="Self.UserRole" Multiplicity="1" />
-          <End Role="UserRolePrivilegeRelation" Type="Self.UserRolePrivilegeRelation" Multiplicity="*" />
+          <End Role="UserRoleRelation" Type="Self.UserRoleRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserRole">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="UserRolePrivilegeRelation">
+            <Dependent Role="UserRoleRelation">
               <PropertyRef Name="UserRoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRolePrivilegeRelation_UserPrivilegeID">
-          <End Role="UserPrivilege" Type="Self.UserPrivilege" Multiplicity="1" />
-          <End Role="UserRolePrivilegeRelation" Type="Self.UserRolePrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserPrivilege">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserRolePrivilegeRelation">
-              <PropertyRef Name="UserPrivilegeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -931,10 +876,8 @@
           <EntitySet Name="TournamentWinnerPlayer" EntityType="Self.TournamentWinnerPlayer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TournamentWinnerTeam" EntityType="Self.TournamentWinnerTeam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserPrivilege" EntityType="Self.UserPrivilege" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserPrivilegeRelation" EntityType="Self.UserPrivilegeRelation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRole" EntityType="Self.UserRole" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="UserRolePrivilegeRelation" EntityType="Self.UserRolePrivilegeRelation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoleRelation" EntityType="Self.UserRoleRelation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserTask" EntityType="Self.UserTask" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserTaskRelation" EntityType="Self.UserTaskRelation" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CateringOrder_EventID" Association="Self.FK_CateringOrder_EventID">
@@ -1069,21 +1012,9 @@
             <End Role="TournamentWinner" EntitySet="TournamentWinner" />
             <End Role="TournamentWinnerTeam" EntitySet="TournamentWinnerTeam" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserPrivilegeRelation_UserID" Association="Self.FK_UserPrivilegeRelation_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserPrivilegeRelation" EntitySet="UserPrivilegeRelation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserPrivilegeRelation_UserPrivilegeID" Association="Self.FK_UserPrivilegeRelation_UserPrivilegeID">
-            <End Role="UserPrivilege" EntitySet="UserPrivilege" />
-            <End Role="UserPrivilegeRelation" EntitySet="UserPrivilegeRelation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserID" Association="Self.FK_UserRolePrivilegeRelation_UserID">
+          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserRoleID" Association="Self.FK_UserRolePrivilegeRelation_UserRoleID">
             <End Role="UserRole" EntitySet="UserRole" />
-            <End Role="UserRolePrivilegeRelation" EntitySet="UserRolePrivilegeRelation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserPrivilegeID" Association="Self.FK_UserRolePrivilegeRelation_UserPrivilegeID">
-            <End Role="UserPrivilege" EntitySet="UserPrivilege" />
-            <End Role="UserRolePrivilegeRelation" EntitySet="UserRolePrivilegeRelation" />
+            <End Role="UserRoleRelation" EntitySet="UserRoleRelation" />
           </AssociationSet>
           <AssociationSet Name="FK_UserTaskRelation_UserID" Association="Self.FK_UserTaskRelation_UserID">
             <End Role="User" EntitySet="User" />
@@ -1127,10 +1058,8 @@
           <EntitySet Name="TournamentWinnerPlayer" EntityType="NetConnectModel.TournamentWinnerPlayer" />
           <EntitySet Name="TournamentWinnerTeam" EntityType="NetConnectModel.TournamentWinnerTeam" />
           <EntitySet Name="User" EntityType="NetConnectModel.User" />
-          <EntitySet Name="UserPrivilege" EntityType="NetConnectModel.UserPrivilege" />
-          <EntitySet Name="UserPrivilegeRelation" EntityType="NetConnectModel.UserPrivilegeRelation" />
           <EntitySet Name="UserRole" EntityType="NetConnectModel.UserRole" />
-          <EntitySet Name="UserRolePrivilegeRelation" EntityType="NetConnectModel.UserRolePrivilegeRelation" />
+          <EntitySet Name="UserRoleRelation" EntityType="NetConnectModel.UserRoleRelation" />
           <EntitySet Name="UserTask" EntityType="NetConnectModel.UserTask" />
           <EntitySet Name="UserTaskRelation" EntityType="NetConnectModel.UserTaskRelation" />
           <AssociationSet Name="FK_CateringOrder_EventID" Association="NetConnectModel.FK_CateringOrder_EventID">
@@ -1265,25 +1194,13 @@
             <End Role="User" EntitySet="User" />
             <End Role="TournamentWinnerPlayer" EntitySet="TournamentWinnerPlayer" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserPrivilegeRelation_UserID" Association="NetConnectModel.FK_UserPrivilegeRelation_UserID">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserPrivilegeRelation" EntitySet="UserPrivilegeRelation" />
-          </AssociationSet>
           <AssociationSet Name="FK_UserTaskRelation_UserID" Association="NetConnectModel.FK_UserTaskRelation_UserID">
             <End Role="User" EntitySet="User" />
             <End Role="UserTaskRelation" EntitySet="UserTaskRelation" />
           </AssociationSet>
-          <AssociationSet Name="FK_UserPrivilegeRelation_UserPrivilegeID" Association="NetConnectModel.FK_UserPrivilegeRelation_UserPrivilegeID">
-            <End Role="UserPrivilege" EntitySet="UserPrivilege" />
-            <End Role="UserPrivilegeRelation" EntitySet="UserPrivilegeRelation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserPrivilegeID" Association="NetConnectModel.FK_UserRolePrivilegeRelation_UserPrivilegeID">
-            <End Role="UserPrivilege" EntitySet="UserPrivilege" />
-            <End Role="UserRolePrivilegeRelation" EntitySet="UserRolePrivilegeRelation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserID" Association="NetConnectModel.FK_UserRolePrivilegeRelation_UserID">
+          <AssociationSet Name="FK_UserRolePrivilegeRelation_UserRoleID" Association="NetConnectModel.FK_UserRolePrivilegeRelation_UserRoleID">
             <End Role="UserRole" EntitySet="UserRole" />
-            <End Role="UserRolePrivilegeRelation" EntitySet="UserRolePrivilegeRelation" />
+            <End Role="UserRoleRelation" EntitySet="UserRoleRelation" />
           </AssociationSet>
           <AssociationSet Name="FK_UserTaskRelation_UserTaskID" Association="NetConnectModel.FK_UserTaskRelation_UserTaskID">
             <End Role="UserTask" EntitySet="UserTask" />
@@ -1298,6 +1215,7 @@
           <Property Name="EventID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="SeatID" Type="Int32" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Registered" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="OrderState" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
@@ -1386,9 +1304,7 @@
           <Property Name="UserTask" Type="DateTime" Precision="3" />
           <Property Name="UserTaskRelation" Type="DateTime" Precision="3" />
           <Property Name="UserRole" Type="DateTime" Precision="3" />
-          <Property Name="UserPrivilege" Type="DateTime" Precision="3" />
-          <Property Name="UserPrivilegeRelation" Type="DateTime" Precision="3" />
-          <Property Name="UserRolePrivilegeRelation" Type="DateTime" Precision="3" />
+          <Property Name="UserRoleRelation" Type="DateTime" Precision="3" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Event">
@@ -1549,7 +1465,7 @@
           <Property Name="EventID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="State" Type="Int32" Nullable="false" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ReservationDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Payed" Type="Boolean" Nullable="false" />
           <Property Name="TransferUserID" Type="Int32" />
@@ -1706,34 +1622,12 @@
           <NavigationProperty Name="Logs" Relationship="NetConnectModel.FK_Logs_UserID" FromRole="User" ToRole="Logs" />
           <NavigationProperty Name="Seat" Relationship="NetConnectModel.FK_Seat_TransferUserID" FromRole="User" ToRole="Seat" />
           <NavigationProperty Name="Seat1" Relationship="NetConnectModel.FK_Seat_UserID" FromRole="User" ToRole="Seat" />
-          <NavigationProperty Name="SeatTransferLogDestination" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
-          <NavigationProperty Name="SeatTransferLogSource" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="User" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="SeatTransferLog" Relationship="NetConnectModel.FK_SeatTransferLog_DestinationUserID" FromRole="User" ToRole="SeatTransferLog" />
+          <NavigationProperty Name="SeatTransferLog1" Relationship="NetConnectModel.FK_SeatTransferLog_SourceUserID" FromRole="User" ToRole="SeatTransferLog" />
           <NavigationProperty Name="TournamentParticipant" Relationship="NetConnectModel.FK_TournamentParticipant_UserID" FromRole="User" ToRole="TournamentParticipant" />
           <NavigationProperty Name="TournamentTeamParticipant" Relationship="NetConnectModel.FK_TournamentTeamParticipant_UserID" FromRole="User" ToRole="TournamentTeamParticipant" />
           <NavigationProperty Name="TournamentWinnerPlayer" Relationship="NetConnectModel.FK_TournamentWinnerPlayer_UserID" FromRole="User" ToRole="TournamentWinnerPlayer" />
-          <NavigationProperty Name="UserPrivilegeRelation" Relationship="NetConnectModel.FK_UserPrivilegeRelation_UserID" FromRole="User" ToRole="UserPrivilegeRelation" />
           <NavigationProperty Name="UserTaskRelation" Relationship="NetConnectModel.FK_UserTaskRelation_UserID" FromRole="User" ToRole="UserTaskRelation" />
-        </EntityType>
-        <EntityType Name="UserPrivilege">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="UserPrivilegeRelation" Relationship="NetConnectModel.FK_UserPrivilegeRelation_UserPrivilegeID" FromRole="UserPrivilege" ToRole="UserPrivilegeRelation" />
-          <NavigationProperty Name="UserRolePrivilegeRelation" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserPrivilegeID" FromRole="UserPrivilege" ToRole="UserRolePrivilegeRelation" />
-        </EntityType>
-        <EntityType Name="UserPrivilegeRelation">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="UserPrivilegeID" Type="Int32" Nullable="false" />
-          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="User" Relationship="NetConnectModel.FK_UserPrivilegeRelation_UserID" FromRole="UserPrivilegeRelation" ToRole="User" />
-          <NavigationProperty Name="UserPrivilege" Relationship="NetConnectModel.FK_UserPrivilegeRelation_UserPrivilegeID" FromRole="UserPrivilegeRelation" ToRole="UserPrivilege" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -1742,18 +1636,16 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="UserRolePrivilegeRelation" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserID" FromRole="UserRole" ToRole="UserRolePrivilegeRelation" />
+          <NavigationProperty Name="UserRoleRelation" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserRoleID" FromRole="UserRole" ToRole="UserRoleRelation" />
         </EntityType>
-        <EntityType Name="UserRolePrivilegeRelation">
+        <EntityType Name="UserRoleRelation">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserRoleID" Type="Int32" Nullable="false" />
-          <Property Name="UserPrivilegeID" Type="Int32" Nullable="false" />
           <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="UserPrivilege" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserPrivilegeID" FromRole="UserRolePrivilegeRelation" ToRole="UserPrivilege" />
-          <NavigationProperty Name="UserRole" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserID" FromRole="UserRolePrivilegeRelation" ToRole="UserRole" />
+          <NavigationProperty Name="UserRole" Relationship="NetConnectModel.FK_UserRolePrivilegeRelation_UserRoleID" FromRole="UserRoleRelation" ToRole="UserRole" />
         </EntityType>
         <EntityType Name="UserTask">
           <Key>
@@ -2193,18 +2085,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserPrivilegeRelation_UserID">
-          <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
-          <End Type="NetConnectModel.UserPrivilegeRelation" Role="UserPrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPrivilegeRelation">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_UserTaskRelation_UserID">
           <End Type="NetConnectModel.User" Role="User" Multiplicity="1" />
           <End Type="NetConnectModel.UserTaskRelation" Role="UserTaskRelation" Multiplicity="*" />
@@ -2217,38 +2097,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserPrivilegeRelation_UserPrivilegeID">
-          <End Type="NetConnectModel.UserPrivilege" Role="UserPrivilege" Multiplicity="1" />
-          <End Type="NetConnectModel.UserPrivilegeRelation" Role="UserPrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserPrivilege">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserPrivilegeRelation">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRolePrivilegeRelation_UserPrivilegeID">
-          <End Type="NetConnectModel.UserPrivilege" Role="UserPrivilege" Multiplicity="1" />
-          <End Type="NetConnectModel.UserRolePrivilegeRelation" Role="UserRolePrivilegeRelation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserPrivilege">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserRolePrivilegeRelation">
-              <PropertyRef Name="UserPrivilegeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserRolePrivilegeRelation_UserID">
+        <Association Name="FK_UserRolePrivilegeRelation_UserRoleID">
           <End Type="NetConnectModel.UserRole" Role="UserRole" Multiplicity="1" />
-          <End Type="NetConnectModel.UserRolePrivilegeRelation" Role="UserRolePrivilegeRelation" Multiplicity="*" />
+          <End Type="NetConnectModel.UserRoleRelation" Role="UserRoleRelation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserRole">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="UserRolePrivilegeRelation">
+            <Dependent Role="UserRoleRelation">
               <PropertyRef Name="UserRoleID" />
             </Dependent>
           </ReferentialConstraint>
@@ -2277,6 +2133,7 @@
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="OrderState" ColumnName="OrderState" />
                 <ScalarProperty Name="Registered" ColumnName="Registered" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="SeatID" ColumnName="SeatID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="EventID" ColumnName="EventID" />
@@ -2333,9 +2190,7 @@
             <EntityTypeMapping TypeName="NetConnectModel.ChangeSet">
               <MappingFragment StoreEntitySet="ChangeSet">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="UserRolePrivilegeRelation" ColumnName="UserRolePrivilegeRelation" />
-                <ScalarProperty Name="UserPrivilegeRelation" ColumnName="UserPrivilegeRelation" />
-                <ScalarProperty Name="UserPrivilege" ColumnName="UserPrivilege" />
+                <ScalarProperty Name="UserRoleRelation" ColumnName="UserRoleRelation" />
                 <ScalarProperty Name="UserRole" ColumnName="UserRole" />
                 <ScalarProperty Name="UserTaskRelation" ColumnName="UserTaskRelation" />
                 <ScalarProperty Name="UserTask" ColumnName="UserTask" />
@@ -2655,25 +2510,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserPrivilege">
-            <EntityTypeMapping TypeName="NetConnectModel.UserPrivilege">
-              <MappingFragment StoreEntitySet="UserPrivilege">
-                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserPrivilegeRelation">
-            <EntityTypeMapping TypeName="NetConnectModel.UserPrivilegeRelation">
-              <MappingFragment StoreEntitySet="UserPrivilegeRelation">
-                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="UserPrivilegeID" ColumnName="UserPrivilegeID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserRole">
             <EntityTypeMapping TypeName="NetConnectModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
@@ -2683,11 +2519,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserRolePrivilegeRelation">
-            <EntityTypeMapping TypeName="NetConnectModel.UserRolePrivilegeRelation">
-              <MappingFragment StoreEntitySet="UserRolePrivilegeRelation">
+          <EntitySetMapping Name="UserRoleRelation">
+            <EntityTypeMapping TypeName="NetConnectModel.UserRoleRelation">
+              <MappingFragment StoreEntitySet="UserRoleRelation">
                 <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
-                <ScalarProperty Name="UserPrivilegeID" ColumnName="UserPrivilegeID" />
                 <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

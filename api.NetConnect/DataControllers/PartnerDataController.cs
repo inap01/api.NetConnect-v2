@@ -71,11 +71,12 @@ namespace api.NetConnect.DataControllers
 
             if (args.Filter.PartnerTypeSelected != "Alle")
                 qry = qry.Where(x => x.PartnerPack.Name == args.Filter.PartnerTypeSelected);
-
-            qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
+            if(!String.IsNullOrEmpty(args.Filter.Name))
+                qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
 
             TotalCount = qry.Count();
 
+            qry = qry.OrderBy(x => x.Name);
             var items = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
                  .Take(args.Pagination.ItemsPerPageSelected)
                  .ToList();

@@ -133,6 +133,36 @@ namespace api.NetConnect
                    action = "Register"
                }
             );
+            config.Routes.MapHttpRoute(
+               name: "POST_Auth_ResetPassword",
+               routeTemplate: "auth/passwordreset",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "ResetPassword"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Auth_ResetPassword",
+               routeTemplate: "auth/passwordreset/{code}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "ResetPassword"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Auth_ResetPassword",
+               routeTemplate: "auth/passwordreset/{code}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Auth",
+                   action = "ResetPassword"
+               }
+            );
             #endregion
 
 
@@ -381,7 +411,7 @@ namespace api.NetConnect
             );
             config.Routes.MapHttpRoute(
                name: "POST_Catering_Backend_Insert",
-               routeTemplate: "backend/catering",
+               routeTemplate: "backend/catering/new",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
                defaults: new
                {
@@ -686,7 +716,7 @@ namespace api.NetConnect
             );
             config.Routes.MapHttpRoute(
                name: "POST_Seating_Backend_Insert",
-               routeTemplate: "backend/seating/new",
+               routeTemplate: "backend/seating/{EventID}/{SeatNumber}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
                defaults: new
                {
@@ -706,7 +736,7 @@ namespace api.NetConnect
             );
             config.Routes.MapHttpRoute(
                name: "PUT_Seating_Backend_Update",
-               routeTemplate: "backend/seating/{id}",
+               routeTemplate: "backend/seating/{EventID}/{SeatNumber}",
                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
                defaults: new
                {

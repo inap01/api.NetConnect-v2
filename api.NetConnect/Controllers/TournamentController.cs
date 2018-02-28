@@ -161,6 +161,7 @@ namespace api.NetConnect.Controllers
         }
         #endregion
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -202,6 +203,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_FilterList(BackendTournamentListArgs args)
         {
@@ -221,13 +223,13 @@ namespace api.NetConnect.Controllers
                         Name = x.Name
                     };
                 });
-                viewmodel.Filter.EventOptions = eventDataCtrl.GetItems().OrderBy(x => x.EventType.Name).ToList().ConvertAll(x => {
+                viewmodel.Filter.EventOptions = eventDataCtrl.GetItems().ToList().ConvertAll(x => {
                     return new BackendTournamentFilter.TournamentFilterEvent()
                     {
                         ID = x.ID,
                         Name = x.EventType.Name + " Vol. " + x.Volume.ToString()
                     };
-                });
+                }).OrderByDescending(x => x.ID).ToList();
                 viewmodel.Pagination = args.Pagination;
 
                 Int32 TotalItemsCount = 0;
@@ -243,6 +245,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
@@ -272,6 +275,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail_New()
         {
@@ -301,6 +305,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
         public IHttpActionResult Backend_Detail_Insert(BackendTournamentViewModelItem request)
         {
@@ -332,6 +337,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel, "Das Turnier wurder erstellt.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendTournamentViewModelItem request)
         {
@@ -362,21 +368,26 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel, "Speichern erfolgreich.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendTournamentDeleteRequest request)
+        public IHttpActionResult Backend_Delete(Int32[] IDs)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            TournamentDataController dataCtrl = new TournamentDataController();
 
             try
             {
-                // TODO
+                foreach(var id in IDs)
+                    dataCtrl.Delete(id);
             }
             catch (Exception ex)
             {
                 return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            if(IDs.Count() <= 1)
+                return Ok(viewmodel, "Eintrag wurden gelöscht");
+            return Ok(viewmodel, IDs.Count() + " Einträge wurden gelöscht");
         }
         #endregion
     }

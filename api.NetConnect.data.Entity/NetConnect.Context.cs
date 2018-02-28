@@ -53,10 +53,8 @@ namespace api.NetConnect.data.Entity
         public virtual DbSet<TournamentWinnerPlayer> TournamentWinnerPlayer { get; set; }
         public virtual DbSet<TournamentWinnerTeam> TournamentWinnerTeam { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserPrivilege> UserPrivilege { get; set; }
-        public virtual DbSet<UserPrivilegeRelation> UserPrivilegeRelation { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
-        public virtual DbSet<UserRolePrivilegeRelation> UserRolePrivilegeRelation { get; set; }
+        public virtual DbSet<UserRoleRelation> UserRoleRelation { get; set; }
         public virtual DbSet<UserTask> UserTask { get; set; }
         public virtual DbSet<UserTaskRelation> UserTaskRelation { get; set; }
     }

@@ -1,4 +1,6 @@
-﻿using api.NetConnect.data.ViewModel.Event.Backend;
+﻿using api.NetConnect.data.Entity;
+using api.NetConnect.data.ViewModel.Event.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +18,11 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
 
     public class BackendCateringListViewModel : ListArgsViewModel<BackendCateringViewModelItem, BackendCateringFilter>
     {
+        public List<BackendCateringProductItem> ProductOptions { get; set; }
+
         public BackendCateringListViewModel() : base()
         {
-
+            ProductOptions = new List<BackendCateringProductItem>();
         }
     }
 
@@ -27,6 +31,7 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         public BackendCateringViewModelItem Data { get; set; }
         public List<BackendEventViewModelItem> EventOptions { get; set; }
         public List<BackendCateringStatusOption> StatusOptions { get; set; }
+        public List<BackendUserViewModelItem> UserOptions { get; set; }
 
         public BackendCateringViewModel()
         {
@@ -39,6 +44,7 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
                 new BackendCateringStatusOption(2),
                 new BackendCateringStatusOption(-1)
             };
+            UserOptions = new List<BackendUserViewModelItem>();
 
             Form = GetForm();
         }
@@ -52,14 +58,16 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
     public class BackendCateringViewModelItem : BackendBaseViewModelItem
     {
         public BackendEventViewModelItem Event { get; set; }
-        public BackendCateringSeat User { get; set; }
+        public BackendUserViewModelItem User { get; set; }
         public List<BackendCateringOrderItem> Order { get; set; }
+        public Int32 SeatNumber { get; set; }
         public BackendCateringStatusOption Status { get; set; }
+        public String Note { get; set; }
 
         public BackendCateringViewModelItem()
         {
             Event = new BackendEventViewModelItem();
-            User = new BackendCateringSeat();
+            User = new BackendUserViewModelItem();
             Order = new List<BackendCateringOrderItem>();
             Status = new BackendCateringStatusOption(1);
         }
@@ -70,7 +78,10 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
 
             result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
             result.Add("Status", new InputInformation() { Type = InputInformationType.choice, Required = true });
-            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Readonly = true });
+            result.Add("SeatNumber", new InputInformation() { Type = InputInformationType.integer, Required = true, Readonly = true });
+            result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Required = true, Readonly = true });
+            result.Add("User", new InputInformation() { Type = InputInformationType.reference, Reference = "User", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()), Required = true, Readonly = true });
+            result.Add("Note", new InputInformation() { Type = InputInformationType.text });
 
             return result;
         }
@@ -114,5 +125,14 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         public List<String> Attributes { get; set; }
         public Int32 Amount { get; set; }
         public Decimal Price { get; set; }
+    }
+
+    public class BackendCateringProductItem : BackendBaseViewModelItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public List<ProductAttributeViewModelItem> Attributes { get; set; }
+        public bool SingleChoice { get; set; }
     }
 }

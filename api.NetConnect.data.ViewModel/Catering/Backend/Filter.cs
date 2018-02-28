@@ -28,7 +28,7 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         {
             Name = "";
             SeatNumber = "";
-            StatusSelected = CateringStatusFilterEnum.Alle;
+            StatusSelected = CateringStatusFilterEnum.Offen;
             _statusOptions = new List<CateringStatusFilterEnum>();
             StatusOptions = new List<CateringStatusFilterEnum>(CateringStatusFilter.getOptions());
         }

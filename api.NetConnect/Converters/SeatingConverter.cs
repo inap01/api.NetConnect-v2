@@ -17,20 +17,20 @@ namespace api.NetConnect.Converters
     public static partial class ConverterExtensions
     {
         #region Fronend
-        public static SeatingViewModelItem FromModel(this SeatingViewModelItem viewModel, Seat model)
+        public static SeatingViewModelItem FromModel(this SeatingViewModelItem viewmodel, Seat model)
         {
-            viewModel.ID = model.ID;
-            viewModel.SeatNumber = model.SeatNumber;
-            viewModel.ReservationState = model.State;
-            viewModel.ReservationDate = model.ReservationDate;
-            viewModel.Description = model.Description;
-            viewModel.IsPayed = model.Payed;
-            viewModel.User = null;
-            viewModel.TransferUser = null;
+            viewmodel.ID = model.ID;
+            viewmodel.SeatNumber = model.SeatNumber;
+            viewmodel.ReservationState = model.State;
+            viewmodel.ReservationDate = model.ReservationDate;
+            viewmodel.Description = model.Description;
+            viewmodel.IsPayed = model.Payed;
+            viewmodel.User = null;
+            viewmodel.TransferUser = null;
 
             if (model.IsActive && model.State != 0 && model.User != null)
             {
-                viewModel.User = new SeatingViewModelItem.SeatingUser()
+                viewmodel.User = new SeatingViewModelItem.SeatingUser()
                 {
                     ID = model.UserID,
                     FirstName = model.User.FirstName,
@@ -42,7 +42,7 @@ namespace api.NetConnect.Converters
 
             if (model.IsActive && model.State != 0 && model.TransferUser != null)
             {
-                viewModel.User = new SeatingViewModelItem.SeatingUser()
+                viewmodel.User = new SeatingViewModelItem.SeatingUser()
                 {
                     ID = model.TransferUserID ?? default(int),
                     FirstName = model.TransferUser.FirstName,
@@ -52,36 +52,54 @@ namespace api.NetConnect.Converters
                 };
             }
 
-            return viewModel;
+            return viewmodel;
         }
         #endregion
 
         #region Backend
-        public static BackendSeatingViewModelItem FromModel(this BackendSeatingViewModelItem viewModel, Seat model)
+        public static BackendSeatingViewModelItem FromModel(this BackendSeatingViewModelItem viewmodel, Seat model)
         {
-            viewModel.ID = model.ID;
-            viewModel.SeatNumber = model.SeatNumber;
-            viewModel.ReservationState = new BackendSeatingStatusOption(model.State);
-            viewModel.ReservationDate = model.ReservationDate;
-            viewModel.Description = model.Description;
-            viewModel.IsPayed = model.Payed;
-            viewModel.User = null;
-            viewModel.TransferUser = null;
-            viewModel.Event.FromModel(model.Event);
+            viewmodel.ID = model.ID;
+            viewmodel.SeatNumber = model.SeatNumber;
+            viewmodel.ReservationState = new BackendSeatingStatusOption(model.State);
+            viewmodel.ReservationDate = model.ReservationDate;
+            viewmodel.Description = model.Description;
+            viewmodel.IsPayed = model.Payed;
+            viewmodel.User = null;
+            viewmodel.TransferUser = null;
+            viewmodel.Event.FromModel(model.Event);
 
             if (model.IsActive && model.State != 0 && model.User != null)
             {
-                viewModel.User = new BackendUserViewModelItem();
-                viewModel.User.FromModel(model.User);
+                viewmodel.User = new BackendUserViewModelItem();
+                viewmodel.User.FromModel(model.User);
             }
 
             if (model.IsActive && model.State != 0 && model.TransferUser != null)
             {
-                viewModel.TransferUser = new BackendUserViewModelItem();
-                viewModel.TransferUser.FromModel(model.TransferUser);
+                viewmodel.TransferUser = new BackendUserViewModelItem();
+                viewmodel.TransferUser.FromModel(model.TransferUser);
             }
 
-            return viewModel;
+            return viewmodel;
+        }
+
+        public static Seat ToModel(this BackendSeatingViewModelItem viewmodel)
+        {
+            Seat model = new Seat();
+
+            model.SeatNumber = viewmodel.SeatNumber;
+            model.EventID = viewmodel.Event.ID;
+            model.UserID = viewmodel.User.ID;
+            if(viewmodel.TransferUser != null)
+                model.TransferUserID = viewmodel.TransferUser.ID;
+            model.State = viewmodel.ReservationState.Key;
+            model.Payed = viewmodel.IsPayed;
+            model.ReservationDate = viewmodel.ReservationDate;
+            model.Description = viewmodel.Description;
+            model.IsActive = true;
+
+            return model;
         }
         #endregion
     }

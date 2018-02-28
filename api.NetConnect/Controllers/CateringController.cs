@@ -10,6 +10,7 @@ using api.NetConnect.Converters;
 using api.NetConnect.DataControllers;
 using api.NetConnect.Helper;
 using api.NetConnect.data.ViewModel.Event.Backend;
+using api.NetConnect.data.ViewModel.User.Backend;
 
 namespace api.NetConnect.Controllers
 {
@@ -38,6 +39,10 @@ namespace api.NetConnect.Controllers
                 if(e == null)
                 {
                     return Warning(viewmodel, "Keine passende Veranstaltung gefunden.");
+                }
+                else if(!e.IsActiveCatering)
+                {
+                    return Warning(viewmodel, "Das Catering ist derzeit deaktiviert.");
                 }
 
                 int eventID = e.ID;
@@ -103,6 +108,7 @@ namespace api.NetConnect.Controllers
         }
         #endregion
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -110,6 +116,8 @@ namespace api.NetConnect.Controllers
             BackendCateringListArgs args = new BackendCateringListArgs();
             EventDataController eventDataCtrl = new EventDataController();
             CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
+            CateringDataController cateringDataCtrl = new CateringDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
             try
             {
@@ -122,6 +130,13 @@ namespace api.NetConnect.Controllers
                         Name = $"{x.EventType.Name} Vol.{x.Volume}"
                     };
                 });
+
+                var products = cateringDataCtrl.GetItems().ToList();
+                viewmodel.ProductOptions = products.ConvertAll(x =>
+                {
+                    return new BackendCateringProductItem().FromModel(x);
+                });
+
                 viewmodel.Filter.EventSelected = viewmodel.Filter.EventOptions[0];
                 args.Filter.EventSelected = viewmodel.Filter.EventOptions[0];
 
@@ -137,12 +152,15 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_FilterList(BackendCateringListArgs args)
         {
             BackendCateringListViewModel viewmodel = new BackendCateringListViewModel();
             EventDataController eventDataCtrl = new EventDataController();
             CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
+            CateringDataController cateringDataCtrl = new CateringDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
             try
             {
@@ -154,6 +172,12 @@ namespace api.NetConnect.Controllers
                         ID = x.ID,
                         Name = $"{x.EventType.Name} Vol.{x.Volume}"
                     };
+                });
+
+                var products = cateringDataCtrl.GetItems().ToList();
+                viewmodel.ProductOptions = products.ConvertAll(x =>
+                {
+                    return new BackendCateringProductItem().FromModel(x);
                 });
 
                 viewmodel.Filter.Name = args.Filter.Name;
@@ -174,12 +198,14 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
             BackendCateringViewModel viewmodel = new BackendCateringViewModel();
-            CateringOrderDataController orderDataCtrl = new CateringOrderDataController();
+            CateringOrderDataController dataCtrl = new CateringOrderDataController();
             EventDataController eventDataCtrl = new EventDataController();
+            UserDataController userDataCtrl = new UserDataController();
 
             try
             {
@@ -187,8 +213,13 @@ namespace api.NetConnect.Controllers
                 {
                     return new BackendEventViewModelItem().FromModel(x);
                 }).OrderByDescending(x => x.ID).ToList();
+                viewmodel.UserOptions = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList().ConvertAll(x =>
+                {
+                    return new BackendUserViewModelItem().FromModel(x);
+                });
 
-                viewmodel.Data.FromModel(orderDataCtrl.GetItem(id));
+
+                viewmodel.Data.FromModel(dataCtrl.GetItem(id));
             }
             catch (Exception ex)
             {
@@ -198,8 +229,9 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
-        [HttpPost]
-        public IHttpActionResult Backend_Detail_Insert(BackendCateringViewModelItem request)
+        [Authorize(Roles = "Admin,Team")]
+        [HttpGet]
+        public IHttpActionResult Backend_Detail_New()
         {
             BackendCateringViewModel viewmodel = new BackendCateringViewModel();
 
@@ -215,21 +247,42 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
+        [HttpPost]
+        public IHttpActionResult Backend_Detail_Insert(BackendNewOrderRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            CateringOrderDataController dataCtrl = new CateringOrderDataController();
+
+            try
+            {
+                dataCtrl.Insert(request.ToModel());
+            }
+            catch (Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
+
+            return Ok(viewmodel, "Bestellung wurde aufgenommen.");
+        }
+
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendCateringViewModelItem request)
         {
             BackendCateringViewModel viewmodel = new BackendCateringViewModel();
+            CateringOrderDataController dataCtrl = new CateringOrderDataController();
 
             try
             {
-                // TODO
+                dataCtrl.Update(request.ToModel());
             }
             catch (Exception ex)
             {
                 return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Eintrag wurde gespeichert.");
         }
         #endregion
     }

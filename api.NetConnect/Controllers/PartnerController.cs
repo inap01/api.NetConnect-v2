@@ -46,6 +46,7 @@ namespace api.NetConnect.Controllers
         #endregion
 
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -71,6 +72,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_FilterList(BackendPartnerListArgs args)
         {
@@ -99,6 +101,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
@@ -122,6 +125,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail_New()
         {
@@ -152,6 +156,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
         public IHttpActionResult Backend_Detail_Insert(BackendPartnerViewModelItem request)
         {
@@ -170,6 +175,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel, "Partner wurde erstellt.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_Detail_Update(Int32 id, BackendPartnerViewModelItem request)
         {
@@ -188,6 +194,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel, "Partner wurde erfolgreich aktualisiert.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
         public IHttpActionResult Backend_Delete(BackendPartnerDeleteRequest request)
         {
@@ -198,6 +205,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
         public IHttpActionResult Backend_Position(PositionPartnerTypeRequest args)
         {
@@ -230,6 +238,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_Position_Update(PositionPartnerUpdateRequest request)
         {

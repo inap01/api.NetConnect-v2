@@ -18,6 +18,7 @@ namespace api.NetConnect.Controllers
     public class GameController : BaseController
     {
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -40,6 +41,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
         public IHttpActionResult Backend_FilterList(BackendGameListArgs args)
         {
@@ -64,6 +66,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 id)
         {
@@ -82,8 +85,9 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
-        public IHttpActionResult Backend_Detail_Insert(TournamentViewModelItem request)
+        public IHttpActionResult Backend_Detail_Insert(BackendGameViewModelItem request)
         {
             BackendGameViewModel viewmodel = new BackendGameViewModel();
 
@@ -99,25 +103,29 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
-        public IHttpActionResult Backend_Detail_Update(Int32 id, TournamentViewModelItem request)
+        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendGameViewModelItem request)
         {
             BackendGameViewModel viewmodel = new BackendGameViewModel();
+            TournamentGameDataController dataCtrl = new TournamentGameDataController();
 
             try
             {
-                // TODO
+                var data = dataCtrl.Update(request.ToModel());
+                viewmodel.Data.FromModel(data);
             }
             catch (Exception ex)
             {
                 return Error(viewmodel, ex);
             }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Eintrag wurde gespeichert.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendTournamentDeleteRequest request)
+        public IHttpActionResult Backend_Delete(Int32[] IDs)
         {
             BaseViewModel viewmodel = new BaseViewModel();
 

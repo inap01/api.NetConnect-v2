@@ -15,35 +15,34 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static TournamentViewModelItem FromModel(this TournamentViewModelItem viewModel, Tournament model)
+        public static TournamentViewModelItem FromModel(this TournamentViewModelItem viewmodel, Tournament model)
         {
             Int32 UserID = UserHelper.CurrentUserID;
 
-            viewModel.ID = model.ID;
-            viewModel.GameID = model.TournamentGameID;
-            viewModel.TeamSize = model.TeamSize;
-            viewModel.ChallongeLink = model.ChallongeLink;
-            viewModel.Mode = model.Mode;
-            viewModel.Start = model.Start;
-            viewModel.End = model.End;
-            viewModel.GameTitle = model.TournamentGame.Name;
-            viewModel.Rules = model.TournamentGame.Rules;
-            //viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.TournamentGame.ImageContainer.ThumbnailPath;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg";
-            viewModel.Event.FromModel(model.Event);
+            viewmodel.ID = model.ID;
+            viewmodel.GameID = model.TournamentGameID;
+            viewmodel.TeamSize = model.TeamSize;
+            viewmodel.ChallongeLink = model.ChallongeLink;
+            viewmodel.Mode = model.Mode;
+            viewmodel.Start = model.Start;
+            viewmodel.End = model.End;
+            viewmodel.GameTitle = model.TournamentGame.Name;
+            viewmodel.Rules = model.TournamentGame.Rules;
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + model.TournamentGame.Image;
+            viewmodel.Event.FromModel(model.Event);
 
-            viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
+            viewmodel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
                 if (x.UserID == UserID)
-                    viewModel.IsParticipant = true;
+                    viewmodel.IsParticipant = true;
 
                 var vm = new TournamentParticipantViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
-            viewModel.Teams = model.TournamentTeam.ToList().Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
+            viewmodel.Teams = model.TournamentTeam.ToList().Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
                 if (x.TournamentTeamParticipant.FirstOrDefault(p => p.UserID == UserID) != null)
-                    viewModel.IsParticipant = true;
+                    viewmodel.IsParticipant = true;
 
                 var vm = new TournamentTeamViewModelItem();
                 vm.FromModel(x);
@@ -51,103 +50,101 @@ namespace api.NetConnect.Converters
             });
 
             if(model.Partner != null)
-                viewModel.Partner.FromModel(model.Partner);
+                viewmodel.Partner.FromModel(model.Partner);
 
-            viewModel.ParticipantCount = model.TournamentParticipant.Count;
-            viewModel.Teams.ForEach(team => viewModel.ParticipantCount += team.Player.Count);
+            viewmodel.ParticipantCount = model.TournamentParticipant.Count;
+            viewmodel.Teams.ForEach(team => viewmodel.ParticipantCount += team.Player.Count);
 
-            return viewModel;
+            return viewmodel;
         }
-        public static List<BackendTournamentViewModelItem> FromModel(this List<BackendTournamentViewModelItem> viewModel, List<Tournament> model)
+        public static List<BackendTournamentViewModelItem> FromModel(this List<BackendTournamentViewModelItem> viewmodel, List<Tournament> modelList)
         {
-            viewModel = model.ConvertAll(x =>
-            {
-                return new BackendTournamentViewModelItem().FromModel(x);
-            });
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendTournamentViewModelItem().FromModel(model));
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendTournamentViewModelItem FromModel(this BackendTournamentViewModelItem viewModel, Tournament model)
+        public static BackendTournamentViewModelItem FromModel(this BackendTournamentViewModelItem viewmodel, Tournament model)
         {
-            viewModel.ID = model.ID;
-            viewModel.ChallongeLink = model.ChallongeLink;
-            viewModel.Mode = model.Mode;
-            viewModel.Start = model.Start;
-            viewModel.End = model.End;
-            viewModel.TeamSize = model.TeamSize;
+            viewmodel.ID = model.ID;
+            viewmodel.ChallongeLink = model.ChallongeLink;
+            viewmodel.Mode = model.Mode;
+            viewmodel.Start = model.Start;
+            viewmodel.End = model.End;
+            viewmodel.TeamSize = model.TeamSize;
 
-            viewModel.Event.FromModel(model.Event);
-            viewModel.Game.FromModel(model.TournamentGame);
+            viewmodel.Event.FromModel(model.Event);
+            viewmodel.Game.FromModel(model.TournamentGame);
 
-            viewModel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
+            viewmodel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {
                 var vm = new BackendUserViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
-            viewModel.Teams = model.TournamentTeam.Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
+            viewmodel.Teams = model.TournamentTeam.Where(x => x.TournamentTeamParticipant.Count > 0).ToList().ConvertAll(x => {
                 var vm = new BackendTournamentTeamViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
             if (model.Partner != null)
-                viewModel.Partner.FromModel(model.Partner);
+                viewmodel.Partner.FromModel(model.Partner);
 
-            viewModel.ParticipantCount = model.TournamentParticipant.Count;
-            viewModel.Teams.ForEach(team => viewModel.ParticipantCount += team.Player.Count);
+            viewmodel.ParticipantCount = model.TournamentParticipant.Count;
+            viewmodel.Teams.ForEach(team => viewmodel.ParticipantCount += team.Player.Count);
 
-            return viewModel;
+            return viewmodel;
         }
 
         // Tournament Participant
-        public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewModel, TournamentParticipant model)
+        public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewmodel, TournamentParticipant model)
         {
-            viewModel.ID = model.ID;
-            viewModel.UserID = model.UserID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
+            viewmodel.ID = model.ID;
+            viewmodel.UserID = model.UserID;
+            viewmodel.FirstName = model.User.FirstName;
+            viewmodel.LastName = model.User.LastName;
+            viewmodel.Nickname = model.User.Nickname;
 
-            return viewModel;
+            return viewmodel;
         }
-        public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewModel, TournamentTeamParticipant model)
+        public static TournamentParticipantViewModelItem FromModel(this TournamentParticipantViewModelItem viewmodel, TournamentTeamParticipant model)
         {
-            viewModel.ID = model.ID;
-            viewModel.UserID = model.UserID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
+            viewmodel.ID = model.ID;
+            viewmodel.UserID = model.UserID;
+            viewmodel.FirstName = model.User.FirstName;
+            viewmodel.LastName = model.User.LastName;
+            viewmodel.Nickname = model.User.Nickname;
 
-            return viewModel;
+            return viewmodel;
         }
 
         // Tournament Team
-        public static TournamentTeamViewModelItem FromModel(this TournamentTeamViewModelItem viewModel, TournamentTeam model)
+        public static TournamentTeamViewModelItem FromModel(this TournamentTeamViewModelItem viewmodel, TournamentTeam model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
-            viewModel.HasPassword = !String.IsNullOrEmpty(model.Password);
-            viewModel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.HasPassword = !String.IsNullOrEmpty(model.Password);
+            viewmodel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
                 var vm = new TournamentParticipantViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendTournamentTeamViewModelItem FromModel(this BackendTournamentTeamViewModelItem viewModel, TournamentTeam model)
+        public static BackendTournamentTeamViewModelItem FromModel(this BackendTournamentTeamViewModelItem viewmodel, TournamentTeam model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
-            viewModel.HasPassword = !String.IsNullOrEmpty(model.Password);
-            viewModel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.HasPassword = !String.IsNullOrEmpty(model.Password);
+            viewmodel.Player = model.TournamentTeamParticipant.ToList().ConvertAll(x => {
                 var vm = new BackendUserViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
-            return viewModel;
+            return viewmodel;
         }
         public static TournamentTeam ToModel(this CreateTeamRequest request, Int32 TournamentID)
         {
@@ -161,45 +158,43 @@ namespace api.NetConnect.Converters
         }
 
         // Tournament Partner
-        public static TournamentViewModelItem.TournamentPartner FromModel(this TournamentViewModelItem.TournamentPartner viewModel, Partner model)
+        public static TournamentViewModelItem.TournamentPartner FromModel(this TournamentViewModelItem.TournamentPartner viewmodel, Partner model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendTournamentViewModelItem.BackendTournamentPartner FromModel(this BackendTournamentViewModelItem.BackendTournamentPartner viewModel, Partner model)
+        public static BackendTournamentViewModelItem.BackendTournamentPartner FromModel(this BackendTournamentViewModelItem.BackendTournamentPartner viewmodel, Partner model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
 
-            return viewModel;
+            return viewmodel;
         }
 
         // Tournament Game
-        public static List<BackendGameViewModelItem> FromModel(this List<BackendGameViewModelItem> viewModel, List<TournamentGame> model)
+        public static List<BackendGameViewModelItem> FromModel(this List<BackendGameViewModelItem> viewmodel, List<TournamentGame> modelList)
         {
-            viewModel = model.ConvertAll(x =>
-            {
-                return new BackendGameViewModelItem().FromModel(x);
-            });
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendGameViewModelItem().FromModel(model));
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static BackendGameViewModelItem FromModel(this BackendGameViewModelItem viewModel, TournamentGame model)
+        public static BackendGameViewModelItem FromModel(this BackendGameViewModelItem viewmodel, TournamentGame model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
-            viewModel.ImagePath = "";
-            viewModel.RulesPath = "";
-            viewModel.RequireSteamID = model.RequireSteamID;
-            viewModel.RequireBattleTag = model.RequireBattleTag;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.ImagePath = model.Image;
+            viewmodel.RulesPath = model.Rules;
+            viewmodel.RequireSteamID = model.RequireSteamID;
+            viewmodel.RequireBattleTag = model.RequireBattleTag;
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static TournamentParticipant ToModel(this JoinTournamentRequest viewModel, Int32 TournamentID)
+        public static TournamentParticipant ToModel(this JoinTournamentRequest viewmodel, Int32 TournamentID)
         {
             TournamentParticipant model = new TournamentParticipant();
             
@@ -210,12 +205,12 @@ namespace api.NetConnect.Converters
             return model;
         }
 
-        public static TournamentTeamParticipant ToTeamModel(this JoinTournamentRequest viewModel)
+        public static TournamentTeamParticipant ToTeamModel(this JoinTournamentRequest viewmodel)
         {
             TournamentTeamParticipant model = new TournamentTeamParticipant();
 
             model.UserID = UserHelper.CurrentUserID;
-            model.TournamentTeamID = viewModel.TeamID ?? default(int);
+            model.TournamentTeamID = viewmodel.TeamID ?? default(int);
             model.Registered = DateTime.Now;
 
             return model;
@@ -235,6 +230,20 @@ namespace api.NetConnect.Converters
             model.ChallongeLink = viewmodel.ChallongeLink;
             if(viewmodel.Partner != null)
                 model.PartnerID = viewmodel.Partner.ID;
+
+            return model;
+        }
+
+        public static TournamentGame ToModel(this BackendGameViewModelItem viewmodel)
+        {
+            TournamentGame model = new TournamentGame();
+
+            model.ID = viewmodel.ID;
+            model.Name = viewmodel.Name;
+            model.Image = viewmodel.ImagePath;
+            model.Rules = viewmodel.RulesPath;
+            model.RequireBattleTag = viewmodel.RequireBattleTag;
+            model.RequireSteamID = viewmodel.RequireSteamID;
 
             return model;
         }

@@ -13,22 +13,32 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static List<BackendEventTypeViewModelItem> FromModel(this List<BackendEventTypeViewModelItem> viewModel, List<EventType> model)
+        public static List<BackendEventTypeViewModelItem> FromModel(this List<BackendEventTypeViewModelItem> viewmodel, List<EventType> model)
         {
-            viewModel = model.ConvertAll(x =>
-            {
-                return new BackendEventTypeViewModelItem().FromModel(x);
-            });
+            foreach (var m in model)
+                viewmodel.Add(new BackendEventTypeViewModelItem().FromModel(m));
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static BackendEventTypeViewModelItem FromModel(this BackendEventTypeViewModelItem viewModel, EventType model)
+        public static BackendEventTypeViewModelItem FromModel(this BackendEventTypeViewModelItem viewmodel, EventType model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.Description = model.Description;
 
-            return viewModel;
+            return viewmodel;
+        }
+
+        public static EventType ToModel(this BackendEventTypeViewModelItem viewmodel)
+        {
+            EventType model = new EventType();
+
+            model.ID = viewmodel.ID;
+            model.Name = viewmodel.Name;
+            model.Description = viewmodel.Description;
+
+            return model;
         }
     }
 }

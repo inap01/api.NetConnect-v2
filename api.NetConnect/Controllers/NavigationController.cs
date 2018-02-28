@@ -21,6 +21,10 @@ namespace api.NetConnect.Controllers
             EventDataController dataCtrl = new EventDataController();
             SeatDataController seatDataCtrl = new SeatDataController();
             PartnerDisplayRelationDataController displayDataCtrl = new PartnerDisplayRelationDataController();
+            var events = dataCtrl.GetItems().ToList();
+            var nextEvent = events.OrderByDescending(x => x.Start).First();
+            if (events.OrderByDescending(x => x.Start).FirstOrDefault(x => x.End > DateTime.Now) != null)
+                nextEvent = events.OrderByDescending(x => x.Start).FirstOrDefault(x => x.End > DateTime.Now);
             var partner = displayDataCtrl.GetItems()
                 .Where(x => x.Partner.IsActive)
                 .OrderBy(x => x.Partner.PartnerPackID)
@@ -48,13 +52,13 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "Turniere",
-                State = "event.tournaments.all({id: 10})",
+                State = "event.tournaments.all({id: " + nextEvent.ID + "})",
                 StateCompare = "event.tournaments"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
                 Text = "Sitzplan",
-                State = "event.seating({id: 10})",
+                State = "event.seating({id: " + nextEvent.ID + "})",
                 StateCompare = "event.seating"
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
@@ -128,12 +132,12 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Informationen",
-                State = "event.details({id: 10})"
+                State = "event.details({id: " + nextEvent.ID + "})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Teilnehmer",
-                State = "event.seating({id: 10})"
+                State = "event.seating({id: " + nextEvent.ID + "})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
@@ -152,7 +156,7 @@ namespace api.NetConnect.Controllers
             });
             #endregion
             #region EventsAside
-            foreach (var e in dataCtrl.GetItems().Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
+            foreach (var e in events.Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
             {
                 var seats = seatDataCtrl.GetItems().Where(x => x.EventID == e.ID);
                 Int32 seatsCount = 70 - seats.Count(x => x.State == -1);
@@ -182,8 +186,8 @@ namespace api.NetConnect.Controllers
                 {
                     Name = p.Partner.Name,
                     Link = p.Partner.Link,
-                    ImagePassive = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImagePassive + "/passive.png",
-                    ImageOriginal = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImageOriginal + "/image.png"
+                    ImagePassive = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImagePassive,
+                    ImageOriginal = Properties.Settings.Default.imageAbsolutePath + p.Partner.ImageOriginal
                 });
             #endregion
             #region NavigationBottom
@@ -198,11 +202,13 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend()
         {
             BackendNavigationViewModel viewmodel = new BackendNavigationViewModel();
 
+            viewmodel.Data.CurrentUserName = UserHelper.CurrentUserName;
             #region NavigationTop
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
@@ -212,7 +218,7 @@ namespace api.NetConnect.Controllers
             });
             viewmodel.Data.NavigationTop.Add(new NavItem()
             {
-                Text = "Backend verlassen",
+                Text = "Adminbereich verlassen",
                 State = "home",
                 StateCompare = "home"
             });
@@ -301,24 +307,6 @@ namespace api.NetConnect.Controllers
                     }
                 }
             });
-            // Catering
-            viewmodel.Data.NavigationAside.Add(new NavItem()
-            {
-                Text = "Catering",
-                StateCompare = "admin.catering",
-                SubMenu = new List<NavItem>() {
-                    new NavItem() {
-                        Text = "Alle Bestellungen",
-                        State = "admin.catering.all",
-                        StateCompare = "admin.catering.all"
-                    },
-                    new NavItem() {
-                        Text = "Bestellung aufnehmen",
-                        State = "admin.catering.new",
-                        StateCompare = "admin.catering.new"
-                    }
-                }
-            });
             // Partner
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
@@ -353,6 +341,13 @@ namespace api.NetConnect.Controllers
                 Text = "Benutzer",
                 State = "admin.user.all",
                 StateCompare = "admin.user"
+            });
+            // Catering
+            viewmodel.Data.NavigationAside.Add(new NavItem()
+            {
+                Text = "Catering",
+                State = "admin.catering.all",
+                StateCompare = "admin.catering.all"
             });
             #endregion
 

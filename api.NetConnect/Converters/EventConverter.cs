@@ -13,29 +13,36 @@ namespace api.NetConnect.Converters
     public static partial class ConverterExtensions
     {
         #region Frontend
-        public static EventViewModelItem FromModel(this EventViewModelItem viewModel, Event model)
+        public static EventViewModelItem FromModel(this EventViewModelItem viewmodel, Event model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Title = model.EventType.Name + " Vol." + model.Volume;
-            viewModel.Start = model.Start;
-            viewModel.End = model.End;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/gallery/8/__preview.jpg";
-            viewModel.Description = model.EventType.Description;
-            viewModel.District = model.District;
-            viewModel.Street = model.Street;
-            viewModel.Housenumber = model.Housenumber;
-            viewModel.Postcode = model.Postcode;
-            viewModel.City = model.City;
-            viewModel.RouteLink = "https://www.google.com/maps?ll=51.00048,6.282984&z=16&t=m&hl=de&gl=US&mapclient=embed&q=Hauptstra%C3%9Fe+93+52441+Linnich+Deutschland";
-            viewModel.Price = model.ReservationCost;
-            viewModel.HasTournaments = model.Tournament.Count > 0;
+            viewmodel.ID = model.ID;
+            viewmodel.Title = model.EventType.Name + " Vol." + model.Volume;
+            viewmodel.Start = model.Start;
+            viewmodel.End = model.End;
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + model.Image;
+            viewmodel.Description = model.EventType.Description;
+            viewmodel.District = model.District;
+            viewmodel.Street = model.Street;
+            viewmodel.Housenumber = model.Housenumber;
+            viewmodel.Postcode = model.Postcode;
+            viewmodel.City = model.City;
+            viewmodel.Price = model.ReservationCost;
+            viewmodel.HasTournaments = model.Tournament.Count > 0;
+
+            string routeLink = "https://www.google.com/maps?q=";
+            routeLink += $"{model.Street}+";
+            routeLink += $"{model.Housenumber}+";
+            routeLink += $"{model.Postcode}+";
+            routeLink += $"{model.City}+";
+            routeLink += $"{model.District}";
+            viewmodel.RouteLink = routeLink;
 
             Int32 seatsCount = 70 - model.Seat.Count(x => x.State == -1);
             Int32 flagged = model.Seat.Count(x => x.State == 1);
             Int32 reserved = model.Seat.Count(x => x.State == 2);
             Int32 free = seatsCount - flagged - reserved;
 
-            viewModel.Seating = new EventViewModelItem.SeatingReservation()
+            viewmodel.Seating = new EventViewModelItem.SeatingReservation()
             {
                 SeatsCount = seatsCount,
                 Flagged = flagged,
@@ -43,42 +50,42 @@ namespace api.NetConnect.Converters
                 Free = free
             };
 
-            return viewModel;
+            return viewmodel;
         }
         #endregion
 
         #region Backend
-        public static List<BackendEventViewModelItem> FromModel(this List<BackendEventViewModelItem> viewModel, List<Event> model)
+        public static List<BackendEventViewModelItem> FromModel(this List<BackendEventViewModelItem> viewmodel, List<Event> model)
         {
             foreach (var m in model)
-                viewModel.Add(new BackendEventViewModelItem().FromModel(m));
+                viewmodel.Add(new BackendEventViewModelItem().FromModel(m));
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static BackendEventViewModelItem FromModel(this BackendEventViewModelItem viewModel, Event model)
+        public static BackendEventViewModelItem FromModel(this BackendEventViewModelItem viewmodel, Event model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.EventType.Name + " Vol." + model.Volume;
-            viewModel.Volume = model.Volume;
-            viewModel.Image = "";
-            viewModel.Start = model.Start;
-            viewModel.End = model.End;
-            viewModel.ReservationCost = model.ReservationCost;
-            viewModel.IsActiveReservation = model.IsActiveReservation;
-            viewModel.IsActiveCatering = model.IsActiveCatering;
-            viewModel.IsActiveFeedback = model.IsActiveFeedback;
-            viewModel.IsPrivate = model.IsPrivate;
-            viewModel.FeedbackLink = model.FeedbackLink;
-            viewModel.District = model.District;
-            viewModel.Street = model.Street;
-            viewModel.Housenumber = model.Housenumber;
-            viewModel.Postcode = model.Postcode;
-            viewModel.City = model.City;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.EventType.Name + " Vol." + model.Volume;
+            viewmodel.Volume = model.Volume;
+            viewmodel.Image = model.Image;
+            viewmodel.Start = model.Start;
+            viewmodel.End = model.End;
+            viewmodel.ReservationCost = model.ReservationCost;
+            viewmodel.IsActiveReservation = model.IsActiveReservation;
+            viewmodel.IsActiveCatering = model.IsActiveCatering;
+            viewmodel.IsActiveFeedback = model.IsActiveFeedback;
+            viewmodel.IsPrivate = model.IsPrivate;
+            viewmodel.FeedbackLink = model.FeedbackLink;
+            viewmodel.District = model.District;
+            viewmodel.Street = model.Street;
+            viewmodel.Housenumber = model.Housenumber;
+            viewmodel.Postcode = model.Postcode;
+            viewmodel.City = model.City;
 
-            viewModel.EventType.FromModel(model.EventType);
+            viewmodel.EventType.FromModel(model.EventType);
 
-            return viewModel;
+            return viewmodel;
         }
 
         public static Event ToModel(this BackendEventViewModelItem viewmodel)
@@ -88,7 +95,7 @@ namespace api.NetConnect.Converters
             model.ID = viewmodel.ID;
             model.EventTypeID = viewmodel.EventType.ID;
             model.Volume = viewmodel.Volume;
-            //model.ImageContainerID = viewmodel;
+            model.Image = viewmodel.Image;
             model.Start = viewmodel.Start;
             model.End = viewmodel.End;
             model.ReservationCost = viewmodel.ReservationCost;

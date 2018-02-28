@@ -73,12 +73,16 @@ namespace api.NetConnect.DataControllers
 
             var qry = GetItems();
 
-            qry = qry.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower()));
-            qry = qry.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower()));
-            qry = qry.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower()));
+            if(!String.IsNullOrEmpty(args.Filter.FirstName))
+                qry = qry.Where(x => x.FirstName.ToLower().Contains(args.Filter.FirstName.ToLower()));
+            if (!String.IsNullOrEmpty(args.Filter.LastName))
+                qry = qry.Where(x => x.LastName.ToLower().Contains(args.Filter.LastName.ToLower()));
+            if (!String.IsNullOrEmpty(args.Filter.Nickname))
+                qry = qry.Where(x => x.Nickname.ToLower().Contains(args.Filter.Nickname.ToLower()));
 
             TotalCount = qry.Count();
 
+            qry = qry.OrderBy(x => x.FirstName);
             var items = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
                  .Take(args.Pagination.ItemsPerPageSelected)
                  .ToList();
@@ -113,6 +117,29 @@ namespace api.NetConnect.DataControllers
         public Boolean CheckExistingNickname(String nickname)
         {
             return GetItems().Count(x => x.Nickname == nickname) > 0;
+        }
+
+        public User ChangePassword(Int32 userID, String NewPassword)
+        {
+            User dbItem = GetItem(userID);
+
+            dbItem.Password = NewPassword;
+            dbItem.PasswordReset = null;
+
+            db.SaveChanges();
+
+            return dbItem;
+        }
+
+        public User SetPasswordReset(Int32 userID)
+        {
+            User dbItem = GetItem(userID);
+            
+            dbItem.PasswordReset = PasswordHelper.HashPassword(DateTime.Now.ToString(), "#random");
+
+            db.SaveChanges();
+
+            return dbItem;
         }
     }
 }

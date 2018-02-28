@@ -53,7 +53,7 @@ namespace api.NetConnect.Controllers
                 {
                     TransferUserID = dataCtrl.GetItems().Single(x => x.Email == request.Email).ID;
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     return Warning(viewmodel, "Die Email wurde nicht vergeben.");
                 }
@@ -211,23 +211,24 @@ namespace api.NetConnect.Controllers
 
             try
             {
-                var updateModel = dataCtrl.GetItem(request.ID);
+                User updateModel = dataCtrl.GetItem(request.ID);
                 updateModel.ToModel(request);
 
                 if (request.OldPassword != null && request.NewPassword1 != null && request.NewPassword2 != null)
                 {
-                    updateModel.Password = PasswordHelper.ChangePassword(dataCtrl.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
+                    var newPassword = PasswordHelper.ChangePassword(dataCtrl.GetItem(UserHelper.CurrentUserID), request.OldPassword, request.NewPassword1, request.NewPassword2);
+                    dataCtrl.ChangePassword(UserHelper.CurrentUserID, newPassword);
                     viewmodel.AddSuccessMessage("Passwort wurde geändert.");
                 }
 
                 updateModel = dataCtrl.Update(updateModel);
                 viewmodel.Data.FromModel(updateModel);
             }
-            catch (WrongPasswordException ex)
+            catch (WrongPasswordException)
             {
                 return Warning(viewmodel, "Das eingegebene Passwort stimmt nicht.");
             }
-            catch (PasswordsNotEqualException ex)
+            catch (PasswordsNotEqualException)
             {
                 return Warning(viewmodel, "Die eingegebenen Passwörter stimmt nicht überein.");
             }

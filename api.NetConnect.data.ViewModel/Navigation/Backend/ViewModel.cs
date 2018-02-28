@@ -26,6 +26,7 @@ namespace api.NetConnect.data.ViewModel.Navigation.Backend
 
     public class BackendNavigationViewModelItem : BaseViewModelItem
     {
+        public String CurrentUserName { get; set; }
         public List<NavItem> NavigationTop { get; set; }
         public List<NavItem> NavigationAside { get; set; }
 

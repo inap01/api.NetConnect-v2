@@ -13,57 +13,55 @@ namespace api.NetConnect.Converters
     public static partial class ConverterExtensions
     {
         #region Frontend
-        public static PartnerViewModelItem FromModel(this PartnerViewModelItem viewModel, Partner model)
+        public static PartnerViewModelItem FromModel(this PartnerViewModelItem viewmodel, Partner model)
         {
-            viewModel.Name = model.Name;
-            viewModel.Description = model.Content;
-            viewModel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageOriginal + "/image.png";
-            viewModel.Link = model.Link;
-            viewModel.RefLink = model.Link;
+            viewmodel.Name = model.Name;
+            viewmodel.Description = model.Content;
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + model.ImageOriginal;
+            viewmodel.Link = model.Link;
+            viewmodel.RefLink = model.Link;
 
-            viewModel.PartnerType.FromModel(model.PartnerPack);
+            viewmodel.PartnerType.FromModel(model.PartnerPack);
 
             // TODO Nachfolgendes
             string[] displays = { "Header", "Footer" };
             foreach (var display in displays)
-                viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay() { ID = 1, Name = display, Value = true });
+                viewmodel.Display.Add(new data.ViewModel.Partner.PartnerDisplay() { ID = 1, Name = display, Value = true });
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static PartnerType FromModel(this PartnerType viewModel, PartnerPack model)
+        public static PartnerType FromModel(this PartnerType viewmodel, PartnerPack model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
 
-            return viewModel;
+            return viewmodel;
         }
         #endregion
         #region Backend
-        public static List<BackendPartnerViewModelItem> FromModel(this List<BackendPartnerViewModelItem> viewModel, List<Partner> model)
+        public static List<BackendPartnerViewModelItem> FromModel(this List<BackendPartnerViewModelItem> viewmodel, List<Partner> modelList)
         {
-            viewModel = model.ConvertAll(x =>
-            {
-                return new BackendPartnerViewModelItem().FromModel(x);
-            });
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendPartnerViewModelItem().FromModel(model));
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static BackendPartnerViewModelItem FromModel(this BackendPartnerViewModelItem viewModel, Partner model)
+        public static BackendPartnerViewModelItem FromModel(this BackendPartnerViewModelItem viewmodel, Partner model)
         {
             PartnerDisplayDataController displayDataCtrl = new PartnerDisplayDataController();
 
-            viewModel.ID = model.ID;
-            viewModel.Name = model.Name;
-            viewModel.Description = model.Content;
-            viewModel.Link = model.Link;
-            viewModel.RefLink = model.RefLink;
-            viewModel.OriginalImage = "http://lan-netconnect.de/_api/images/partner/lioncast/image.png";
-            viewModel.PassiveImage = "http://lan-netconnect.de/_api/images/partner/lioncast/image.png";
-            viewModel.IsActive = model.IsActive;
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.Description = model.Content;
+            viewmodel.Link = model.Link;
+            viewmodel.RefLink = model.RefLink;
+            viewmodel.OriginalImage = model.ImageOriginal;
+            viewmodel.PassiveImage = model.ImagePassive;
+            viewmodel.IsActive = model.IsActive;
 
-            viewModel.PartnerTypeSelected = new BackendPartnerType()
+            viewmodel.PartnerTypeSelected = new BackendPartnerType()
             {
                 ID = model.PartnerPack.ID,
                 Name = model.PartnerPack.Name
@@ -72,14 +70,14 @@ namespace api.NetConnect.Converters
             foreach (var display in displayDataCtrl.GetItems())
             {
                 if(model.PartnerDisplayRelation.FirstOrDefault(x => x.PartnerID == model.ID && x.PartnerDisplayID == display.ID) != null)
-                    viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
+                    viewmodel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
                     {
                         ID = display.ID,
                         Name = display.Name,
                         Value = true
                     });
                 else
-                    viewModel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
+                    viewmodel.Display.Add(new data.ViewModel.Partner.PartnerDisplay()
                     {
                         ID = display.ID,
                         Name = display.Name,
@@ -87,33 +85,34 @@ namespace api.NetConnect.Converters
                     });
             }
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static Partner ToModel(this BackendPartnerViewModelItem viewModel)
+        public static Partner ToModel(this BackendPartnerViewModelItem viewmodel)
         {
             PartnerDataController dataCtrl = new PartnerDataController();
             PartnerPackDataController partnerPackDataCtrl = new PartnerPackDataController();
 
             Partner model = new Partner();
-            if (viewModel.ID != 0) 
-                model = dataCtrl.GetItem(viewModel.ID);
+            if (viewmodel.ID != 0) 
+                model = dataCtrl.GetItem(viewmodel.ID);
             
-            model.Name = viewModel.Name;
-            model.Content = viewModel.Description;
-            model.Link = viewModel.Link;
-            model.RefLink = viewModel.RefLink;
-            //model.Image = viewModel.Image;
-            model.IsActive = viewModel.IsActive;
+            model.Name = viewmodel.Name;
+            model.Content = viewmodel.Description;
+            model.Link = viewmodel.Link;
+            model.RefLink = viewmodel.RefLink;
+            model.ImageOriginal = viewmodel.OriginalImage;
+            model.ImagePassive = viewmodel.PassiveImage;
+            model.IsActive = viewmodel.IsActive;
 
-            model.PartnerPack = partnerPackDataCtrl.GetItem(viewModel.PartnerTypeSelected.ID);
+            model.PartnerPack = partnerPackDataCtrl.GetItem(viewmodel.PartnerTypeSelected.ID);
 
             /*
-            foreach (var display in viewModel.Display.Where(x => x.Value))
+            foreach (var display in viewmodel.Display.Where(x => x.Value))
                 model.PartnerDisplayRelation.Add(new PartnerDisplayRelation()
                 {
-                    PartnerID = viewModel.ID,
-                    Partner = PartnerDataController.GetItem(viewModel.ID),
+                    PartnerID = viewmodel.ID,
+                    Partner = PartnerDataController.GetItem(viewmodel.ID),
                     PartnerDisplayID = display.ID,
                     PartnerDisplay = PartnerDisplayDataController.GetItem(display.ID)
                 });
@@ -122,15 +121,15 @@ namespace api.NetConnect.Converters
             return model;
         }
 
-        public static Partner ToModel(this BackendPartnerPositionViewModelItem viewModel)
+        public static Partner ToModel(this BackendPartnerPositionViewModelItem viewmodel)
         {
             PartnerDataController dataCtrl = new PartnerDataController();
 
             Partner model = new Partner();
-            if (viewModel.ID != 0)
-                model = dataCtrl.GetItem(viewModel.ID);
+            if (viewmodel.ID != 0)
+                model = dataCtrl.GetItem(viewmodel.ID);
 
-            model.Position = viewModel.Position;
+            model.Position = viewmodel.Position;
 
             return model;
         }

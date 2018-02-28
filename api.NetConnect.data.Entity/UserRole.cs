@@ -17,7 +17,7 @@ namespace api.NetConnect.data.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserRole()
         {
-            this.UserRolePrivilegeRelation = new HashSet<UserRolePrivilegeRelation>();
+            this.UserRoleRelation = new HashSet<UserRoleRelation>();
         }
     
         public int ID { get; set; }
@@ -25,6 +25,6 @@ namespace api.NetConnect.data.Entity
         public byte[] RowVersion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserRolePrivilegeRelation> UserRolePrivilegeRelation { get; set; }
+        public virtual ICollection<UserRoleRelation> UserRoleRelation { get; set; }
     }
 }

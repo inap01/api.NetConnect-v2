@@ -211,5 +211,32 @@ namespace api.NetConnect.Properties {
                 return ((bool)(this["ClientDebugMode"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("lan.netconnect@gmail.com")]
+        public string Email_FromAdress {
+            get {
+                return ((string)(this["Email_FromAdress"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NetConnect e.V.")]
+        public string Email_FromName {
+            get {
+                return ((string)(this["Email_FromName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("rurich17")]
+        public string Email_FromPassword {
+            get {
+                return ((string)(this["Email_FromPassword"]));
+            }
+        }
     }
 }

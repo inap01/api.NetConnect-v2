@@ -32,6 +32,14 @@ namespace api.NetConnect.Helper
             return HashSHA256(salt + password);
         }
 
+        public static String ChangePassword(User User, String NewPassword1, String NewPassword2)
+        {
+            if (NewPassword1 != NewPassword2)
+                throw new PasswordsNotEqualException();
+
+            return HashPassword(NewPassword1, User.PasswordSalt);
+        }
+
         public static String ChangePassword(User User, String OldPassword, String NewPassword1, String NewPassword2)
         {
             if (NewPassword1 != NewPassword2)

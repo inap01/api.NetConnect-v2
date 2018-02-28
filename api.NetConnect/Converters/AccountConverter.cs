@@ -13,88 +13,88 @@ namespace api.NetConnect.Converters
     public static partial class ConverterExtensions
     {
         #region Reservation
-        public static AccountReservationViewModelItem FromModel(this AccountReservationViewModelItem viewModel, User model)
+        public static AccountReservationViewModelItem FromModel(this AccountReservationViewModelItem viewmodel, User model)
         {
             EventDataController eventDataCtrl = new EventDataController();
             SeatTransferLogDataController transferDataCtrl = new SeatTransferLogDataController();
 
-            viewModel.Name = $"{model.FirstName} {model.LastName}";
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Events = eventDataCtrl.GetItems().Where(x => x.End > DateTime.Now).ToList().ConvertAll(x => {
+            viewmodel.Name = $"{model.FirstName} {model.LastName}";
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Events = eventDataCtrl.GetItems().Where(x => x.End > DateTime.Now).ToList().ConvertAll(x => {
                 var vm = new AccountReservationEventViewModelItem();
                 vm.FromModel(x, model);
                 return vm;
             });
-            viewModel.BankAccountData.FromProperties();
+            viewmodel.BankAccountData.FromProperties();
 
-            viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-3), Text = "asdfghjkl" });
-            viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-2), Text = "asdfghjkl" });
-            viewModel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-1), Text = "asdfghjkl" });
+            viewmodel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-3), Text = "asdfghjkl" });
+            viewmodel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-2), Text = "asdfghjkl" });
+            viewmodel.TransferLog.Add(new AccountReservationSeatTransferLogViewModelItem() { Date = DateTime.Now.AddDays(-1), Text = "asdfghjkl" });
 
-            viewModel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.DestinationUser.ID == model.ID).ToList().ConvertAll(x =>
+            viewmodel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.DestinationUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return SendTicketString(x);
             }));
-            viewModel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.SourceUser.ID == model.ID).ToList().ConvertAll(x =>
+            viewmodel.TransferLog.AddRange(transferDataCtrl.GetItems().Where(x => x.SourceUser.ID == model.ID).ToList().ConvertAll(x =>
             {
                 return RecivedTicketString(x);
             }));
-            viewModel.TransferLog = viewModel.TransferLog.OrderByDescending(x => x.Date).ToList();
+            viewmodel.TransferLog = viewmodel.TransferLog.OrderByDescending(x => x.Date).ToList();
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static AccountReservationEventViewModelItem FromModel(this AccountReservationEventViewModelItem viewModel, Event model, User user)
+        public static AccountReservationEventViewModelItem FromModel(this AccountReservationEventViewModelItem viewmodel, Event model, User user)
         {
             SeatDataController seatDataCtrl = new SeatDataController();
 
-            viewModel.ID = model.ID;
-            viewModel.Name = model.EventType.Name + " Vol." + model.Volume;
-            viewModel.Seats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.UserID == user.ID).ToList().ConvertAll(x => {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.EventType.Name + " Vol." + model.Volume;
+            viewmodel.Seats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.UserID == user.ID).ToList().ConvertAll(x => {
                 var vm = new AccountReservationSeatViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
-            viewModel.TransferedSeats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.TransferUserID == user.ID).ToList().ConvertAll(x => {
+            viewmodel.TransferedSeats = seatDataCtrl.GetItems().Where(x => x.EventID == model.ID && x.TransferUserID == user.ID).ToList().ConvertAll(x => {
                 var vm = new AccountReservationTransferedSeatViewModelItem();
                 vm.FromModel(x);
                 return vm;
             });
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static AccountReservationSeatViewModelItem FromModel(this AccountReservationSeatViewModelItem viewModel, Seat model)
+        public static AccountReservationSeatViewModelItem FromModel(this AccountReservationSeatViewModelItem viewmodel, Seat model)
         {
-            viewModel.ID = model.ID;
-            viewModel.SeatNumber = model.SeatNumber;
-            viewModel.State = model.State;
+            viewmodel.ID = model.ID;
+            viewmodel.SeatNumber = model.SeatNumber;
+            viewmodel.State = model.State;
             if (model.TransferUser != null)
-                viewModel.TransferUser = new UserViewModelItem().FromModel(model.TransferUser);
+                viewmodel.TransferUser = new UserViewModelItem().FromModel(model.TransferUser);
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static AccountReservationTransferedSeatViewModelItem FromModel(this AccountReservationTransferedSeatViewModelItem viewModel, Seat model)
+        public static AccountReservationTransferedSeatViewModelItem FromModel(this AccountReservationTransferedSeatViewModelItem viewmodel, Seat model)
         {
-            viewModel.ID = model.ID;
-            viewModel.SeatNumber = model.SeatNumber;
-            viewModel.State = model.State;
+            viewmodel.ID = model.ID;
+            viewmodel.SeatNumber = model.SeatNumber;
+            viewmodel.State = model.State;
             if (model.TransferUser != null)
-                viewModel.From = new UserViewModelItem().FromModel(model.User);
+                viewmodel.From = new UserViewModelItem().FromModel(model.User);
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static BankAccountData FromProperties(this BankAccountData viewModel)
+        public static BankAccountData FromProperties(this BankAccountData viewmodel)
         {
-            viewModel.BankAccountOwner = Properties.Settings.Default.BankAccountOwner;
-            viewModel.IBAN = Properties.Settings.Default.IBAN;
-            viewModel.BLZ = Properties.Settings.Default.BLZ;
-            viewModel.BankAccountNumber = Properties.Settings.Default.BankAccountNumber;
-            viewModel.BIC = Properties.Settings.Default.BIC;
+            viewmodel.BankAccountOwner = Properties.Settings.Default.BankAccountOwner;
+            viewmodel.IBAN = Properties.Settings.Default.IBAN;
+            viewmodel.BLZ = Properties.Settings.Default.BLZ;
+            viewmodel.BankAccountNumber = Properties.Settings.Default.BankAccountNumber;
+            viewmodel.BIC = Properties.Settings.Default.BIC;
 
-            return viewModel;
+            return viewmodel;
         }
 
         private static AccountReservationSeatTransferLogViewModelItem SendTicketString(SeatTransferLog LogEntry)
@@ -119,60 +119,60 @@ namespace api.NetConnect.Converters
         #endregion
 
         #region Tournament
-        public static AccountTournamentViewModelItem FromModel(this AccountTournamentViewModelItem viewModel, User model)
+        public static AccountTournamentViewModelItem FromModel(this AccountTournamentViewModelItem viewmodel, User model)
         {
             TournamentParticipantDataController participantDataCtrl = new TournamentParticipantDataController();
 
-            viewModel.Name = $"{model.FirstName} {model.LastName}";
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Name = $"{model.FirstName} {model.LastName}";
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
             
-            viewModel.TournamentParticipation.AddRange(participantDataCtrl.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.Event.End > DateTime.Now).ToList().ConvertAll(x =>
+            viewmodel.TournamentParticipation.AddRange(participantDataCtrl.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.Event.End > DateTime.Now).ToList().ConvertAll(x =>
             {
                 return new AccountTournamentParticipantViewModelItem().FromModel(x.Tournament);
             }));
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static AccountTournamentParticipantViewModelItem FromModel(this AccountTournamentParticipantViewModelItem viewModel, Tournament model)
+        public static AccountTournamentParticipantViewModelItem FromModel(this AccountTournamentParticipantViewModelItem viewmodel, Tournament model)
         {
-            viewModel.ID = model.ID;
-            viewModel.Mode = model.Mode;
-            viewModel.Start = model.Start;
-            viewModel.GameTitle = model.TournamentGame.Name;
-            viewModel.Event.FromModel(model.Event);
+            viewmodel.ID = model.ID;
+            viewmodel.Mode = model.Mode;
+            viewmodel.Start = model.Start;
+            viewmodel.GameTitle = model.TournamentGame.Name;
+            viewmodel.Event.FromModel(model.Event);
 
-            return viewModel;
+            return viewmodel;
         }
         #endregion
 
         #region Edit
-        public static AccountEditViewModelItem FromModel(this AccountEditViewModelItem viewModel, User model)
+        public static AccountEditViewModelItem FromModel(this AccountEditViewModelItem viewmodel, User model)
         {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.FirstName;
-            viewModel.LastName = model.LastName;
-            viewModel.Nickname = model.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
-            viewModel.Email = model.Email;
-            viewModel.SteamID = model.SteamID;
-            viewModel.BattleTag = model.BattleTag;
-            viewModel.Newsletter = model.Newsletter;
-            viewModel.OldPassword = null;
-            viewModel.NewPassword1 = null;
-            viewModel.NewPassword2 = null;
+            viewmodel.ID = model.ID;
+            viewmodel.FirstName = model.FirstName;
+            viewmodel.LastName = model.LastName;
+            viewmodel.Nickname = model.Nickname;
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewmodel.Email = model.Email;
+            viewmodel.SteamID = model.SteamID;
+            viewmodel.BattleTag = model.BattleTag;
+            viewmodel.Newsletter = model.Newsletter;
+            viewmodel.OldPassword = null;
+            viewmodel.NewPassword1 = null;
+            viewmodel.NewPassword2 = null;
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static User ToModel(this User model, AccountEditViewModelItem viewModel)
+        public static User ToModel(this User model, AccountEditViewModelItem viewmodel)
         {
-            model.FirstName = viewModel.FirstName;
-            model.LastName = viewModel.LastName;
-            model.Nickname = viewModel.Nickname;
-            model.Email = viewModel.Email;
-            model.SteamID = viewModel.SteamID;
-            model.BattleTag = viewModel.BattleTag;
+            model.FirstName = viewmodel.FirstName;
+            model.LastName = viewmodel.LastName;
+            model.Nickname = viewmodel.Nickname;
+            model.Email = viewmodel.Email;
+            model.SteamID = viewmodel.SteamID;
+            model.BattleTag = viewmodel.BattleTag;
 
             return model;
         }

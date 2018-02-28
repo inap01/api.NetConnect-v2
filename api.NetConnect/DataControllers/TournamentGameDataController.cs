@@ -42,7 +42,17 @@ namespace api.NetConnect.DataControllers
 
         public TournamentGame Update(TournamentGame item)
         {
-            throw new NotImplementedException();
+            var dbItem = GetItem(item.ID);
+
+            dbItem.Name = item.Name;
+            dbItem.Image = item.Image;
+            dbItem.Rules = item.Rules;
+            dbItem.RequireBattleTag = item.RequireBattleTag;
+            dbItem.RequireSteamID = item.RequireSteamID;
+
+            db.SaveChanges();
+
+            return dbItem;
         }
 
         public void Delete(int ID)
@@ -56,7 +66,8 @@ namespace api.NetConnect.DataControllers
         {
             var qry = GetItems();
 
-            qry = qry.Where(x => x.Name.ToLower().IndexOf(args.Filter.Name.ToLower()) != -1);
+            if(!String.IsNullOrEmpty(args.Filter.Name))
+                qry = qry.Where(x => x.Name.ToLower().IndexOf(args.Filter.Name.ToLower()) != -1);
 
             TotalCount = qry.Count();
 

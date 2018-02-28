@@ -24,6 +24,12 @@ namespace api.NetConnect.Controllers
         {
             SeatingListViewModel viewmodel = new SeatingListViewModel();
             SeatDataController dataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
+
+            if (!eventDataCtrl.GetItem(eventID).IsActiveReservation)
+            {
+                return Warning(viewmodel, "Die Reservierung ist derzeit deaktiviert.");
+            }
 
             var seats = dataCtrl.GetItems().Where(x => x.EventID == eventID);
 
@@ -49,9 +55,14 @@ namespace api.NetConnect.Controllers
         {
             SeatingViewModel viewmodel = new SeatingViewModel();
             SeatDataController dataCtrl = new SeatDataController();
+            EventDataController eventDataCtrl = new EventDataController();
 
             try
             {
+                if(!eventDataCtrl.GetItem(eventID).IsActiveReservation)
+                {
+                    return Warning(viewmodel, "Die Reservierung ist derzeit deaktiviert.");
+                }
                 viewmodel.BankAccount.FromProperties();
                 viewmodel.Data.FromModel(dataCtrl.GetItem(seatNumber, eventID));
 
@@ -110,6 +121,7 @@ namespace api.NetConnect.Controllers
         }
         #endregion
         #region Backend
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Get()
         {
@@ -120,7 +132,8 @@ namespace api.NetConnect.Controllers
 
             var events = eventDataCtrl.GetItems().OrderByDescending(x => x.Start).ToList();
             var users = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList();
-            var seats = dataCtrl.GetItems().Where(x => x.EventID == events[0].ID);
+            var eID = events[0].ID;
+            var seats = dataCtrl.GetItems().Where(x => x.EventID == eID).ToList();
 
             viewmodel.Filter.EventOptions = events.ConvertAll(x =>
             {
@@ -150,8 +163,9 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
-        public IHttpActionResult Backend_FilterList(BackendSeatingFilter filter)
+        public IHttpActionResult Backend_FilterList(ListArgsRequest<BackendSeatingFilter> request)
         {
             BackendSeatingListViewModel viewmodel = new BackendSeatingListViewModel();
             SeatDataController dataCtrl = new SeatDataController();
@@ -160,8 +174,10 @@ namespace api.NetConnect.Controllers
 
             var events = eventDataCtrl.GetItems().OrderByDescending(x => x.Start).ToList();
             var users = userDataCtrl.GetItems().OrderBy(x => x.FirstName).ToList();
-            var seats = dataCtrl.GetItems().Where(x => x.EventID == filter.EventSelected.ID);
+            var eID = request.Filter.EventSelected.ID;
+            var seats = dataCtrl.FilterList(request);
 
+            viewmodel.Filter.EventSelected = request.Filter.EventSelected;
             viewmodel.Filter.EventOptions = events.ConvertAll(x =>
             {
                 return new SeatingFilterEvent()
@@ -189,6 +205,7 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpGet]
         public IHttpActionResult Backend_Detail(Int32 EventID, Int32 SeatNumber)
         {
@@ -211,7 +228,8 @@ namespace api.NetConnect.Controllers
                     {
                         SeatNumber = SeatNumber,
                         State = 0,
-                        Event = eventDataCtrl.GetItem(EventID)
+                        Event = eventDataCtrl.GetItem(EventID),
+                        ReservationDate = DateTime.Now
                     };
                 viewmodel.Data.FromModel(model);
             }
@@ -223,8 +241,9 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPost]
-        public IHttpActionResult Backend_Detail_Insert(BackendSeatingViewModelItem request)
+        public IHttpActionResult Backend_Detail_Insert(Int32 EventID, Int32 SeatNumber, BackendSeatingViewModelItem request)
         {
             BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
 
@@ -233,16 +252,49 @@ namespace api.NetConnect.Controllers
             return Ok(viewmodel);
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpPut]
-        public IHttpActionResult Backend_Detail_Update(Int32 id, BackendSeatingViewModelItem request)
+        public IHttpActionResult Backend_Detail_Update(Int32 EventID, Int32 SeatNumber, BackendSeatingViewModelItem request)
         {
             BackendSeatingViewModel viewmodel = new BackendSeatingViewModel();
+            SeatDataController dataCtrl = new SeatDataController();
 
-            // TODO
+            try
+            {
+                var seats = dataCtrl.GetItems().Where(x => x.EventID == EventID);
+                Seat model = seats.FirstOrDefault(x => x.SeatNumber == SeatNumber);
+                Seat result = null;
+                if(request.ReservationState.Key != 0)
+                {
+                    if(model == null)
+                    {
+                        result = dataCtrl.Insert(request.ToModel());
+                    }
+                    else
+                    {
+                        result = request.ToModel();
+                        result.ID = model.ID;
+                        result = dataCtrl.Update(result);
+                    }
+                    viewmodel.Data.FromModel(result);
+                }
+                else
+                {
+                    if(model != null)
+                    {
+                        dataCtrl.Delete(model.ID);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
 
-            return Ok(viewmodel);
+            return Ok(viewmodel, "Sitzplatz gespeichert.");
         }
 
+        [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
         public IHttpActionResult Backend_Delete(BackendSeatingDeleteRequest request)
         {

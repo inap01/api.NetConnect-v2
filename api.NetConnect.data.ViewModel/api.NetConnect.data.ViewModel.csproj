@@ -53,10 +53,13 @@
     <Compile Include="Account\TransferReservationRequest.cs" />
     <Compile Include="Account\ViewModel.cs" />
     <Compile Include="Auth\LoginRequest.cs" />
+    <Compile Include="Auth\PasswordChangeRequest.cs" />
+    <Compile Include="Auth\PasswordResetRequest.cs" />
     <Compile Include="Auth\RegisterRequest.cs" />
     <Compile Include="Auth\ViewModel.cs" />
     <Compile Include="BackendBaseViewModel.cs" />
     <Compile Include="Catering\Backend\Filter.cs" />
+    <Compile Include="Catering\Backend\BackendNewOrderRequest.cs" />
     <Compile Include="Catering\Backend\ViewModel.cs" />
     <Compile Include="Catering\OrderRequest.cs" />
     <Compile Include="Catering\ViewModel.cs" />
@@ -99,7 +102,6 @@
     <Compile Include="Seating\Backend\Filter.cs" />
     <Compile Include="Seating\ViewModel.cs" />
     <Compile Include="Status\StatusViewModel.cs" />
-    <Compile Include="Tournament\Backend\DeleteRequest.cs" />
     <Compile Include="Tournament\Backend\Filter.cs" />
     <Compile Include="Tournament\Backend\SortSettings.cs" />
     <Compile Include="Tournament\Backend\ViewModel.cs" />

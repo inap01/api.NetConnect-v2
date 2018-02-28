@@ -68,8 +68,8 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
             result.Add("Volume", new InputInformation() { Type = InputInformationType.integer, Required = true });
             result.Add("Start", new InputInformation() { Type = InputInformationType.datetime, Required = true });
             result.Add("End", new InputInformation() { Type = InputInformationType.datetime, Required = true });
-            result.Add("Image", new InputInformation() { Type = InputInformationType.image });
-            result.Add("ReservationCost", new InputInformation() { Type = InputInformationType.integer });
+            result.Add("Image", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("ReservationCost", new InputInformation() { Type = InputInformationType.integer, Required = true });
             result.Add("IsActiveReservation", new InputInformation() { Type = InputInformationType.boolean });
             result.Add("IsActiveCatering", new InputInformation() { Type = InputInformationType.boolean });
             result.Add("IsActiveFeedback", new InputInformation() { Type = InputInformationType.boolean });
@@ -82,7 +82,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
             result.Add("Postcode", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("City", new InputInformation() { Type = InputInformationType.@string, Required = true });
 
-            result.Add("EventType", new InputInformation() { Type = InputInformationType.reference, Reference = "EventType", ReferenceForm = Form.GetReferenceForm(BackendEventTypeViewModelItem.GetForm()) });
+            result.Add("EventType", new InputInformation() { Type = InputInformationType.reference, Reference = "EventType", ReferenceForm = Form.GetReferenceForm(BackendEventTypeViewModelItem.GetForm()), Required = true });
 
             return result;
         }

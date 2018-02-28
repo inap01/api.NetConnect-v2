@@ -42,9 +42,7 @@ namespace api.NetConnect.data.Entity
         public Nullable<System.DateTime> UserTask { get; set; }
         public Nullable<System.DateTime> UserTaskRelation { get; set; }
         public Nullable<System.DateTime> UserRole { get; set; }
-        public Nullable<System.DateTime> UserPrivilege { get; set; }
-        public Nullable<System.DateTime> UserPrivilegeRelation { get; set; }
-        public Nullable<System.DateTime> UserRolePrivilegeRelation { get; set; }
+        public Nullable<System.DateTime> UserRoleRelation { get; set; }
         public byte[] RowVersion { get; set; }
     }
 }

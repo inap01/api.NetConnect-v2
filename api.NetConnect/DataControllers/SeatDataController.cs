@@ -50,6 +50,10 @@ namespace api.NetConnect.DataControllers
             var result = db.Seat.Add(item);
             db.SaveChanges();
 
+            db.Entry(result).Reference(c => c.Event).Load();
+            db.Entry(result).Reference(c => c.User).Load();
+            db.Entry(result).Reference(c => c.TransferUser).Load();
+
             return result;
         }
 
@@ -78,6 +82,17 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
         }
         #endregion
+
+        public List<Seat> FilterList(ListArgsRequest<BackendSeatingFilter> args)
+        {
+            var qry = GetItems();
+            
+            qry = qry.Where(x => x.EventID == args.Filter.EventSelected.ID);
+
+            qry = qry.OrderByDescending(x => x.ID);
+
+            return qry.ToList();
+        }
 
         public List<Seat> GetCurrentUserSeats(Int32 eventID)
         {

@@ -42,7 +42,14 @@ namespace api.NetConnect.DataControllers
 
         public EventType Update(EventType item)
         {
-            throw new NotImplementedException();
+            var dbItem = GetItem(item.ID);
+            
+            dbItem.Name = item.Name;
+            dbItem.Description = item.Description;
+
+            db.SaveChanges();
+
+            return dbItem;
         }
 
         public void Delete(int ID)
@@ -56,7 +63,8 @@ namespace api.NetConnect.DataControllers
         {
             var qry = GetItems();
 
-            qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
+            if(!String.IsNullOrEmpty(args.Filter.Name))
+                qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
 
             TotalCount = qry.Count();
 

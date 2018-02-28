@@ -9,19 +9,19 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static void FromModel(this ChangeSetViewModelItem viewModel, ChangeSet model)
+        public static void FromModel(this ChangeSetViewModelItem viewmodel, ChangeSet model)
         {
-            viewModel.CateringOrder = model.CateringOrder;
-            viewModel.CateringProduct = model.CateringOrderDetail;
-            viewModel.CateringOrderDetail = model.CateringProduct;
-            viewModel.Partner = model.Partner;
-            viewModel.PartnerPack = model.PartnerPack;
-            viewModel.Seat = model.Seat;
-            viewModel.Tournament = model.Tournament;
-            viewModel.TournamentGame = model.TournamentGame;
-            viewModel.TournamentParticipant = model.TournamentParticipant;
-            viewModel.TournamentTeam = model.TournamentTeam;
-            viewModel.User = model.User;
+            viewmodel.CateringOrder = model.CateringOrder;
+            viewmodel.CateringProduct = model.CateringOrderDetail;
+            viewmodel.CateringOrderDetail = model.CateringProduct;
+            viewmodel.Partner = model.Partner;
+            viewmodel.PartnerPack = model.PartnerPack;
+            viewmodel.Seat = model.Seat;
+            viewmodel.Tournament = model.Tournament;
+            viewmodel.TournamentGame = model.TournamentGame;
+            viewmodel.TournamentParticipant = model.TournamentParticipant;
+            viewmodel.TournamentTeam = model.TournamentTeam;
+            viewmodel.User = model.User;
         }
     }
 }

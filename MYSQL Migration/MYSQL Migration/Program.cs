@@ -167,7 +167,7 @@ namespace MYSQL_Migration
                     IsTeam = Convert.ToBoolean(entry["is_admin"]),
                     CEO = ceo,
                     IsActive = true,
-                    PasswordReset = entry["password_reset"].ToString(),
+                    PasswordReset = !String.IsNullOrEmpty(entry["password_reset"].ToString()) ? entry["password_reset"].ToString() : null,
                 });
                 oldIDTonewID.Add(Convert.ToInt32(entry["ID"]), count);
                 count++;
@@ -240,8 +240,8 @@ namespace MYSQL_Migration
                     RefLink = null,
                     ClickCount = Convert.ToInt32(entry["click_count"]),
                     Content = Convert.ToString(entry["content"]),
-                    ImageOriginal = entry["image"].ToString(),
-                    ImagePassive = entry["image"].ToString(),
+                    ImageOriginal = entry["image"].ToString() + "/image.png",
+                    ImagePassive = entry["image"].ToString() + "/passive.png",
                     IsActive = Convert.ToBoolean(entry["active"]),
                     Link = Convert.ToString(entry["link"]),
                     Name = Convert.ToString(entry["name"]),
@@ -295,7 +295,7 @@ namespace MYSQL_Migration
                     Description = entry["description"].ToString(),
                     ReservationDate = GetFromMySqlDate(new MySqlDateTime(entry["date"].ToString())).Value,
                     Payed = Convert.ToInt32(entry["payed"]) > 0,
-                    EventID = 10,
+                    EventID = 9,
                     SeatNumber = seatnumber,
                     IsActive = true,
                 };

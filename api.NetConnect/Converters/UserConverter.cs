@@ -13,103 +13,101 @@ namespace api.NetConnect.Converters
 {
     public static partial class ConverterExtensions
     {
-        public static UserViewModelItem FromModel(this UserViewModelItem viewModel, User model)
+        public static UserViewModelItem FromModel(this UserViewModelItem viewmodel, User model)
         {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.FirstName;
-            viewModel.LastName = model.LastName;
-            viewModel.Nickname = model.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Email = model.Email;
-            viewModel.SteamID = model.SteamID;
-            viewModel.BattleTag = model.BattleTag;
+            viewmodel.ID = model.ID;
+            viewmodel.FirstName = model.FirstName;
+            viewmodel.LastName = model.LastName;
+            viewmodel.Nickname = model.Nickname;
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Email = model.Email;
+            viewmodel.SteamID = model.SteamID;
+            viewmodel.BattleTag = model.BattleTag;
 
-            return viewModel;
+            return viewmodel;
         }
-        public static List<BackendUserViewModelItem> FromModel(this List<BackendUserViewModelItem> viewModel, List<User> model)
+        public static List<BackendUserViewModelItem> FromModel(this List<BackendUserViewModelItem> viewmodel, List<User> modelList)
         {
-            viewModel = model.ConvertAll(x =>
-            {
-                return new BackendUserViewModelItem().FromModel(x);
-            });
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendUserViewModelItem().FromModel(model));
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewModel, User model)
+        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewmodel, User model)
         {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.FirstName;
-            viewModel.LastName = model.LastName;
-            viewModel.Nickname = model.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Email = model.Email;
-            viewModel.SteamID = model.SteamID;
-            viewModel.BattleTag = model.BattleTag;
-            viewModel.Newsletter = model.Newsletter;
-            viewModel.IsAdmin = model.IsAdmin;
-            viewModel.IsTeam = model.IsTeam;
+            viewmodel.ID = model.ID;
+            viewmodel.FirstName = model.FirstName;
+            viewmodel.LastName = model.LastName;
+            viewmodel.Nickname = model.Nickname;
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Email = model.Email;
+            viewmodel.SteamID = model.SteamID;
+            viewmodel.BattleTag = model.BattleTag;
+            viewmodel.Newsletter = model.Newsletter;
+            viewmodel.IsAdmin = model.IsAdmin;
+            viewmodel.IsTeam = model.IsTeam;
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewModel, TournamentParticipant model)
+        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewmodel, TournamentParticipant model)
         {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Email = model.User.Email;
-            viewModel.SteamID = model.User.SteamID;
-            viewModel.BattleTag = model.User.BattleTag;
-            viewModel.Newsletter = model.User.Newsletter;
-            viewModel.IsAdmin = model.User.IsAdmin;
-            viewModel.IsTeam = model.User.IsTeam;
+            viewmodel.ID = model.ID;
+            viewmodel.FirstName = model.User.FirstName;
+            viewmodel.LastName = model.User.LastName;
+            viewmodel.Nickname = model.User.Nickname;
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Email = model.User.Email;
+            viewmodel.SteamID = model.User.SteamID;
+            viewmodel.BattleTag = model.User.BattleTag;
+            viewmodel.Newsletter = model.User.Newsletter;
+            viewmodel.IsAdmin = model.User.IsAdmin;
+            viewmodel.IsTeam = model.User.IsTeam;
 
-            return viewModel;
+            return viewmodel;
         }
-        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewModel, TournamentTeamParticipant model)
+        public static BackendUserViewModelItem FromModel(this BackendUserViewModelItem viewmodel, TournamentTeamParticipant model)
         {
-            viewModel.ID = model.ID;
-            viewModel.FirstName = model.User.FirstName;
-            viewModel.LastName = model.User.LastName;
-            viewModel.Nickname = model.User.Nickname;
-            viewModel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            viewModel.Email = model.User.Email;
-            viewModel.SteamID = model.User.SteamID;
-            viewModel.BattleTag = model.User.BattleTag;
-            viewModel.Newsletter = model.User.Newsletter;
-            viewModel.IsAdmin = model.User.IsAdmin;
-            viewModel.IsTeam = model.User.IsTeam;
+            viewmodel.ID = model.ID;
+            viewmodel.FirstName = model.User.FirstName;
+            viewmodel.LastName = model.User.LastName;
+            viewmodel.Nickname = model.User.Nickname;
+            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Email = model.User.Email;
+            viewmodel.SteamID = model.User.SteamID;
+            viewmodel.BattleTag = model.User.BattleTag;
+            viewmodel.Newsletter = model.User.Newsletter;
+            viewmodel.IsAdmin = model.User.IsAdmin;
+            viewmodel.IsTeam = model.User.IsTeam;
 
-            return viewModel;
+            return viewmodel;
         }
 
-        public static User ToModel(this UserViewModelItem viewModel)
+        public static User ToModel(this UserViewModelItem viewmodel)
         {
             User model = new User();
 
-            model.ID = viewModel.ID;
-            model.FirstName = viewModel.FirstName;
-            model.LastName = viewModel.LastName;
-            model.Nickname = viewModel.Nickname;
-            model.Email = viewModel.Email;
-            model.SteamID = viewModel.SteamID;
-            model.BattleTag = viewModel.BattleTag;
+            model.ID = viewmodel.ID;
+            model.FirstName = viewmodel.FirstName;
+            model.LastName = viewmodel.LastName;
+            model.Nickname = viewmodel.Nickname;
+            model.Email = viewmodel.Email;
+            model.SteamID = viewmodel.SteamID;
+            model.BattleTag = viewmodel.BattleTag;
 
             return model;
         }
 
-        public static User ToModel(this RegisterRequest viewModel, String HashedPassword, String Salt)
+        public static User ToModel(this RegisterRequest viewmodel, String HashedPassword, String Salt)
         {
             User model = new User();
 
-            model.FirstName = viewModel.FirstName;
-            model.LastName = viewModel.LastName;
-            model.Nickname = viewModel.Nickname;
-            model.Email = viewModel.Email;
+            model.FirstName = viewmodel.FirstName;
+            model.LastName = viewmodel.LastName;
+            model.Nickname = viewmodel.Nickname;
+            model.Email = viewmodel.Email;
             model.Password = HashedPassword;
             model.PasswordSalt = Salt;
-            model.Newsletter = viewModel.Newsletter;
+            model.Newsletter = viewmodel.Newsletter;
 
             model.Registered = DateTime.Now;
             model.IsActive = true;
@@ -119,20 +117,20 @@ namespace api.NetConnect.Converters
             return model;
         }
 
-        public static User ToModel(this BackendUserViewModelItem viewModel)
+        public static User ToModel(this BackendUserViewModelItem viewmodel)
         {
             User model = new User();
 
-            model.ID = viewModel.ID;
-            model.FirstName = viewModel.FirstName;
-            model.LastName = viewModel.LastName;
-            model.Nickname = viewModel.Nickname;
-            model.Email = viewModel.Email;
-            model.SteamID = viewModel.SteamID;
-            model.BattleTag = viewModel.BattleTag;
-            model.Newsletter = viewModel.Newsletter;
-            model.IsAdmin = viewModel.IsAdmin;
-            model.IsTeam = viewModel.IsTeam;
+            model.ID = viewmodel.ID;
+            model.FirstName = viewmodel.FirstName;
+            model.LastName = viewmodel.LastName;
+            model.Nickname = viewmodel.Nickname;
+            model.Email = viewmodel.Email;
+            model.SteamID = viewmodel.SteamID;
+            model.BattleTag = viewmodel.BattleTag;
+            model.Newsletter = viewmodel.Newsletter;
+            model.IsAdmin = viewmodel.IsAdmin;
+            model.IsTeam = viewmodel.IsTeam;
 
             return model;
         }

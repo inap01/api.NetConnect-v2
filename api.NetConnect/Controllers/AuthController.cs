@@ -129,7 +129,7 @@ namespace api.NetConnect.Controllers
                 }
                 else
                 {
-                    if(request.Password1 == request.Password2)
+                    if (request.Password1 == request.Password2)
                     {
                         String Salt;
                         String HashedPassword = PasswordHelper.CreatePassword(request.Password1, out Salt);
@@ -147,6 +147,75 @@ namespace api.NetConnect.Controllers
             }
 
             return Ok(viewmodel, "Registrierung erfolgreich. Du kannst dich nun einloggen.");
+        }
+
+        [HttpPost]
+        public IHttpActionResult ResetPassword(PasswordResetRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            UserDataController dataCtrl = new UserDataController();
+
+            try
+            {
+                User user = dataCtrl.GetItems().SingleOrDefault(x => x.Email == request.Email);
+                if (user == null)
+                {
+                    return Warning(viewmodel, "Eingegebene Email ist nicht registriert.");
+                }
+                else
+                {
+                    user = dataCtrl.SetPasswordReset(user.ID);
+                    EmailHelper.SendResetMail(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
+
+            return Ok(viewmodel, "Dir wurde ein Link zugesendet.");
+        }
+
+        [HttpGet]
+        public IHttpActionResult ResetPassword(String code)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            UserDataController dataCtrl = new UserDataController();
+
+            try
+            {
+                var user = dataCtrl.GetItems().SingleOrDefault(x => x.PasswordReset == code);
+                if (user == null)
+                    return Warning(viewmodel, "Der Link ist abgelaufen.");
+            }
+            catch (Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
+
+            return Ok(viewmodel);
+        }
+
+        [HttpPut]
+        public IHttpActionResult ResetPassword(String code, PasswordChangeRequest request)
+        {
+            BaseViewModel viewmodel = new BaseViewModel();
+            UserDataController dataCtrl = new UserDataController();
+
+            try
+            {
+                var user = dataCtrl.GetItems().SingleOrDefault(x => x.PasswordReset == code);
+                if (user == null)
+                    return Warning(viewmodel, "Der Link ist abgelaufen.");
+                String newPwd = PasswordHelper.ChangePassword(user, request.Password1, request.Password2);
+                dataCtrl.ChangePassword(user.ID, newPwd);
+            }
+            catch (Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
+
+            return Ok(viewmodel, "Dein Passwort wurde gesetzt.");
         }
     }
 }
