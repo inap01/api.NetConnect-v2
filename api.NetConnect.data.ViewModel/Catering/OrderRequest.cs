@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace api.NetConnect.data.ViewModel.Catering
 {
-    public class OrderRequest
+    public class OrderRequest : BaseViewModel
     {
         public Int32 SeatID { get; set; }
         public List<OrderRequestItem> Items { get; set; }

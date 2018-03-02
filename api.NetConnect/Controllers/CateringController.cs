@@ -84,7 +84,7 @@ namespace api.NetConnect.Controllers
         [HttpPost]
         public IHttpActionResult Insert(OrderRequest request)
         {
-            BaseViewModel viewmodel = new BaseViewModel();
+            OrderRequest viewmodel = request;
             CateringOrderDataController dataCtrl = new CateringOrderDataController();
             EventDataController eventDataCtrl = new EventDataController();
 
