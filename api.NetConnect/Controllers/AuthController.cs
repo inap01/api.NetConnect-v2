@@ -42,7 +42,7 @@ namespace api.NetConnect.Controllers
 
                     viewmodel.Data.FromModel(u);
 
-                    HttpContext.Current.Response.AddHeader("X-Redirect", Properties.Settings.Default.BaseAbosulteUrl + "/user/" + u.ID);
+                    HttpContext.Current.Response.AddHeader("X-Redirect", Properties.Settings.Default.BaseAbosulteUrl + "/account");
                 }
                 else
                 {

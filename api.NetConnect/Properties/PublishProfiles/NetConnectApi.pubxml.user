@@ -16,25 +16,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/22/2013 07:43:40</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.Entity.dll">
-      <publishTime>02/21/2018 09:19:51</publishTime>
+      <publishTime>03/01/2018 16:47:24</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.Entity.dll.config">
       <publishTime>02/07/2018 17:29:39</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.Entity.pdb">
-      <publishTime>02/21/2018 09:19:51</publishTime>
+      <publishTime>03/01/2018 16:47:24</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.ViewModel.dll">
-      <publishTime>02/21/2018 09:19:50</publishTime>
+      <publishTime>03/04/2018 17:57:30</publishTime>
     </File>
     <File Include="bin/api.NetConnect.data.ViewModel.pdb">
-      <publishTime>02/21/2018 09:19:50</publishTime>
+      <publishTime>03/04/2018 17:57:30</publishTime>
     </File>
     <File Include="bin/api.NetConnect.dll">
-      <publishTime>02/21/2018 09:19:56</publishTime>
+      <publishTime>03/04/2018 17:57:35</publishTime>
     </File>
     <File Include="bin/api.NetConnect.pdb">
-      <publishTime>02/21/2018 09:19:56</publishTime>
+      <publishTime>03/04/2018 17:57:35</publishTime>
     </File>
     <File Include="bin/de/System.Net.Http.Formatting.resources.dll">
       <publishTime>01/28/2015 04:02:46</publishTime>
@@ -217,7 +217,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/19/2018 12:04:19</publishTime>
     </File>
     <File Include="Resources/template_passwordReset.html">
-      <publishTime>02/19/2018 17:17:40</publishTime>
+      <publishTime>02/22/2018 19:16:44</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>02/21/2018 09:20:43</publishTime>

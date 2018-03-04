@@ -136,7 +136,7 @@ namespace api.NetConnect.Controllers
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
-                Text = "Teilnehmer",
+                Text = "Sitzplan",
                 State = "event.seating({id: " + nextEvent.ID + "})"
             });
             viewmodel.Data.NavigationAside.Add(new NavItem()
@@ -159,9 +159,9 @@ namespace api.NetConnect.Controllers
             foreach (var e in events.Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
             {
                 var seats = seatDataCtrl.GetItems().Where(x => x.EventID == e.ID);
-                Int32 seatsCount = 70 - seats.Count(x => x.State == -1);
+                Int32 seatsCount = 74 - seats.Count(x => x.State == -1);
                 Int32 flagged = seats.Count(x => x.State == 1);
-                Int32 reserved = seats.Count(x => x.State == 2);
+                Int32 reserved = seats.Count(x => x.State >= 2);
                 Int32 free = seatsCount - flagged - reserved;
                 viewmodel.Data.EventsAside.Add(new EventItem()
                 {
@@ -172,7 +172,7 @@ namespace api.NetConnect.Controllers
                     PublicAccess = !e.IsPrivate,
                     Seating = new data.ViewModel.Event.EventViewModelItem.SeatingReservation()
                     {
-                        SeatsCount = 70 - seats.Count(x => x.State == -1),
+                        SeatsCount = seatsCount,
                         Flagged = flagged,
                         Reserved = reserved,
                         Free = free

@@ -446,15 +446,15 @@ VALUES ('Playground', 1, ''),
 GO
 
 INSERT INTO dbo.[Event] ([EventTypeID], [Volume], [Start], [End], [ReservationCost], [IsActiveReservation], [IsActiveCatering], [IsActiveFeedback], [FeedbackLink], [District], [Street], [Housenumber], [Postcode], [City], [Image])
-VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', ''),
-	   (1, 9, '20180309 17:00:00 PM', '20180311 12:00:00 PM', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', '')
+VALUES (1, 1, '20140704', '20140706', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 2, '20141107', '20141109', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 3, '20150417', '20150419', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 4, '20150918', '20150920', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 5, '20151211', '20151213', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 6, '20160930', '20160930', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 7, '20170317', '20170319', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+       (1, 8, '20170908', '20170910', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png'),
+	   (1, 9, '20180309 17:00:00 PM', '20180311 12:00:00 PM', 15, 1, 0, 0, 'http://lan-netconnect.de', 'Koerrenzig', 'Hauptstrasse', '91', '52441', 'Linnich', 'events/playground.png')
 GO
 
 INSERT INTO dbo.NewsCategory ([Name], [Image])

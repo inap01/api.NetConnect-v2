@@ -144,7 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="lib\EntityFramework.dll" />
+    <None Include="lib\EntityFramework.dll" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -220,7 +220,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <None Include="packages.config" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

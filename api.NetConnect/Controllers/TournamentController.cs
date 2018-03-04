@@ -136,14 +136,14 @@ namespace api.NetConnect.Controllers
                 var participant = participantDataCtrl.GetItems().SingleOrDefault(x => x.TournamentID == tournamentID && x.UserID == UserHelper.CurrentUserID);
                 if(participant != null)
                 {
-                    participantDataCtrl.Delete(tournamentID);
+                    participantDataCtrl.Delete(participant.ID);
                 }
                 else
                 {
                     var teamParticipant = teamParticipantDataCtrl.GetItemByTournament(tournamentID);
                     if (teamParticipant != null)
                     {
-                        teamParticipantDataCtrl.Delete(tournamentID);
+                        teamParticipantDataCtrl.Delete(teamParticipant.ID);
                     }
                     else
                     {
