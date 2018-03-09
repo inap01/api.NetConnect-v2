@@ -31,7 +31,7 @@ namespace api.NetConnect.Controllers
                 return Warning(viewmodel, "Die Reservierung ist derzeit deaktiviert.");
             }
 
-            var seats = dataCtrl.GetItems().Where(x => x.EventID == eventID);
+            var seats = dataCtrl.GetItems().Where(x => x.EventID == eventID).ToList();
 
             for (int i = 1; i <= Properties.Settings.Default.SeatAmount; i++)
             {

@@ -27,7 +27,7 @@ namespace api.NetConnect.Controllers
                 nextEvent = events.OrderByDescending(x => x.Start).FirstOrDefault(x => x.End > DateTime.Now);
             var partner = displayDataCtrl.GetItems()
                 .Where(x => x.Partner.IsActive)
-                .OrderBy(x => x.Partner.PartnerPackID)
+                .OrderByDescending(x => x.Partner.PartnerPackID)
                 .ThenBy(x => x.Partner.Position);
 
             #region NavigationTop
@@ -159,7 +159,7 @@ namespace api.NetConnect.Controllers
             foreach (var e in events.Where(x => x.End > DateTime.Now).OrderByDescending(x => x.Start))
             {
                 var seats = seatDataCtrl.GetItems().Where(x => x.EventID == e.ID);
-                Int32 seatsCount = 74 - seats.Count(x => x.State == -1);
+                Int32 seatsCount = Properties.Settings.Default.SeatAmount - seats.Count(x => x.State == -1);
                 Int32 flagged = seats.Count(x => x.State == 1);
                 Int32 reserved = seats.Count(x => x.State >= 2);
                 Int32 free = seatsCount - flagged - reserved;
@@ -346,8 +346,24 @@ namespace api.NetConnect.Controllers
             viewmodel.Data.NavigationAside.Add(new NavItem()
             {
                 Text = "Catering",
-                State = "admin.catering.all",
-                StateCompare = "admin.catering.all"
+                StateCompare = "admin.catering.all",
+                SubMenu = new List<NavItem>() {
+                    new NavItem() {
+                        Text = "Bestellungen",
+                        State = "admin.catering.all",
+                        StateCompare = "admin.catering.all"
+                    },
+                    new NavItem() {
+                        Text = "Produkte",
+                        State = "admin.product.all",
+                        StateCompare = "admin.product.all"
+                    },
+                    new NavItem() {
+                        Text = "Produkt Attribute",
+                        State = "admin.productattribute.all",
+                        StateCompare = "admin.productattribute.all"
+                    }
+                }
             });
             #endregion
 

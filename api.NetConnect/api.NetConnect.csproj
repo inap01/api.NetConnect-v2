@@ -181,8 +181,10 @@
     <Compile Include="Converters\AccountConverter.cs" />
     <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="DataControllers\CateringOrderDataController.cs" />
+    <Compile Include="DataControllers\CateringProductAttributeRelationDataController.cs" />
+    <Compile Include="DataControllers\CateringProductAttributeDataController.cs" />
     <Compile Include="DataControllers\ChangeSetDataController.cs" />
-    <Compile Include="DataControllers\CateringDataController.cs" />
+    <Compile Include="DataControllers\CateringProductDataController.cs" />
     <Compile Include="DataControllers\EventTypeDataController.cs" />
     <Compile Include="DataControllers\EventDataController.cs" />
     <Compile Include="DataControllers\GalleryDataController.cs" />

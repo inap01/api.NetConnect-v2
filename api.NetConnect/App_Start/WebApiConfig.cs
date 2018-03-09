@@ -389,6 +389,7 @@ namespace api.NetConnect
             );
             #endregion
             #region Backend
+            #region Catering
             config.Routes.MapHttpRoute(
                name: "GET_Catering_Backend_Get",
                routeTemplate: "backend/catering",
@@ -449,6 +450,131 @@ namespace api.NetConnect
                    action = "Backend_Detail_Update"
                }
             );
+            #endregion
+            #region Products
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_Product_Get",
+               routeTemplate: "backend/product",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Catering_Backend_Product_FilterList",
+               routeTemplate: "backend/product",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Catering_Backend_Product_Insert",
+               routeTemplate: "backend/product/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_Product_New",
+               routeTemplate: "backend/product/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_Product_Detail",
+               routeTemplate: "backend/product/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Catering_Backend_Product_Update",
+               routeTemplate: "backend/product/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_Product_Detail_Update"
+               }
+            );
+            #endregion
+            #region ProductsAttributes
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_ProductAttribute_Get",
+               routeTemplate: "backend/productattribute",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_Get"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "Put_Catering_Backend_ProductAttribute_FilterList",
+               routeTemplate: "backend/productattribute",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_FilterList"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "POST_Catering_Backend_ProductAttribute_Insert",
+               routeTemplate: "backend/productattribute/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_Detail_Insert"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_ProductAttribute_New",
+               routeTemplate: "backend/productattribute/new",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_Detail_New"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "GET_Catering_Backend_ProductAttribute_Detail",
+               routeTemplate: "backend/productattribute/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_Detail"
+               }
+            );
+            config.Routes.MapHttpRoute(
+               name: "PUT_Catering_Backend_ProductAttribute_Update",
+               routeTemplate: "backend/productattribute/{id}",
+               constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Put) },
+               defaults: new
+               {
+                   controller = "Catering",
+                   action = "Backend_ProductAttribute_Detail_Update"
+               }
+            );
+            #endregion
             #endregion
             #endregion
 

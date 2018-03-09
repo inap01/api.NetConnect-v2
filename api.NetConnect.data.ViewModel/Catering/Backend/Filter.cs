@@ -39,4 +39,14 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
             public String Name { get; set; }
         }
     }
+
+    public class BackendProductFilter
+    {
+        public String Name { get; set; }
+    }
+
+    public class BackendProductAttributeFilter
+    {
+        public String Name { get; set; }
+    }
 }

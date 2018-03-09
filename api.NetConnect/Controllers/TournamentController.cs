@@ -28,7 +28,7 @@ namespace api.NetConnect.Controllers
 
 
             var e = eventDataCtrl.GetItem(eventID);
-            var tournaments = dataCtrl.GetItems().Where(x => x.EventID == eventID);
+            var tournaments = dataCtrl.GetItems().Where(x => x.EventID == eventID).ToList();
             
             if (e.End > DateTime.Now)
                 if(tournaments.Count() > 0)

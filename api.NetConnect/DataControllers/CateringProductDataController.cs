@@ -9,9 +9,9 @@ using System.Web;
 
 namespace api.NetConnect.DataControllers
 {
-    public class CateringDataController : BaseDataController, IDataController<CateringProduct>
+    public class CateringProductDataController : BaseDataController, IDataController<CateringProduct>
     {
-        public CateringDataController() : base()
+        public CateringProductDataController() : base()
         {
 
         }
@@ -43,7 +43,16 @@ namespace api.NetConnect.DataControllers
 
         public CateringProduct Update(CateringProduct item)
         {
-            throw new NotImplementedException();
+            var dbItem = GetItem(item.ID);
+            dbItem.Name = item.Name;
+            dbItem.Image = item.Image;
+            dbItem.Price = item.Price;
+            dbItem.SingleChoice = item.SingleChoice;
+            dbItem.IsActive = item.IsActive;
+
+            db.SaveChanges();
+
+            return dbItem;
         }
 
         public void Delete(int ID)
@@ -52,5 +61,22 @@ namespace api.NetConnect.DataControllers
             db.SaveChanges();
         }
         #endregion
+
+        public List<CateringProduct> FilterList(ListArgsRequest<BackendProductFilter> args, out Int32 TotalCount)
+        {
+            var qry = GetItems();
+
+            if (!String.IsNullOrEmpty(args.Filter.Name))
+                qry = qry.Where(x => x.Name.ToLower().Contains(args.Filter.Name.ToLower()));
+
+            TotalCount = qry.Count();
+
+            qry = qry.OrderByDescending(x => x.ID);
+            var items = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
+                 .Take(args.Pagination.ItemsPerPageSelected)
+                 .ToList();
+
+            return items;
+        }
     }
 }

@@ -99,6 +99,7 @@ namespace api.NetConnect.Converters
             });
             viewmodel.Status = new BackendCateringStatusOption(model.OrderState);
             viewmodel.Note = model.Note;
+            viewmodel.Registered = model.Registered;
 
             return viewmodel;
         }
@@ -174,6 +175,77 @@ namespace api.NetConnect.Converters
 
             model.ID = viewmodel.ID;
             model.OrderState = viewmodel.Status.Key;
+
+            return model;
+        }
+
+        public static BackendProductListViewModel FromModel(this BackendProductListViewModel viewmodel, IEnumerable<CateringProduct> modelList)
+        {
+            viewmodel.Data.FromModel(modelList);
+
+            return viewmodel;
+        }
+        public static List<BackendProductViewModelItem> FromModel(this List<BackendProductViewModelItem> viewmodel, IEnumerable<CateringProduct> modelList)
+        {
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendProductViewModelItem().FromModel(model));
+
+            return viewmodel;
+        }
+        public static BackendProductViewModelItem FromModel(this BackendProductViewModelItem viewmodel, CateringProduct model)
+        {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.Image = model.Image;
+            viewmodel.Price = model.Price;
+            viewmodel.SingleChoice = model.SingleChoice;
+            viewmodel.IsActive = model.IsActive;
+
+            foreach (var rel in model.CateringProductAttributeRelation)
+                viewmodel.Attributes.Add(new BackendProductAttributeViewModelItem().FromModel(rel.CateringProductAttribute));
+
+            return viewmodel;
+        }
+        public static CateringProduct ToModel(this BackendProductViewModelItem viewmodel)
+        {
+            CateringProduct model = new CateringProduct();
+
+            model.ID = viewmodel.ID;
+            model.Name = viewmodel.Name;
+            model.Image = viewmodel.Image;
+            model.Price = viewmodel.Price;
+            model.SingleChoice = viewmodel.SingleChoice;
+            model.IsActive = viewmodel.IsActive;
+
+            return model;
+        }
+
+        public static BackendProductAttributeListViewModel FromModel(this BackendProductAttributeListViewModel viewmodel, IEnumerable<CateringProductAttribute> modelList)
+        {
+            viewmodel.Data.FromModel(modelList);
+
+            return viewmodel;
+        }
+        public static List<BackendProductAttributeViewModelItem> FromModel(this List<BackendProductAttributeViewModelItem> viewmodel, IEnumerable<CateringProductAttribute> modelList)
+        {
+            foreach (var model in modelList)
+                viewmodel.Add(new BackendProductAttributeViewModelItem().FromModel(model));
+
+            return viewmodel;
+        }
+        public static BackendProductAttributeViewModelItem FromModel(this BackendProductAttributeViewModelItem viewmodel, CateringProductAttribute model)
+        {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+
+            return viewmodel;
+        }
+        public static CateringProductAttribute ToModel(this BackendProductAttributeViewModelItem viewmodel)
+        {
+            CateringProductAttribute model = new CateringProductAttribute();
+
+            model.ID = viewmodel.ID;
+            model.Name = viewmodel.Name;
 
             return model;
         }

@@ -37,7 +37,7 @@ namespace api.NetConnect.Converters
             routeLink += $"{model.District}";
             viewmodel.RouteLink = routeLink;
 
-            Int32 seatsCount = 74 - model.Seat.Count(x => x.State == -1);
+            Int32 seatsCount = Properties.Settings.Default.SeatAmount - model.Seat.Count(x => x.State == -1);
             Int32 flagged = model.Seat.Count(x => x.State == 1);
             Int32 reserved = model.Seat.Count(x => x.State >= 2);
             Int32 free = seatsCount - flagged - reserved;

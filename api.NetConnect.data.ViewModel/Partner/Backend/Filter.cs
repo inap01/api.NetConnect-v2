@@ -38,7 +38,7 @@ namespace api.NetConnect.data.ViewModel.Partner.Backend
         public BackendPartnerFilter()
         {
             Name = "";
-            StatusSelected = StatusFilterEnum.Alle;
+            StatusSelected = StatusFilterEnum.Aktiv;
             _statusOptions = new List<StatusFilterEnum>();
             StatusOptions = new List<StatusFilterEnum>(StatusFilter.getOptions());
             PartnerTypeSelected = all;

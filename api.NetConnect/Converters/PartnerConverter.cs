@@ -90,45 +90,35 @@ namespace api.NetConnect.Converters
 
         public static Partner ToModel(this BackendPartnerViewModelItem viewmodel)
         {
-            PartnerDataController dataCtrl = new PartnerDataController();
-            PartnerPackDataController partnerPackDataCtrl = new PartnerPackDataController();
-
             Partner model = new Partner();
-            if (viewmodel.ID != 0) 
-                model = dataCtrl.GetItem(viewmodel.ID);
-            
+
+            model.ID = viewmodel.ID;
             model.Name = viewmodel.Name;
             model.Content = viewmodel.Description;
             model.Link = viewmodel.Link;
             model.RefLink = viewmodel.RefLink;
+            model.PartnerPackID = viewmodel.PartnerTypeSelected.ID;
             model.ImageOriginal = viewmodel.OriginalImage;
             model.ImagePassive = viewmodel.PassiveImage;
             model.IsActive = viewmodel.IsActive;
 
-            model.PartnerPack = partnerPackDataCtrl.GetItem(viewmodel.PartnerTypeSelected.ID);
-
-            /*
-            foreach (var display in viewmodel.Display.Where(x => x.Value))
-                model.PartnerDisplayRelation.Add(new PartnerDisplayRelation()
-                {
-                    PartnerID = viewmodel.ID,
-                    Partner = PartnerDataController.GetItem(viewmodel.ID),
-                    PartnerDisplayID = display.ID,
-                    PartnerDisplay = PartnerDisplayDataController.GetItem(display.ID)
-                });
-            */
-
             return model;
+        }
+
+        public static BackendPartnerPositionViewModelItem FromModel(this BackendPartnerPositionViewModelItem viewmodel, Partner model, Int32 Position)
+        {
+            viewmodel.ID = model.ID;
+            viewmodel.Name = model.Name;
+            viewmodel.Position = Position;
+
+            return viewmodel;
         }
 
         public static Partner ToModel(this BackendPartnerPositionViewModelItem viewmodel)
         {
-            PartnerDataController dataCtrl = new PartnerDataController();
-
             Partner model = new Partner();
-            if (viewmodel.ID != 0)
-                model = dataCtrl.GetItem(viewmodel.ID);
 
+            model.ID = viewmodel.ID;
             model.Position = viewmodel.Position;
 
             return model;

@@ -181,10 +181,13 @@ namespace api.NetConnect.Controllers
         {
             BackendPartnerViewModel viewmodel = new BackendPartnerViewModel();
             PartnerDataController dataCtrl = new PartnerDataController();
+            PartnerDisplayRelationDataController displayRelationDataCtrl = new PartnerDisplayRelationDataController();
 
             try
             {
-                viewmodel.Data.FromModel(dataCtrl.Update(request.ToModel()));
+                var model = dataCtrl.Update(request.ToModel());
+                viewmodel.Data.FromModel(model);
+                viewmodel.Data.Display = displayRelationDataCtrl.UpdatePartner(model, request.Display);
             }
             catch(Exception ex)
             {
@@ -196,13 +199,24 @@ namespace api.NetConnect.Controllers
 
         [Authorize(Roles = "Admin,Team")]
         [HttpDelete]
-        public IHttpActionResult Backend_Delete(BackendPartnerDeleteRequest request)
+        public IHttpActionResult Backend_Delete(Int32[] IDs)
         {
             BaseViewModel viewmodel = new BaseViewModel();
+            PartnerDataController dataCtrl = new PartnerDataController();
 
-            // TODO
+            try
+            {
+                foreach (var id in IDs)
+                    dataCtrl.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                return Error(viewmodel, ex);
+            }
 
-            return Ok(viewmodel);
+            if (IDs.Count() <= 1)
+                return Ok(viewmodel, "Eintrag wurden gelöscht");
+            return Ok(viewmodel, IDs.Count() + " Einträge wurden gelöscht");
         }
 
         [Authorize(Roles = "Admin,Team")]
@@ -216,24 +230,16 @@ namespace api.NetConnect.Controllers
             if (args.PartnerType == null)
                 args.PartnerType = partnerPackDataCtrl.GetItems().First().Name;
 
-            int position = 1;
-            viewmodel.Data = dataCtrl.GetItems()
-                .Where(x => x.PartnerPack.Name == args.PartnerType && x.IsActive)
-                .OrderBy(x => x.Position).ToList()
-                .ConvertAll(x =>
-            {
-                return new BackendPartnerPositionViewModelItem()
-                {
-                    ID = x.ID,
-                    Name = x.Name,
-                    Position = position++
-                };
-            }).ToList();
-
             viewmodel.PartnerTypeOptions = partnerPackDataCtrl.GetItems().ToList().ConvertAll(x =>
             {
                 return x.Name;
             });
+
+            int position = 1;
+            var partner = dataCtrl.GetItems().Where(x => x.PartnerPack.Name == args.PartnerType && x.IsActive).OrderBy(x => x.Position).ToList();
+            viewmodel.Data = partner.ConvertAll(x => {
+                return new BackendPartnerPositionViewModelItem().FromModel(x, position++);
+            }).ToList();
 
             return Ok(viewmodel);
         }
@@ -249,7 +255,7 @@ namespace api.NetConnect.Controllers
             {
                 request.Partner.ForEach(x =>
                 {
-                    dataCtrl.Update(x.ToModel());
+                    dataCtrl.UpdatePosition(x.ToModel());
                 });
             }
             catch(Exception ex)

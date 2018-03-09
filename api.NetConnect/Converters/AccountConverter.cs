@@ -19,7 +19,7 @@ namespace api.NetConnect.Converters
             SeatTransferLogDataController transferDataCtrl = new SeatTransferLogDataController();
 
             viewmodel.Name = $"{model.FirstName} {model.LastName}";
-            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + "team/no_image.png"; // TODO
             viewmodel.Events = eventDataCtrl.GetItems().Where(x => x.End > DateTime.Now).ToList().ConvertAll(x => {
                 var vm = new AccountReservationEventViewModelItem();
                 vm.FromModel(x, model);
@@ -124,8 +124,8 @@ namespace api.NetConnect.Converters
             TournamentParticipantDataController participantDataCtrl = new TournamentParticipantDataController();
 
             viewmodel.Name = $"{model.FirstName} {model.LastName}";
-            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png"; // TODO
-            
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + "team/no_image.png"; // TODO
+
             viewmodel.TournamentParticipation.AddRange(participantDataCtrl.GetItems().Where(x => x.User.ID == model.ID && x.Tournament.Event.End > DateTime.Now).ToList().ConvertAll(x =>
             {
                 return new AccountTournamentParticipantViewModelItem().FromModel(x.Tournament);
@@ -153,7 +153,7 @@ namespace api.NetConnect.Converters
             viewmodel.FirstName = model.FirstName;
             viewmodel.LastName = model.LastName;
             viewmodel.Nickname = model.Nickname;
-            viewmodel.Image = "http://lan-netconnect.de/_api/images/team/no_image.png";
+            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + "team/no_image.png"; // TODO
             viewmodel.Email = model.Email;
             viewmodel.SteamID = model.SteamID;
             viewmodel.BattleTag = model.BattleTag;

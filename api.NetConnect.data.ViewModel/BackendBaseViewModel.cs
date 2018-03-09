@@ -38,5 +38,5 @@ namespace api.NetConnect.data.ViewModel
         }
     }
 
-    public enum InputInformationType { @string, text, boolean, @integer, date, datetime, reference, referenceButton, choice }
+    public enum InputInformationType { @string, text, boolean, @integer, @decimal, date, datetime, reference, referenceButton, choice }
 }

@@ -8,6 +8,7 @@ using System.Web;
 
 namespace api.NetConnect.data.ViewModel.Catering.Backend
 {
+    #region Catering
     public class BackendCateringListArgs : ListArgsRequest<BackendCateringFilter>
     {
         public BackendCateringListArgs() : base()
@@ -60,6 +61,7 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         public BackendEventViewModelItem Event { get; set; }
         public BackendUserViewModelItem User { get; set; }
         public List<BackendCateringOrderItem> Order { get; set; }
+        public DateTime Registered { get; set; }
         public Int32 SeatNumber { get; set; }
         public BackendCateringStatusOption Status { get; set; }
         public String Note { get; set; }
@@ -82,6 +84,7 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
             result.Add("Event", new InputInformation() { Type = InputInformationType.reference, Reference = "Event", ReferenceForm = Form.GetReferenceForm(BackendEventViewModelItem.GetForm()), Required = true, Readonly = true });
             result.Add("User", new InputInformation() { Type = InputInformationType.reference, Reference = "User", ReferenceForm = Form.GetReferenceForm(BackendUserViewModelItem.GetForm()), Required = true, Readonly = true });
             result.Add("Note", new InputInformation() { Type = InputInformationType.text });
+            result.Add("Registered", new InputInformation() { Type = InputInformationType.datetime, Readonly = true });
 
             return result;
         }
@@ -135,4 +138,118 @@ namespace api.NetConnect.data.ViewModel.Catering.Backend
         public List<ProductAttributeViewModelItem> Attributes { get; set; }
         public bool SingleChoice { get; set; }
     }
+    #endregion
+    #region Product
+    public class BackendProductListArgs : ListArgsRequest<BackendProductFilter>
+    {
+        public BackendProductListArgs() : base()
+        {
+
+        }
+    }
+
+    public class BackendProductListViewModel : ListArgsViewModel<BackendProductViewModelItem, BackendProductFilter>
+    {
+        public BackendProductListViewModel() : base()
+        {
+
+        }
+    }
+
+    public class BackendProductViewModel : BackendBaseViewModel
+    {
+        public BackendProductViewModelItem Data { get; set; }
+        public List<BackendProductAttributeViewModelItem> AttributeOptions { get; set; }
+
+        public BackendProductViewModel()
+        {
+            Data = new BackendProductViewModelItem();
+            AttributeOptions = new List<BackendProductAttributeViewModelItem>();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            return BackendProductViewModelItem.GetForm();
+        }
+    }
+
+    public class BackendProductViewModelItem : BackendBaseViewModelItem
+    {
+        public String Name { get; set; }
+        public String Image { get; set; }
+        public Decimal Price { get; set; }
+        public Boolean SingleChoice { get; set; }
+        public Boolean IsActive { get; set; }
+        public List<BackendProductAttributeViewModelItem> Attributes { get; set; }
+
+        public BackendProductViewModelItem()
+        {
+            Attributes = new List<BackendProductAttributeViewModelItem>();
+        }
+
+        public static Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("Image", new InputInformation() { Type = InputInformationType.@string, Required = true });
+            result.Add("Price", new InputInformation() { Type = InputInformationType.@decimal, Required = true });
+            result.Add("SingleChoice", new InputInformation() { Type = InputInformationType.boolean, Required = true });
+            result.Add("IsActive", new InputInformation() { Type = InputInformationType.boolean, Required = true });
+
+            return result;
+        }
+    }
+    #endregion
+    #region Attributes
+    public class BackendProductAttributeListArgs : ListArgsRequest<BackendProductAttributeFilter>
+    {
+        public BackendProductAttributeListArgs() : base()
+        {
+
+        }
+    }
+
+    public class BackendProductAttributeListViewModel : ListArgsViewModel<BackendProductAttributeViewModelItem, BackendProductAttributeFilter>
+    {
+        public BackendProductAttributeListViewModel() : base()
+        {
+
+        }
+    }
+
+    public class BackendProductAttributeViewModel : BackendBaseViewModel
+    {
+        public BackendProductAttributeViewModelItem Data { get; set; }
+
+        public BackendProductAttributeViewModel()
+        {
+            Data = new BackendProductAttributeViewModelItem();
+
+            Form = GetForm();
+        }
+
+        public override Dictionary<string, InputInformation> GetForm()
+        {
+            return BackendProductAttributeViewModelItem.GetForm();
+        }
+    }
+    public class BackendProductAttributeViewModelItem : BaseViewModelItem
+    {
+        public String Name { get; set; }
+
+        public static Dictionary<string, InputInformation> GetForm()
+        {
+            Dictionary<string, InputInformation> result = new Dictionary<string, InputInformation>();
+
+            result.Add("ID", new InputInformation() { Type = InputInformationType.integer, Readonly = true });
+            result.Add("Name", new InputInformation() { Type = InputInformationType.@string, Required = true });
+
+            return result;
+        }
+    }
+    #endregion
 }

@@ -42,12 +42,29 @@ namespace api.NetConnect.DataControllers
             var result = db.Partner.Add(item);
             db.SaveChanges();
 
+            db.Entry(result).Reference(c => c.PartnerPack).Load();
+
             return result;
         }
 
         public Partner Update(Partner item)
         {
-            throw new NotImplementedException();
+            var dbItem = GetItem(item.ID);
+            
+            dbItem.Name = item.Name;
+            dbItem.Content = item.Content;
+            dbItem.Link = item.Link;
+            dbItem.RefLink = item.RefLink;
+            dbItem.PartnerPackID = item.PartnerPackID;
+            dbItem.ImageOriginal = item.ImageOriginal;
+            dbItem.ImagePassive = item.ImagePassive;
+            dbItem.IsActive = item.IsActive;
+
+            db.SaveChanges();
+
+            db.Entry(dbItem).Reference(c => c.PartnerPack).Load();
+
+            return dbItem;
         }
 
         public void Delete(int ID)
@@ -82,6 +99,17 @@ namespace api.NetConnect.DataControllers
                  .ToList();
 
             return items;
+        }
+
+        public Partner UpdatePosition(Partner item)
+        {
+            var dbItem = GetItem(item.ID);
+
+            dbItem.Position = item.Position;
+
+            db.SaveChanges();
+
+            return dbItem;
         }
     }
 }

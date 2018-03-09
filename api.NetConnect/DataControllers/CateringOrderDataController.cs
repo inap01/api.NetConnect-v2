@@ -83,7 +83,7 @@ namespace api.NetConnect.DataControllers
 
             TotalCount = qry.Count();
 
-            qry = qry.OrderByDescending(x => x.ID);
+            qry = qry.OrderByDescending(x => x.Registered);
             qry = qry.Skip(args.Pagination.ItemsPerPageSelected * (args.Pagination.Page - 1))
                  .Take(args.Pagination.ItemsPerPageSelected);
 

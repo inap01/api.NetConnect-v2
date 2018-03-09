@@ -20,7 +20,7 @@ namespace api.NetConnect.Controllers
             GalleryListModel viewmodel = new GalleryListModel();
             EventDataController dataCtrl = new EventDataController();
 
-            var ev = dataCtrl.GetItems();
+            var ev = dataCtrl.GetItems().OrderByDescending(x => x.Start);
 
 
             foreach (var _event in ev)
