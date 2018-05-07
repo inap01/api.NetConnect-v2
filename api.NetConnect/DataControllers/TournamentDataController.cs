@@ -20,12 +20,13 @@ namespace api.NetConnect.DataControllers
         public Tournament GetItem(int ID)
         {
             var qry = db.Tournament.AsQueryable();
-            qry.Include(x => x.TournamentGame);
-            qry.Include(x => x.Event);
-            qry.Include(x => x.Partner);
-            qry.Include(x => x.TournamentParticipant);
-            qry.Include(x => x.TournamentTeam);
-            qry.Include(x => x.TournamentWinner);
+            qry = qry.Include(x => x.TournamentGame);
+            qry = qry.Include(x => x.Event);
+            qry = qry.Include(x => x.Partner);
+            qry = qry.Include(x => x.TournamentParticipant.Select(y => y.User));
+            qry = qry.Include(x => x.TournamentTeam.Select(y => y.TournamentTeamParticipant.Select(z => z.User)));
+            qry = qry.Include(x => x.TournamentWinner.Select(y => y.TournamentWinnerTeam));
+            qry = qry.Include(x => x.TournamentWinner.Select(y => y.TournamentWinnerPlayer.User));
 
             return qry.Single(x => x.ID == ID);
         }
@@ -33,12 +34,13 @@ namespace api.NetConnect.DataControllers
         public IQueryable<Tournament> GetItems()
         {
             var qry = db.Tournament.AsQueryable();
-            qry.Include(x => x.TournamentGame);
-            qry.Include(x => x.Event);
-            qry.Include(x => x.Partner);
-            qry.Include(x => x.TournamentParticipant);
-            qry.Include(x => x.TournamentTeam);
-            qry.Include(x => x.TournamentWinner);
+            qry = qry.Include(x => x.TournamentGame);
+            qry = qry.Include(x => x.Event);
+            qry = qry.Include(x => x.Partner);
+            qry = qry.Include(x => x.TournamentParticipant.Select(y => y.User));
+            qry = qry.Include(x => x.TournamentTeam.Select(y => y.TournamentTeamParticipant.Select(z => z.User)));
+            qry = qry.Include(x => x.TournamentWinner.Select(y => y.TournamentWinnerTeam));
+            qry = qry.Include(x => x.TournamentWinner.Select(y => y.TournamentWinnerPlayer.User));
 
             return qry;
         }

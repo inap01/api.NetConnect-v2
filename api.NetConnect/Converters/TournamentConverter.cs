@@ -26,9 +26,14 @@ namespace api.NetConnect.Converters
             viewmodel.Mode = model.Mode;
             viewmodel.Start = model.Start;
             viewmodel.End = model.End;
-            viewmodel.GameTitle = model.TournamentGame.Name;
-            viewmodel.Rules = model.TournamentGame.Rules;
-            viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + model.TournamentGame.Image;
+
+            if(model.TournamentGame != null)
+            {
+                viewmodel.GameTitle = model.TournamentGame.Name;
+                viewmodel.Rules = model.TournamentGame.Rules;
+                viewmodel.Image = Properties.Settings.Default.imageAbsolutePath + model.TournamentGame.Image;
+            }
+
             viewmodel.Event.FromModel(model.Event);
 
             viewmodel.Player = model.TournamentParticipant.ToList().ConvertAll(x => {

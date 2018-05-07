@@ -20,7 +20,18 @@ namespace api.NetConnect.DataControllers
         public Event GetItem(int ID)
         {
             var qry = db.Event.AsQueryable();
-            qry.Include(x => x.EventType);
+            qry = qry.Include(x => x.CateringOrder);
+            qry = qry.Include(x => x.Seat);
+            qry = qry.Include(x => x.Tournament);
+            qry = qry.Include(x => x.EventType);
+
+            qry = qry.Include(x => x.Tournament.Select(y => y.TournamentGame));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.Partner));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentParticipant.Select(z => z.User)));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentTeam.Select(z => z.TournamentTeamParticipant.Select(a => a.User))));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentWinner.Select(z => z.TournamentWinnerTeam)));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentWinner.Select(z => z.TournamentWinnerPlayer.User)));
+
 
             return qry.Single(x => x.ID == ID);
         }
@@ -28,7 +39,17 @@ namespace api.NetConnect.DataControllers
         public IQueryable<Event> GetItems()
         {
             var qry = db.Event.AsQueryable();
-            qry.Include(x => x.EventType);
+            qry = qry.Include(x => x.CateringOrder);
+            qry = qry.Include(x => x.Seat);
+            qry = qry.Include(x => x.Tournament);
+            qry = qry.Include(x => x.EventType);
+
+            qry = qry.Include(x => x.Tournament.Select(y => y.TournamentGame));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.Partner));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentParticipant.Select(z => z.User)));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentTeam.Select(z => z.TournamentTeamParticipant.Select(a => a.User))));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentWinner.Select(z => z.TournamentWinnerTeam)));
+            //qry = qry.Include(x => x.Tournament.Select(y => y.TournamentWinner.Select(z => z.TournamentWinnerPlayer.User)));
 
             return qry;
         }

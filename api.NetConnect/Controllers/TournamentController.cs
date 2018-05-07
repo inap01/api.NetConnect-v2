@@ -23,15 +23,19 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Get(Int32 eventID)
         {
             TournamentListViewModel viewmodel = new TournamentListViewModel();
-            TournamentDataController dataCtrl = new TournamentDataController();
+            //TournamentDataController dataCtrl = new TournamentDataController();
             EventDataController eventDataCtrl = new EventDataController();
 
+            data.Entity.Event e;
+            try { e = eventDataCtrl.GetItem(eventID); }
+            catch (Exception ex) { throw new Exception("Fehler beim Laden der Daten (data.Entity.Event)", ex); }
 
-            var e = eventDataCtrl.GetItem(eventID);
-            var tournaments = dataCtrl.GetItems().Where(x => x.EventID == eventID).ToList();
-            
+            List<data.Entity.Tournament> tournaments;
+            try { tournaments = e.Tournament.ToList(); }
+            catch(Exception ex) { throw new Exception("Fehler beim Laden der Daten (data.Entity.Tournament)", ex); }
+
             if (e.End > DateTime.Now)
-                if(tournaments.Count() > 0)
+                if (tournaments.Count > 0)
                     foreach (var tournament in tournaments)
                     {
                         TournamentViewModelItem item = new TournamentViewModelItem();
