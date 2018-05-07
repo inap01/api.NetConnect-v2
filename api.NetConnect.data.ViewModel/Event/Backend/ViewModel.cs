@@ -74,7 +74,7 @@ namespace api.NetConnect.data.ViewModel.Event.Backend
             result.Add("IsActiveCatering", new InputInformation() { Type = InputInformationType.boolean });
             result.Add("IsActiveFeedback", new InputInformation() { Type = InputInformationType.boolean });
             result.Add("IsPrivate", new InputInformation() { Type = InputInformationType.boolean });
-            result.Add("FeedbackLink", new InputInformation() { Type = InputInformationType.@string });
+            result.Add("FeedbackLink", new InputInformation() { Type = InputInformationType.@string, Required = true });
 
             result.Add("District", new InputInformation() { Type = InputInformationType.@string, Required = true });
             result.Add("Street", new InputInformation() { Type = InputInformationType.@string, Required = true });

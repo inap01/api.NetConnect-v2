@@ -162,10 +162,12 @@ namespace api.NetConnect.Controllers
         public IHttpActionResult Backend_Detail_Insert(BackendEventViewModelItem request)
         {
             BackendEventViewModel viewmodel = new BackendEventViewModel();
+            EventDataController dataCtrl = new EventDataController();
 
             try
             {
-                // TODO
+                var data = dataCtrl.Insert(request.ToModel());
+                viewmodel.Data.FromModel(data);
             }
             catch (Exception ex)
             {
